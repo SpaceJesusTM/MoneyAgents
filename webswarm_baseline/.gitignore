@@ -1,0 +1,3 @@
+# generated run artifacts (representative ones are copied to ../examples/)
+runs/
+__pycache__/

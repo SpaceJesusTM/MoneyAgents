@@ -1,0 +1,692 @@
+[
+  {
+    "router": "rules",
+    "decider": "rules",
+    "options": {},
+    "cases": 32,
+    "agreement": 0.969,
+    "agreement_by_expected": {
+      "ATOM": "15/15",
+      "WIDE": "6/7",
+      "DEEP": "6/6",
+      "ENTITY_COLLECT": "4/4"
+    },
+    "over_delegation_below_root": "0/9",
+    "median_secs": 0.0,
+    "mean_secs": 0.0,
+    "total_secs": 0.0,
+    "predicted": {
+      "ATOM": 16,
+      "WIDE": 6,
+      "DEEP": 6,
+      "ENTITY_COLLECT": 4
+    },
+    "rows": [
+      {
+        "objective": "What was NVIDIA's data center revenue for fiscal year 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "What is the current federal funds target rate range set by the Federal Reserve?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "What was Apple's services revenue in fiscal 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "How much did Microsoft spend on capital expenditures in its most recent fiscal year?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "What gross margin did AMD report for its latest quarter?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "When did TSMC begin volume production of its 2nm process?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "comparison, enumeration, or 'main factors' pattern"
+      },
+      {
+        "objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "comparison, enumeration, or 'main factors' pattern"
+      },
+      {
+        "objective": "Compare the 2026 capital expenditure plans of Microsoft, Alphabet, Amazon and Meta.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "comparison, enumeration, or 'main factors' pattern"
+      },
+      {
+        "objective": "What are the key drivers and risks for Tesla's energy storage business?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "comparison, enumeration, or 'main factors' pattern"
+      },
+      {
+        "objective": "How do JPMorgan, Bank of America and Citigroup compare on net interest income this year?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "comparison, enumeration, or 'main factors' pattern"
+      },
+      {
+        "objective": "What are the main headwinds facing European automakers in 2026?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "comparison, enumeration, or 'main factors' pattern"
+      },
+      {
+        "objective": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "unknown target followed by a dependent question, or a claim to check"
+      },
+      {
+        "objective": "Which company is the largest customer of ASML's EUV lithography systems, and what share of ASML's revenue does it account for?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "unknown target followed by a dependent question, or a claim to check"
+      },
+      {
+        "objective": "Why did Intel's foundry business report an operating loss last year, and what would have to change for it to break even?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "unknown target followed by a dependent question, or a claim to check"
+      },
+      {
+        "objective": "Is it true that hyperscaler capital expenditure is growing faster than their cloud revenue?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "unknown target followed by a dependent question, or a claim to check"
+      },
+      {
+        "objective": "Which memory maker gained the most high-bandwidth-memory share last year, and what drove the gain?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "unknown target followed by a dependent question, or a claim to check"
+      },
+      {
+        "objective": "Which companies supply high-bandwidth memory for AI accelerators?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "asks for a list of entities to discover"
+      },
+      {
+        "objective": "List the publicly traded companies that manufacture lithography equipment for advanced chips.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "asks for a list of entities to discover"
+      },
+      {
+        "objective": "Which hyperscalers are designing their own AI accelerator chips?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "asks for a list of entities to discover"
+      },
+      {
+        "objective": "Name the major suppliers of advanced chip packaging services.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "asks for a list of entities to discover"
+      },
+      {
+        "objective": "NVIDIA data-center GPU pricing trends in recent quarters",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Hyperscaler capital expenditure plans and demand for NVIDIA accelerators",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Competitive pressure from AMD and custom silicon on NVIDIA's data-center market share",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Supply chain constraints and chip availability affecting NVIDIA's data-center revenue",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "US export controls on AI chips to China and their effect on NVIDIA sales",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "AMD gross margin in its most recent fiscal year",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Tesla energy storage deployments and revenue trend",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Battery cell supply and cost outlook for Tesla Megapack",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Amazon 2026 capital expenditure guidance",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Capital expenditure plans of the three largest US cloud providers compared for 2026",
+        "depth": 1,
+        "expected": "WIDE",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "no multi-part or unknown-target pattern"
+      },
+      {
+        "objective": "Which foundry manufactures AMD's newest data-center CPUs, and is its capacity constrained?",
+        "depth": 1,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 0.0,
+        "reason": "unknown target followed by a dependent question, or a claim to check"
+      }
+    ]
+  },
+  {
+    "router": "generative_4b",
+    "decider": "generative",
+    "options": {},
+    "cases": 32,
+    "agreement": 0.875,
+    "agreement_by_expected": {
+      "ATOM": "14/15",
+      "WIDE": "7/7",
+      "DEEP": "3/6",
+      "ENTITY_COLLECT": "4/4"
+    },
+    "over_delegation_below_root": "1/9",
+    "median_secs": 3.569,
+    "mean_secs": 3.677,
+    "total_secs": 117.7,
+    "predicted": {
+      "ATOM": 16,
+      "WIDE": 8,
+      "DEEP": 4,
+      "ENTITY_COLLECT": 4
+    },
+    "rows": [
+      {
+        "objective": "What was NVIDIA's data center revenue for fiscal year 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 2.777,
+        "reason": "Specific fact about one company and a metric."
+      },
+      {
+        "objective": "What is the current federal funds target rate range set by the Federal Reserve?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.122,
+        "reason": "Asks for a specific fact about the Federal Reserve."
+      },
+      {
+        "objective": "What was Apple's services revenue in fiscal 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.022,
+        "reason": "Specific fact about one entity and time period."
+      },
+      {
+        "objective": "How much did Microsoft spend on capital expenditures in its most recent fiscal year?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.033,
+        "reason": "Asks for a specific financial metric for one entity."
+      },
+      {
+        "objective": "What gross margin did AMD report for its latest quarter?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.543,
+        "reason": "Asks for a specific metric (gross margin) for a single entity (AMD)."
+      },
+      {
+        "objective": "When did TSMC begin volume production of its 2nm process?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.473,
+        "reason": "Asks for a specific date regarding one entity and one product."
+      },
+      {
+        "objective": "Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.09,
+        "reason": "Compares three named entities on a specific metric."
+      },
+      {
+        "objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 2.998,
+        "reason": "Multiple independent factors need separate research."
+      },
+      {
+        "objective": "Compare the 2026 capital expenditure plans of Microsoft, Alphabet, Amazon and Meta.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 2.953,
+        "reason": "Multiple named entities to compare."
+      },
+      {
+        "objective": "What are the key drivers and risks for Tesla's energy storage business?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.217,
+        "reason": "Multiple independent factors (drivers and risks) require separate research."
+      },
+      {
+        "objective": "How do JPMorgan, Bank of America and Citigroup compare on net interest income this year?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.167,
+        "reason": "Compares three named entities on a specific metric."
+      },
+      {
+        "objective": "What are the main headwinds facing European automakers in 2026?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.094,
+        "reason": "Multiple independent factors need separate research."
+      },
+      {
+        "objective": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.351,
+        "reason": "Identifies specific unnamed entity (supplier) and dependent metric (growth speed)."
+      },
+      {
+        "objective": "Which company is the largest customer of ASML's EUV lithography systems, and what share of ASML's revenue does it account for?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": null,
+        "secs": 3.965,
+        "reason": "Identifies a specific entity (largest customer) and asks for a specific metric (revenue share)."
+      },
+      {
+        "objective": "Why did Intel's foundry business report an operating loss last year, and what would have to change for it to break even?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 4.15,
+        "reason": "Identifies specific causes and required changes for a single entity."
+      },
+      {
+        "objective": "Is it true that hyperscaler capital expenditure is growing faster than their cloud revenue?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.621,
+        "reason": "Verifying a specific claim about growth rates requires checking data."
+      },
+      {
+        "objective": "Which memory maker gained the most high-bandwidth-memory share last year, and what drove the gain?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "WIDE",
+        "ok": false,
+        "confidence": null,
+        "secs": 3.592,
+        "reason": "Identify top HBM makers and analyze their specific growth drivers."
+      },
+      {
+        "objective": "Which companies supply high-bandwidth memory for AI accelerators?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.739,
+        "reason": "The objective asks to identify a list of entities supplying a specific product."
+      },
+      {
+        "objective": "List the publicly traded companies that manufacture lithography equipment for advanced chips.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.61,
+        "reason": "The objective asks for a list of entities, which matches ENTITY_COLLECT."
+      },
+      {
+        "objective": "Which hyperscalers are designing their own AI accelerator chips?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.545,
+        "reason": "Identify specific companies developing AI accelerators."
+      },
+      {
+        "objective": "Name the major suppliers of advanced chip packaging services.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.968,
+        "reason": "The objective asks for a list of entities (suppliers), which matches ENTITY_COLLECT."
+      },
+      {
+        "objective": "NVIDIA data-center GPU pricing trends in recent quarters",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.988,
+        "reason": "Focuses on specific pricing metrics for a single entity."
+      },
+      {
+        "objective": "Hyperscaler capital expenditure plans and demand for NVIDIA accelerators",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 4.47,
+        "reason": "Hyperscalers' capex plans are a specific factor to research."
+      },
+      {
+        "objective": "Competitive pressure from AMD and custom silicon on NVIDIA's data-center market share",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "DEEP",
+        "ok": false,
+        "confidence": null,
+        "secs": 3.935,
+        "reason": "Objective asks to identify specific unnamed competitors causing a specific effect."
+      },
+      {
+        "objective": "Supply chain constraints and chip availability affecting NVIDIA's data-center revenue",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.928,
+        "reason": "Focuses on specific supply chain constraints impacting a single entity."
+      },
+      {
+        "objective": "US export controls on AI chips to China and their effect on NVIDIA sales",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.471,
+        "reason": "Objective asks for specific impact of a control on sales."
+      },
+      {
+        "objective": "AMD gross margin in its most recent fiscal year",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 3.429,
+        "reason": "Single entity metric lookup."
+      },
+      {
+        "objective": "Tesla energy storage deployments and revenue trend",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 4.013,
+        "reason": "Focuses on specific metrics (deployments, revenue) for a single entity."
+      },
+      {
+        "objective": "Battery cell supply and cost outlook for Tesla Megapack",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 4.147,
+        "reason": "Focuses on specific supply and cost factors for one product."
+      },
+      {
+        "objective": "Amazon 2026 capital expenditure guidance",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": null,
+        "secs": 4.378,
+        "reason": "Focuses on a single company's specific financial guidance."
+      },
+      {
+        "objective": "Capital expenditure plans of the three largest US cloud providers compared for 2026",
+        "depth": 1,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": null,
+        "secs": 6.277,
+        "reason": "Comparing multiple entities' specific financial plans requires WIDE."
+      },
+      {
+        "objective": "Which foundry manufactures AMD's newest data-center CPUs, and is its capacity constrained?",
+        "depth": 1,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": null,
+        "secs": 4.585,
+        "reason": "Identifies specific entity (foundry) and checks a dependent fact (capacity constraint)."
+      }
+    ]
+  }
+]

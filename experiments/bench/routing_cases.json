@@ -1,0 +1,41 @@
+{
+  "_note": "Labels are the author's judgement of the intended WebSwarm mode for each objective (see prompts.MODES_GUIDE). They are not from a public benchmark. 'parent' is set for depth-1 cases: objectives a manager has already split out of a larger question, where over-delegation is the costly error.",
+  "cases": [
+    {"objective": "What was NVIDIA's data center revenue for fiscal year 2025?", "expected": "ATOM"},
+    {"objective": "What is the current federal funds target rate range set by the Federal Reserve?", "expected": "ATOM"},
+    {"objective": "What was Apple's services revenue in fiscal 2025?", "expected": "ATOM"},
+    {"objective": "How much did Microsoft spend on capital expenditures in its most recent fiscal year?", "expected": "ATOM"},
+    {"objective": "What gross margin did AMD report for its latest quarter?", "expected": "ATOM"},
+    {"objective": "When did TSMC begin volume production of its 2nm process?", "expected": "ATOM"},
+
+    {"objective": "Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year.", "expected": "WIDE"},
+    {"objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?", "expected": "WIDE"},
+    {"objective": "Compare the 2026 capital expenditure plans of Microsoft, Alphabet, Amazon and Meta.", "expected": "WIDE"},
+    {"objective": "What are the key drivers and risks for Tesla's energy storage business?", "expected": "WIDE"},
+    {"objective": "How do JPMorgan, Bank of America and Citigroup compare on net interest income this year?", "expected": "WIDE"},
+    {"objective": "What are the main headwinds facing European automakers in 2026?", "expected": "WIDE"},
+
+    {"objective": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?", "expected": "DEEP"},
+    {"objective": "Which company is the largest customer of ASML's EUV lithography systems, and what share of ASML's revenue does it account for?", "expected": "DEEP"},
+    {"objective": "Why did Intel's foundry business report an operating loss last year, and what would have to change for it to break even?", "expected": "DEEP"},
+    {"objective": "Is it true that hyperscaler capital expenditure is growing faster than their cloud revenue?", "expected": "DEEP"},
+    {"objective": "Which memory maker gained the most high-bandwidth-memory share last year, and what drove the gain?", "expected": "DEEP"},
+
+    {"objective": "Which companies supply high-bandwidth memory for AI accelerators?", "expected": "ENTITY_COLLECT"},
+    {"objective": "List the publicly traded companies that manufacture lithography equipment for advanced chips.", "expected": "ENTITY_COLLECT"},
+    {"objective": "Which hyperscalers are designing their own AI accelerator chips?", "expected": "ENTITY_COLLECT"},
+    {"objective": "Name the major suppliers of advanced chip packaging services.", "expected": "ENTITY_COLLECT"},
+
+    {"objective": "NVIDIA data-center GPU pricing trends in recent quarters", "expected": "ATOM", "parent": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?"},
+    {"objective": "Hyperscaler capital expenditure plans and demand for NVIDIA accelerators", "expected": "ATOM", "parent": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?"},
+    {"objective": "Competitive pressure from AMD and custom silicon on NVIDIA's data-center market share", "expected": "ATOM", "parent": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?"},
+    {"objective": "Supply chain constraints and chip availability affecting NVIDIA's data-center revenue", "expected": "ATOM", "parent": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?"},
+    {"objective": "US export controls on AI chips to China and their effect on NVIDIA sales", "expected": "ATOM", "parent": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?"},
+    {"objective": "AMD gross margin in its most recent fiscal year", "expected": "ATOM", "parent": "Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year."},
+    {"objective": "Tesla energy storage deployments and revenue trend", "expected": "ATOM", "parent": "What are the key drivers and risks for Tesla's energy storage business?"},
+    {"objective": "Battery cell supply and cost outlook for Tesla Megapack", "expected": "ATOM", "parent": "What are the key drivers and risks for Tesla's energy storage business?"},
+    {"objective": "Amazon 2026 capital expenditure guidance", "expected": "ATOM", "parent": "Compare the 2026 capital expenditure plans of Microsoft, Alphabet, Amazon and Meta."},
+    {"objective": "Capital expenditure plans of the three largest US cloud providers compared for 2026", "expected": "WIDE", "parent": "What will drive demand for AI servers next year?"},
+    {"objective": "Which foundry manufactures AMD's newest data-center CPUs, and is its capacity constrained?", "expected": "DEEP", "parent": "What are the main risks to AMD's server business?"}
+  ]
+}

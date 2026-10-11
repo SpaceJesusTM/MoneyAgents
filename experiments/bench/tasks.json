@@ -1,0 +1,112 @@
+{
+  "_note": "Benchmark tasks. 'stable' tasks have answers fixed by past filings (gold facts checked against the issuers' own releases on 2026-10-11). 'live' tasks depend on current reporting; they are graded for coverage and grounding only. `key_facts` and `coverage` are case-insensitive regular expressions matched against the final answer; a fact counts as found when any of its patterns matches. Both GAAP and non-GAAP figures are accepted where a company reports both.",
+  "tasks": [
+    {
+      "id": "A1", "type": "ATOM", "stability": "stable",
+      "question": "What was NVIDIA's Data Center revenue for fiscal year 2025 (the year ended January 26, 2025), and how much did it grow from the prior year?",
+      "key_facts": [
+        {"fact": "Data Center revenue $115.2 billion", "patterns": ["115\\.2", "115,1\\d\\d"]},
+        {"fact": "up 142% year over year", "patterns": ["142\\s?%", "142 percent"]}
+      ],
+      "authoritative": ["nvidianews.nvidia.com", "investor.nvidia.com", "q4cdn.com", "sec.gov"],
+      "check": "NVIDIA Q4 FY2025 press release / CFO commentary, 26 Feb 2025."
+    },
+    {
+      "id": "A2", "type": "ATOM", "stability": "stable",
+      "question": "What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?",
+      "key_facts": [
+        {"fact": "Services net sales $96.2 billion", "patterns": ["96\\.2", "96\\.17", "96,169"]}
+      ],
+      "authoritative": ["apple.com", "sec.gov"],
+      "check": "Apple FY2024 Form 10-K, net sales by category."
+    },
+    {
+      "id": "W1", "type": "WIDE", "stability": "stable",
+      "question": "Compare the gross margins of NVIDIA (fiscal year 2025), AMD (fiscal year 2024) and Intel (fiscal year 2024).",
+      "key_facts": [
+        {"fact": "NVIDIA FY2025 gross margin 75.0% GAAP (75.5% non-GAAP)", "patterns": ["75\\.0\\s?%", "75\\.5\\s?%", "\\b75\\s?%"]},
+        {"fact": "AMD FY2024 gross margin 49% GAAP (53% non-GAAP)", "patterns": ["\\b49\\s?%", "\\b53\\s?%"]},
+        {"fact": "Intel FY2024 gross margin 32.7% GAAP (36.0% non-GAAP)", "patterns": ["32\\.7\\s?%", "36\\.0\\s?%", "\\b36\\s?%"]}
+      ],
+      "coverage": [
+        {"point": "NVIDIA", "patterns": ["nvidia"]}, {"point": "AMD", "patterns": ["\\bamd\\b"]}, {"point": "Intel", "patterns": ["intel"]}
+      ],
+      "authoritative": ["nvidianews.nvidia.com", "ir.amd.com", "newsroom.amd.com", "intc.com", "sec.gov"],
+      "check": "Each company's fourth-quarter and full-year release."
+    },
+    {
+      "id": "W2", "type": "WIDE", "stability": "stable",
+      "question": "Compare the total annual revenue of Microsoft (fiscal year 2024), Alphabet (2024) and Amazon (2024).",
+      "key_facts": [
+        {"fact": "Microsoft FY2024 revenue $245.1 billion", "patterns": ["245\\.1", "245,122"]},
+        {"fact": "Alphabet 2024 revenue $350.0 billion", "patterns": ["350\\.0", "350,018", "\\$350 billion", "350 billion"]},
+        {"fact": "Amazon 2024 net sales $638.0 billion", "patterns": ["638\\.0", "637\\.9", "637,959", "638 billion"]}
+      ],
+      "coverage": [
+        {"point": "Microsoft", "patterns": ["microsoft"]}, {"point": "Alphabet", "patterns": ["alphabet|google"]}, {"point": "Amazon", "patterns": ["amazon"]}
+      ],
+      "authoritative": ["microsoft.com", "abc.xyz", "aboutamazon.com", "ir.aboutamazon.com", "sec.gov"],
+      "check": "Each company's annual results release / Form 10-K."
+    },
+    {
+      "id": "D1", "type": "DEEP", "stability": "stable",
+      "question": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+      "key_facts": [
+        {"fact": "the supplier is TSMC", "patterns": ["tsmc", "taiwan semiconductor"]},
+        {"fact": "the packaging technology is CoWoS", "patterns": ["cowos", "chip[- ]on[- ]wafer[- ]on[- ]substrate"]}
+      ],
+      "coverage": [
+        {"point": "a capacity growth figure or expansion plan", "patterns": ["doubl", "\\d+\\s?%", "wafers per month", "wpm", "expan"]}
+      ],
+      "authoritative": ["tsmc.com", "nvidia.com", "reuters.com"],
+      "check": "TSMC earnings calls and trade press: CoWoS capacity is the widely reported bottleneck. Growth figures vary by date and source, so only their presence is graded."
+    },
+    {
+      "id": "D2", "type": "DEEP", "stability": "stable",
+      "question": "Which company manufactures the processors Apple designs for the iPhone, and in which US state is that company building advanced chip factories?",
+      "key_facts": [
+        {"fact": "the manufacturer is TSMC", "patterns": ["tsmc", "taiwan semiconductor"]},
+        {"fact": "the US factories are in Arizona", "patterns": ["arizona", "phoenix"]}
+      ],
+      "authoritative": ["tsmc.com", "apple.com", "reuters.com"],
+      "check": "TSMC Arizona announcements; Apple supplier statements."
+    },
+    {
+      "id": "M1", "type": "MIXED", "stability": "live",
+      "question": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+      "coverage": [
+        {"point": "customer demand / hyperscaler spending", "patterns": ["hyperscal", "capex", "capital expenditure", "cloud provider", "demand"]},
+        {"point": "supply or manufacturing constraints", "patterns": ["supply", "capacity", "cowos", "packaging", "tsmc", "shortage"]},
+        {"point": "competition", "patterns": ["\\bamd\\b", "custom (silicon|chip|asic)", "asic", "competit", "in-house"]},
+        {"point": "export controls / China / trade policy", "patterns": ["export", "china", "tariff", "restriction"]},
+        {"point": "company guidance or product roadmap", "patterns": ["guidance", "outlook", "blackwell", "rubin", "roadmap"]}
+      ],
+      "authoritative": ["nvidianews.nvidia.com", "q4cdn.com", "sec.gov"],
+      "check": "Live question. Judge coverage of the dimensions above and whether each claim is cited to a retrieved source."
+    },
+    {
+      "id": "M2", "type": "MIXED", "stability": "live",
+      "question": "What are the main drivers and risks for AMD's data center business over the next year?",
+      "coverage": [
+        {"point": "server CPUs (EPYC) and share gains", "patterns": ["epyc", "server cpu", "market share", "share gain"]},
+        {"point": "AI accelerators (Instinct / MI series)", "patterns": ["instinct", "mi3\\d\\d", "mi4\\d\\d", "ai accelerator", "ai gpu", "gpu"]},
+        {"point": "competition", "patterns": ["nvidia", "intel", "competit"]},
+        {"point": "customer demand / hyperscalers", "patterns": ["hyperscal", "cloud", "openai", "meta", "microsoft", "customer", "demand"]},
+        {"point": "export controls, supply or other risks", "patterns": ["export", "china", "supply", "risk", "tariff"]}
+      ],
+      "authoritative": ["ir.amd.com", "newsroom.amd.com", "sec.gov"],
+      "check": "Live question. Judge coverage of the dimensions above and whether each claim is cited to a retrieved source."
+    },
+    {
+      "id": "E1", "type": "ENTITY_COLLECT", "stability": "stable",
+      "question": "Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?",
+      "key_facts": [
+        {"fact": "SK hynix", "patterns": ["sk\\s?hynix"]},
+        {"fact": "Samsung", "patterns": ["samsung"]},
+        {"fact": "Micron", "patterns": ["micron"]}
+      ],
+      "authoritative": ["skhynix.com", "samsung.com", "micron.com"],
+      "check": "The three HBM producers are SK hynix, Samsung Electronics and Micron Technology."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Recorded web responses contain third-party page text and can be large: kept local by default.
+bench/cassettes/
+# Full per-run traces; results.jsonl and the comparison tables are tracked.
+results/*/runs/
+__pycache__/

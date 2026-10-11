@@ -1,0 +1,36 @@
+{
+  "_note": "Experiment arms. Each is the frozen baseline config plus the listed overrides, so every arm differs from the baseline in a stated, minimal way. 'subset' restricts an arm to the tasks where its mechanism can act.",
+  "arms": {
+    "baseline": {
+      "description": "Frozen baseline: the main 4B model makes every decision generatively; incremental review; FIFO model queue.",
+      "overrides": []
+    },
+    "batch_review": {
+      "description": "Manager waits for the whole batch before reviewing (what the WebSwarm reference code does), instead of reviewing each arrival.",
+      "overrides": ["review_policy=batch"],
+      "subset": ["W1", "W2", "D1", "M1", "M2", "E1"]
+    },
+    "probing": {
+      "description": "Web probing before WIDE planning (WebSwarm section 3.3).",
+      "overrides": ["web_probing=true"],
+      "subset": ["W1", "W2", "M1", "M2"]
+    },
+    "finish_first": {
+      "description": "Model-slot scheduler serves calls that complete a node before calls that start new work.",
+      "overrides": ["scheduler=finish_first"],
+      "subset": ["W1", "W2", "D1", "M1", "M2", "E1"]
+    },
+    "rules": {
+      "description": "All bounded decisions (route, next ATOM action, review, verify-or-not, redundancy) by deterministic rules; no model calls for control.",
+      "overrides": ["decider=rules", "verify_policy=decider"]
+    },
+    "local_s1_4b": {
+      "description": "Bounded decisions as typed one-token questions answered by the same 4B model via logprobs (local System One-style).",
+      "overrides": ["decider=local_s1", "verify_policy=decider"]
+    },
+    "local_s1_2b": {
+      "description": "Same typed decisions answered by the smaller qwen3.5:2b model; research still by the 4B model.",
+      "overrides": ["decider=local_s1", "verify_policy=decider", "decider_options.model=qwen3.5:2b-q4_K_M"]
+    }
+  }
+}
