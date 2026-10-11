@@ -142,6 +142,16 @@
         "extract_mode=lines",
         "cite_retry=true"
       ]
+    },
+    "mock_jev": {
+      "description": "MOCK, plumbing check only: decisions from the in-process mock that speaks the Jev wire format (word overlap). Not Jev; never compare its numbers with anything.",
+      "overrides": [
+        "decider=mock_jev",
+        "verify_policy=decider"
+      ],
+      "subset": [
+        "A1"
+      ]
     }
   }
 }
