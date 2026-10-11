@@ -1,0 +1,239 @@
+{
+  "question": "What was NVIDIA's Data Center revenue for fiscal year 2025 (the year ended January 26, 2025), and how much did it grow from the prior year?",
+  "config": {
+    "name": "baseline",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/A1",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T00:59:58-04:00",
+    "git_commit": "6458038e44e2dd09a88ac2090bd76b33d78adf60",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "NVIDIA's Data Center revenue for fiscal year 2025 (ended January 26, 2025) was $115.2 billion [S1]. This represents a 142% increase from the prior year [S1].",
+    "status": "ok",
+    "confidence": "high",
+    "gaps": "",
+    "audit": {
+      "citations": 1,
+      "unknown_citations": [],
+      "cited_pages": 1,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "nvidianews.nvidia.com"
+      ],
+      "numbers": 4,
+      "numbers_in_cited_source": 4,
+      "numbers_elsewhere_in_evidence": 0,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 0,
+      "numeric_grounding": 1.0
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 42.4,
+    "wall_seconds": 42.3,
+    "time_to_first_search_result": 10.343,
+    "time_to_first_evidence": 27.88,
+    "time_to_first_page_evidence": 27.88,
+    "llm_calls": 7,
+    "llm_calls_by_kind": {
+      "route": 1,
+      "act": 4,
+      "extract": 1,
+      "answer": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 38.48,
+    "llm_queue_wait_seconds": 0,
+    "prompt_tokens": 4623,
+    "output_tokens": 509,
+    "llm_prompt_eval_seconds": 12.76,
+    "llm_generation_seconds": 19.75,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 1
+    },
+    "searches": 1,
+    "fetches": 2,
+    "web_calls": 3,
+    "fetch_failures": 1,
+    "search_failures": 0,
+    "web_seconds": 4.33,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 0,
+    "nodes": 1,
+    "nodes_by_mode": {
+      "ATOM": 1
+    },
+    "nodes_by_role": {
+      "research": 1
+    },
+    "nodes_by_status": {
+      "ok": 1
+    },
+    "max_depth": 0,
+    "findings": 3,
+    "findings_from_pages": 3,
+    "findings_rejected": 0,
+    "sources": 1,
+    "source_domains": [
+      "nvidianews.nvidia.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 0,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 1,
+    "budget_hits": []
+  },
+  "tree": "[ATOM] What was NVIDIA's Data Center revenue for fiscal year 2025 (the year ended January 26, 2025), and how much did it grow from the prior year?  (#0, ok, 42s, confidence high)\n    why: Specific financial metric for a single entity.\n    ! asked to read result 1, which is not an unread result; read 2 instead",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "What was NVIDIA's Data Center revenue for fiscal year 2025 (the year ended January 26, 2025), and how much did it grow from the prior year?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Specific financial metric for a single entity.",
+      "notes": [
+        "asked to read result 1, which is not an unread result; read 2 instead"
+      ],
+      "children": [],
+      "created": 0.033,
+      "started": 0.033,
+      "finished": 42.363,
+      "result": {
+        "status": "ok",
+        "answer": "NVIDIA's Data Center revenue for fiscal year 2025 (ended January 26, 2025) was $115.2 billion [S1]. This represents a 142% increase from the prior year [S1].",
+        "confidence": "high",
+        "gaps": "",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://nvidianews.nvidia.com/_gallery/download_pdf/67bf85d73d633281c6875f57/",
+        "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2025",
+        "domain": "nvidianews.nvidia.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T04:59:44+00:00",
+        "first_node": 0
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "NVIDIA's Data Center revenue for the quarter ended January 26, 2025, was $35.6 billion, representing a 93% increase from the same period in the prior year.",
+        "quote": "Record quarterly Data Center revenue of $35.6 billion, up 16% from Q3 and up 93% from a year ago",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 27.88,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "NVIDIA's full-year Data Center revenue for fiscal 2025 (the year ended January 26, 2025) was $115.2 billion, representing a 142% increase from the prior year.",
+        "quote": "Full-year revenue rose 142% to a record $115.2 billion.",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 27.886,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "NVIDIA's total full-year revenue for fiscal 2025 was $130.5 billion, which is an 114% increase from the prior year.",
+        "quote": "Record full-year revenue of $130.5 billion, up 114%",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 27.89,
+        "verified": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,542 @@
+{
+  "question": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+  "config": {
+    "name": "baseline",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/D1",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T01:14:39-04:00",
+    "git_commit": "de16bc3c85cf3ffd2740ef3fb54e6e669a19a6d7",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "Amkor is the primary supplier of advanced-packaging technology for NVIDIA's latest AI accelerators, confirmed by a $1.5 billion deal signed in late July 2026 to expand U.S. production in Arizona [S1][S4]. This partnership involves jointly developing packaging and testing technologies to integrate different chip types into single packages [S1].\n\nHowever, the specific advanced-packaging capacity figures (in units per year) and the projected annual growth rate for this deal could not be established. Despite multiple sub-objectives seeking these quantitative metrics, all provided sources explicitly state that such data is missing. The findings only confirm the financial value of the agreement, its location, and its timing [S2][S3][S5][S6][S7]. There are no conflicting results regarding capacity numbers; rather, there is a consistent absence of this information across all cited documents.\n\nUncertainty:\nThe research could not determine Amkor's current maximum advanced-packaging capacity for NVIDIA chips nor its projected annual growth rate. The available evidence confirms the existence and value of the partnership but lacks the specific production volume data required to answer how fast that capacity can grow.",
+    "status": "ok",
+    "confidence": "high",
+    "gaps": "",
+    "audit": {
+      "citations": 7,
+      "unknown_citations": [],
+      "cited_pages": 2,
+      "cited_snippets": 5,
+      "cited_domains": [
+        "bizjournals.com",
+        "en.sedaily.com",
+        "ir.amkor.com",
+        "reuters.com",
+        "seadivi.asia",
+        "secure.businesswire.com",
+        "thebuildout.ai"
+      ],
+      "numbers": 2,
+      "numbers_in_cited_source": 0,
+      "numbers_elsewhere_in_evidence": 2,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 1,
+      "numeric_grounding": 0.0
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 240.6,
+    "wall_seconds": 240.6,
+    "time_to_first_search_result": 13.151,
+    "time_to_first_evidence": 31.555,
+    "time_to_first_page_evidence": 31.555,
+    "llm_calls": 31,
+    "llm_calls_by_kind": {
+      "route": 1,
+      "deep_step": 4,
+      "act": 16,
+      "extract": 3,
+      "answer": 4,
+      "snippet_extract": 2,
+      "synthesize": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 212.05,
+    "llm_queue_wait_seconds": 0,
+    "prompt_tokens": 19145,
+    "output_tokens": 2663,
+    "llm_prompt_eval_seconds": 73.02,
+    "llm_generation_seconds": 119.37,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 1,
+      "deep_step:generative": 4
+    },
+    "searches": 9,
+    "fetches": 6,
+    "web_calls": 15,
+    "fetch_failures": 4,
+    "search_failures": 0,
+    "web_seconds": 30.51,
+    "web_run_cache_hits": 2,
+    "web_from_cassette": 0,
+    "nodes": 5,
+    "nodes_by_mode": {
+      "DEEP": 1,
+      "ATOM": 4
+    },
+    "nodes_by_role": {
+      "research": 4,
+      "verifier": 1
+    },
+    "nodes_by_status": {
+      "ok": 5
+    },
+    "max_depth": 1,
+    "findings": 12,
+    "findings_from_pages": 6,
+    "findings_rejected": 0,
+    "sources": 7,
+    "source_domains": [
+      "bizjournals.com",
+      "en.sedaily.com",
+      "ir.amkor.com",
+      "reuters.com",
+      "seadivi.asia",
+      "secure.businesswire.com",
+      "thebuildout.ai"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 1,
+      "pages_read_with_no_accepted_finding": 1,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 7,
+    "budget_hits": []
+  },
+  "tree": "[DEEP] Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?  (#0, ok, 241s, verdict survived)\n│   why: Identifies specific unnamed entity (supplier) and dependent metric (growth speed).\n│   ! no investigate rounds left (or repeated step); moving to verification\n│   ! verification sent before finishing\n├── [ATOM] Who is the primary supplier of advanced packaging technology for NVIDIA's latest AI accelerator chips?  (#1, ok, 39s, confidence high)\n├── [ATOM] What is the current maximum advanced-packaging capacity of Amkor for NVIDIA chips, and what is the projected annual growth rate?  (#2, ok, 49s, confidence low)\n│       ! search returned nothing; retried as 'Amkor NVIDIA advanced packaging capacity annual growth'\n│       ! repeated/empty query; read the next unread result instead\n├── [ATOM] What are the specific advanced-packaging capacity figures (in units per year) and projected annual growth rate for Amkor's $1.5 billion deal with NVIDIA?  (#3, ok, 57s, confidence low)\n│       ! search returned nothing; retried as 'Amkor NVIDIA advanced packaging capacity per year'\n│       ! no page evidence; used search snippets (3 findings)\n└── [ATOM/verifier] The provided findings do not contain specific advanced-packaging capacity figures (units per year) or a projected annual growth rate for Amkor's $1.5 billion deal with NVIDIA. The text confirms the deal value, location (Arizona), and timing (late July 2026) but lacks quantitative production data or growth projections.  (#4, ok, 54s, verdict survived)\n        ! no page evidence; used search snippets (3 findings)",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "DEEP",
+      "model_mode": "DEEP",
+      "status": "ok",
+      "reason": "Identifies specific unnamed entity (supplier) and dependent metric (growth speed).",
+      "notes": [
+        "no investigate rounds left (or repeated step); moving to verification",
+        "verification sent before finishing"
+      ],
+      "children": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "created": 0.023,
+      "started": 0.023,
+      "finished": 240.633,
+      "result": {
+        "status": "ok",
+        "answer": "Amkor is the primary supplier of advanced-packaging technology for NVIDIA's latest AI accelerators, confirmed by a $1.5 billion deal signed in late July 2026 to expand U.S. production in Arizona [S1][S4]. This partnership involves jointly developing packaging and testing technologies to integrate different chip types into single packages [S1].\n\nHowever, the specific advanced-packaging capacity figures (in units per year) and the projected annual growth rate for this deal could not be established. Despite multiple sub-objectives seeking these quantitative metrics, all provided sources explicitly state that such data is missing. The findings only confirm the financial value of the agreement, its location, and its timing [S2][S3][S5][S6][S7]. There are no conflicting results regarding capacity numbers; rather, there is a consistent absence of this information across all cited documents.\n\nUncertainty:\nThe research could not determine Amkor's current maximum advanced-packaging capacity for NVIDIA chips nor its projected annual growth rate. The available evidence confirms the existence and value of the partnership but lacks the specific production volume data required to answer how fast that capacity can grow.",
+        "confidence": "high",
+        "gaps": "",
+        "verdict": "survived",
+        "entities": [],
+        "sources": [
+          "S1",
+          "S4",
+          "S2",
+          "S3",
+          "S5",
+          "S6",
+          "S7"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Who is the primary supplier of advanced packaging technology for NVIDIA's latest AI accelerator chips?",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 7.765,
+      "started": 7.766,
+      "finished": 46.851,
+      "result": {
+        "status": "ok",
+        "answer": "Amkor is the primary supplier of advanced packaging technology for NVIDIA's latest AI accelerator chips, evidenced by a $1.5 billion deal signed on October 23 to expand US production [S1]. The partnership involves jointly developing packaging and testing technology to combine different chip types into single packages [S1]. While Amkor previously focused on simpler packaging, it is actively advancing its capabilities through such partnerships [S1].",
+        "confidence": "high",
+        "gaps": "None; the findings explicitly identify Amkor as the partner for NVIDIA's advanced packaging.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": [
+        "step_kind"
+      ]
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "What is the current maximum advanced-packaging capacity of Amkor for NVIDIA chips, and what is the projected annual growth rate?",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "search returned nothing; retried as 'Amkor NVIDIA advanced packaging capacity annual growth'",
+        "repeated/empty query; read the next unread result instead"
+      ],
+      "children": [],
+      "created": 51.162,
+      "started": 51.162,
+      "finished": 100.295,
+      "result": {
+        "status": "ok",
+        "answer": "The provided findings do not state a specific maximum advanced-packaging capacity figure for Amkor's NVIDIA chips, nor do they include a projected annual growth rate. They only confirm a $1.5 billion multi-year agreement [S2] to expand U.S. capacity with NVIDIA prepayments [S2], aiming to strengthen domestic manufacturing capabilities [S2].",
+        "confidence": "low",
+        "gaps": "Missing specific maximum capacity numbers and projected annual growth rates.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S2"
+        ]
+      },
+      "context_keys": [
+        "known",
+        "step_kind"
+      ]
+    },
+    {
+      "id": 3,
+      "parent": 0,
+      "depth": 1,
+      "objective": "What are the specific advanced-packaging capacity figures (in units per year) and projected annual growth rate for Amkor's $1.5 billion deal with NVIDIA?",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "search returned nothing; retried as 'Amkor NVIDIA advanced packaging capacity per year'",
+        "no page evidence; used search snippets (3 findings)"
+      ],
+      "children": [],
+      "created": 105.814,
+      "started": 105.814,
+      "finished": 163.087,
+      "result": {
+        "status": "ok",
+        "answer": "The provided findings do not contain specific advanced-packaging capacity figures (units per year) or a projected annual growth rate for Amkor's $1.5 billion deal with NVIDIA [S3]. The text confirms the deal value, location (Arizona), and timing (late July 2026) but lacks quantitative production data or growth projections [S4][S5].",
+        "confidence": "low",
+        "gaps": "Missing specific capacity figures in units per year and projected annual growth rate.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S3",
+          "S4",
+          "S5"
+        ]
+      },
+      "context_keys": [
+        "known",
+        "step_kind"
+      ]
+    },
+    {
+      "id": 4,
+      "parent": 0,
+      "depth": 1,
+      "objective": "The provided findings do not contain specific advanced-packaging capacity figures (units per year) or a projected annual growth rate for Amkor's $1.5 billion deal with NVIDIA. The text confirms the deal value, location (Arizona), and timing (late July 2026) but lacks quantitative production data or growth projections.",
+      "role": "verifier",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "no page evidence; used search snippets (3 findings)"
+      ],
+      "children": [],
+      "created": 169.94,
+      "started": 169.94,
+      "finished": 223.872,
+      "result": {
+        "status": "ok",
+        "answer": "The findings confirm the deal value ($1.5 billion) [S6], location (Arizona) [S7], and timing (late July 2026) [S4]. However, none of the sources provide specific advanced-packaging capacity figures in units per year or projected annual growth rates. The text lacks these quantitative production data points as claimed.",
+        "confidence": "medium",
+        "gaps": "None",
+        "verdict": "survived",
+        "entities": [],
+        "sources": [
+          "S6",
+          "S7",
+          "S4"
+        ]
+      },
+      "context_keys": [
+        "step_kind"
+      ]
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://en.sedaily.com/international/2026/07/24/amkor-nvidias-packaging-pick-tackles-hidden-ai-chip",
+        "title": "Amkor, Nvidia&#x27;s Packaging Pick, Tackles Hidden AI Chip Bottleneck - Seoul Economic Daily",
+        "domain": "en.sedaily.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:11:10+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S2",
+        "url": "https://ir.amkor.com/news-releases/news-release-details/amkor-technology-announces-strategic-partnership-nvidia-expand",
+        "title": "Amkor Technology Announces Strategic Partnership with NVIDIA to Expand Advanced Packaging and Test for Next-Generation AI Infrastructure | Amkor Technology",
+        "domain": "ir.amkor.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:12:05+00:00",
+        "first_node": 2
+      },
+      {
+        "id": "S3",
+        "url": "https://www.reuters.com/world/asia-pacific/nvidia-amkor-strike-15-billion-chip-packaging-deal-2026-07-23/",
+        "title": "Nvidia, Amkor strike $1.5 billion chip packaging deal | Reuters",
+        "domain": "reuters.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:13:13+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S4",
+        "url": "https://www.seadivi.asia/nvidia-amkor-advanced-packaging-deal-analysis",
+        "title": "NVIDIA Locks $1.5B Amkor Advanced Packaging Capacity: AI ...",
+        "domain": "seadivi.asia",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:13:13+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S5",
+        "url": "https://secure.businesswire.com/news/home/20260723873230/en/Amkor-Technology-Announces-Strategic-Partnership-with-NVIDIA-to-Expand-Advanced-Packaging-and-Test-for-Next-Generation-AI-Infrastructure",
+        "title": "Amkor Technology Announces Strategic Partnership with NVIDIA ...",
+        "domain": "secure.businesswire.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:13:13+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S6",
+        "url": "https://thebuildout.ai/intel/9a939572-818f-418e-ac8d-ed56acdff437",
+        "title": "Nvidia signs $1.5 billion deal with Amkor Technology to boost U.S ...",
+        "domain": "thebuildout.ai",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:14:15+00:00",
+        "first_node": 4
+      },
+      {
+        "id": "S7",
+        "url": "https://www.bizjournals.com/phoenix/news/2026/07/23/nvidia-amkor-chip-packaging-agreement.html",
+        "title": "Amkor inks $1.5B deal with Nvidia to expand Arizona chip packaging capacity",
+        "domain": "bizjournals.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:14:15+00:00",
+        "first_node": 4
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "Nvidia signed a semiconductor packaging deal worth $1.5 billion (about 2.2 trillion won) with Amkor on the 23rd to expand production within the United States.",
+        "quote": "According to Bloomberg on the 23rd, Nvidia signed a semiconductor packaging deal worth $1.5 billion (about 2.2 trillion won), including an advance payment, with Amkor to expand semiconductor production within the United States.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 31.555,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "Amkor and Nvidia plan to jointly develop packaging and testing technology for Nvidia's AI and accelerated computing platforms, focusing on combining different types of chips into a single package.",
+        "quote": "The two companies plan to jointly develop packaging and testing technology for Nvidia's AI and accelerated computing platforms, focusing on technology that combines different types of chips into a single package.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 31.556,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "Amkor previously specialized in relatively simple chip packaging but is making efforts to enter more advanced technology stages through partnerships such as one with Taiwan's TSMC.",
+        "quote": "Amkor previously specialized in relatively simple chip packaging, but has been making efforts to enter more advanced technology stages through partnerships such as one with Taiwan's TSMC.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 31.557,
+        "verified": true
+      },
+      {
+        "id": "F4",
+        "claim": "The partnership involves a $1.5 billion multi-year agreement between Amkor Technology and NVIDIA to expand advanced packaging capacity.",
+        "quote": "$1.5 Billion Multi-Year Advanced Packaging and Development Agreement to Support Expansion of Amkor’s U.S. Advanced Packaging Capacity",
+        "source_id": "S2",
+        "node_id": 2,
+        "t": 86.833,
+        "verified": true
+      },
+      {
+        "id": "F5",
+        "claim": "NVIDIA will provide a prepayment to support the expansion of Amkor's U.S. advanced packaging capacity under this agreement.",
+        "quote": "Under the agreement, NVIDIA will provide a prepayment to support the expansion of Amkor’s U.S. advanced packaging capacity.",
+        "source_id": "S2",
+        "node_id": 2,
+        "t": 86.834,
+        "verified": true
+      },
+      {
+        "id": "F6",
+        "claim": "The collaboration aims to expand full turnkey advanced packaging and test capabilities in the United States to strengthen domestic semiconductor manufacturing.",
+        "quote": "The partnership also reflects a shared commitment to expanding full turnkey advanced packaging and test capabilities in the United States, strengthening domestic semiconductor manufacturing and supply-chain resilience for AI infrastructure.",
+        "source_id": "S2",
+        "node_id": 2,
+        "t": 86.836,
+        "verified": true
+      },
+      {
+        "id": "F7",
+        "claim": "The deal is worth $1.5 billion to expand advanced semiconductor packaging and test capacity in the U.S.",
+        "quote": "Amkor Technology said on Thursday it had entered a multi-year agreement with Nvidia worth $1.5 billion to expand advanced semiconductor packaging and test capacity in the U.S., as the...",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 154.692,
+        "verified": true
+      },
+      {
+        "id": "F8",
+        "claim": "The agreement was reached in late July 2026 to lock in Amkor's advanced packaging and testing capacity in Arizona, U.S.",
+        "quote": "In late July 2026, NVIDIA and Amkor reached a multi-year strategic agreement worth $1.5 billion, prepaying to lock in Amkor's advanced packaging and testing capacity in Arizona, U.S.",
+        "source_id": "S4",
+        "node_id": 3,
+        "t": 154.693,
+        "verified": true
+      },
+      {
+        "id": "F9",
+        "claim": "The deal supports the expansion of Amkor's U.S. capacity in Arizona, complementing its established manufacturing footprint across Asia.",
+        "quote": "NVIDIA’s capacity agreement supports Amkor’s expansion of U.S. capacity in Arizona, complementing the company’s established manufacturing footprint across Asia, to create a...",
+        "source_id": "S5",
+        "node_id": 3,
+        "t": 154.693,
+        "verified": true
+      },
+      {
+        "id": "F10",
+        "claim": "On July 23, 2026, Amkor Technology confirmed a $1.5 billion multi-year strategic partnership with NVIDIA to expand advanced semiconductor packaging and test capacity in the United States.",
+        "quote": "Amkor Technology Arizona nikkei.com On July 23, 2026, Amkor Technology confirmed a $1.5 billion multi-year strategic partnership with NVIDIA to expand advanced semiconductor packaging and test capacity in the United States.",
+        "source_id": "S6",
+        "node_id": 4,
+        "t": 216.068,
+        "verified": true
+      },
+      {
+        "id": "F11",
+        "claim": "Amkor Technology and Nvidia announced a $1.5 billion partnership to expand advanced semiconductor packaging capacity in Arizona for AI infrastructure.",
+        "quote": "Amkor inks $1.5B deal with Nvidia to expand Arizona chip packaging capacity: Amkor Technology and Nvidia announce a $1.5 billion partnership to expand advanced semiconductor packaging capacity in Arizona for AI infrastructure.",
+        "source_id": "S7",
+        "node_id": 4,
+        "t": 216.069,
+        "verified": true
+      },
+      {
+        "id": "F12",
+        "claim": "In late July 2026, NVIDIA and Amkor reached a multi-year strategic agreement worth $1.5 billion, prepaying to lock in Amkor's advanced packaging and testing capacity in Arizona, U.S.",
+        "quote": "NVIDIA Locks $1.5B Amkor Advanced Packaging Capacity: AI Computing Arms ...: In late July 2026, NVIDIA and Amkor reached a multi-year strategic agreement worth $1.5 billion, prepaying to lock in Amkor's advanced packaging and testing capacity in Arizona, U.S.",
+        "source_id": "S4",
+        "node_id": 4,
+        "t": 216.069,
+        "verified": true
+      }
+    ]
+  }
+}

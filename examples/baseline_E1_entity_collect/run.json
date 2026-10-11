@@ -1,0 +1,721 @@
+{
+  "question": "Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?",
+  "config": {
+    "name": "baseline",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/E1",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T01:43:56-04:00",
+    "git_commit": "de16bc3c85cf3ffd2740ef3fb54e6e669a19a6d7",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "- Micron: Only non-Korean supplier qualified for HBM3E; business growing over 100% year-on-year. [S2, S5, S6] (3 of 3 search paths)\n- SK Hynix: Holds 50-55% global HBM market share; leads manufacturer leaderboard for HBM. [S2, S3, S4, S5] (3 of 3 search paths)\n- Samsung: Trails on HBM3E but racing on HBM4; part of top supplier set. [S2, S4, S5] (2 of 3 search paths)\n- Samsung Electronics: Signed MOU with AMD for HBM4 supply; passed NVIDIA qualification for HBM3E. [S1] (1 of 3 search paths; independent check: survived [S7, S8, S9])",
+    "status": "ok",
+    "confidence": "high",
+    "gaps": "acronym/alias variants of the same entity may be listed separately",
+    "audit": {
+      "citations": 9,
+      "unknown_citations": [],
+      "cited_pages": 3,
+      "cited_snippets": 6,
+      "cited_domains": [
+        "presenc.ai",
+        "quantabundance.com",
+        "reuters.com",
+        "semiconductor.samsung.com",
+        "siliconanalysts.com",
+        "sourcebyspec.com",
+        "techtimes.com"
+      ],
+      "numbers": 3,
+      "numbers_in_cited_source": 0,
+      "numbers_elsewhere_in_evidence": 3,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 2,
+      "numeric_grounding": 0.0
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 251.2,
+    "wall_seconds": 251.2,
+    "time_to_first_search_result": 19.913,
+    "time_to_first_evidence": 80.523,
+    "time_to_first_page_evidence": 80.523,
+    "llm_calls": 27,
+    "llm_calls_by_kind": {
+      "route": 1,
+      "entity_plan": 1,
+      "act": 16,
+      "extract": 3,
+      "snippet_extract": 2,
+      "answer": 4
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 241.93,
+    "llm_queue_wait_seconds": 309.12,
+    "prompt_tokens": 16312,
+    "output_tokens": 2997,
+    "llm_prompt_eval_seconds": 73.56,
+    "llm_generation_seconds": 151.48,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 1
+    },
+    "searches": 13,
+    "fetches": 6,
+    "web_calls": 19,
+    "fetch_failures": 3,
+    "search_failures": 0,
+    "web_seconds": 35.3,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 0,
+    "nodes": 5,
+    "nodes_by_mode": {
+      "ENTITY_COLLECT": 1,
+      "ATOM": 4
+    },
+    "nodes_by_role": {
+      "research": 1,
+      "collector": 3,
+      "verifier": 1
+    },
+    "nodes_by_status": {
+      "ok": 5
+    },
+    "max_depth": 1,
+    "findings": 15,
+    "findings_from_pages": 9,
+    "findings_rejected": 0,
+    "sources": 9,
+    "source_domains": [
+      "presenc.ai",
+      "quantabundance.com",
+      "reuters.com",
+      "semiconductor.samsung.com",
+      "siliconanalysts.com",
+      "sourcebyspec.com",
+      "techtimes.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 0,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 7,
+    "budget_hits": []
+  },
+  "tree": "[ENTITY_COLLECT] Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?  (#0, ok, 251s, confidence high)\n│   why: The answer is a list of entities that must be discovered.\n├── [ATOM/collector] Find the official suppliers of High-Bandwidth Memory (HBM) for NVIDIA Blackwell and AMD MI300 architectures announced during Q4 2025 semiconductor supply chain reports.  (#1, ok, 185s, confidence medium)\n│       ! search returned nothing; retried as 'NVIDIA Blackwell HBM supplier Q4 2025 AMD'\n│       ! repeated/empty query; read the next unread result instead\n│       ! asked to read result 1, which is not an unread result; read 2 instead\n├── [ATOM/collector] Find recent news coverage from late 2025 detailing which memory manufacturers are securing multi-year contracts with major AI accelerator makers to meet 2026 data center demand.  (#2, ok, 162s, confidence medium)\n│       ! search returned nothing; retried as 'memory manufacturers multi-year contracts AI accelerators 2026'\n├── [ATOM/collector] Find the current market-share rankings for HBM3e and HBM4 modules published by industry analysts in early 2026, specifically focusing on tier-1 suppliers dominating the AI chip ecosystem.  (#3, ok, 172s, confidence medium)\n│       ! no page evidence; used search snippets (3 findings)\n└── [ATOM/verifier] \"Samsung Electronics\" belongs in the answer to: Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?  (#4, ok, 56s, verdict survived)\n        ! search returned nothing; retried as 'Samsung Electronics manufacturer high-bandwidth memory AI accelerator'\n        ! no page evidence; used search snippets (3 findings)",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ENTITY_COLLECT",
+      "model_mode": "ENTITY_COLLECT",
+      "status": "ok",
+      "reason": "The answer is a list of entities that must be discovered.",
+      "notes": [],
+      "children": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "created": 0.036,
+      "started": 0.036,
+      "finished": 251.218,
+      "result": {
+        "status": "ok",
+        "answer": "- Micron: Only non-Korean supplier qualified for HBM3E; business growing over 100% year-on-year. [S2, S5, S6] (3 of 3 search paths)\n- SK Hynix: Holds 50-55% global HBM market share; leads manufacturer leaderboard for HBM. [S2, S3, S4, S5] (3 of 3 search paths)\n- Samsung: Trails on HBM3E but racing on HBM4; part of top supplier set. [S2, S4, S5] (2 of 3 search paths)\n- Samsung Electronics: Signed MOU with AMD for HBM4 supply; passed NVIDIA qualification for HBM3E. [S1] (1 of 3 search paths; independent check: survived [S7, S8, S9])",
+        "confidence": "high",
+        "gaps": "acronym/alias variants of the same entity may be listed separately",
+        "verdict": "",
+        "entities": [
+          {
+            "name": "Micron",
+            "note": "Only non-Korean supplier qualified for HBM3E; business growing over 100% year-on-year.",
+            "sources": [
+              "S2",
+              "S5",
+              "S6"
+            ],
+            "paths": [
+              2,
+              3,
+              1
+            ],
+            "support": 3
+          },
+          {
+            "name": "SK Hynix",
+            "note": "Holds 50-55% global HBM market share; leads manufacturer leaderboard for HBM.",
+            "sources": [
+              "S2",
+              "S3",
+              "S4",
+              "S5",
+              "S1",
+              "S6"
+            ],
+            "paths": [
+              2,
+              3,
+              1
+            ],
+            "support": 3
+          },
+          {
+            "name": "Samsung",
+            "note": "Trails on HBM3E but racing on HBM4; part of top supplier set.",
+            "sources": [
+              "S2",
+              "S4",
+              "S5"
+            ],
+            "paths": [
+              2,
+              3
+            ],
+            "support": 2
+          },
+          {
+            "name": "Samsung Electronics",
+            "note": "Signed MOU with AMD for HBM4 supply; passed NVIDIA qualification for HBM3E.",
+            "sources": [
+              "S1"
+            ],
+            "paths": [
+              1
+            ],
+            "support": 1,
+            "verify_claim": "\"Samsung Electronics\" belongs in the answer to: Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?",
+            "verdict": "survived",
+            "verify_sources": [
+              "S7",
+              "S8",
+              "S9"
+            ]
+          }
+        ],
+        "sources": [
+          "S2",
+          "S5",
+          "S6",
+          "S3",
+          "S4",
+          "S1",
+          "S7",
+          "S8",
+          "S9"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Find the official suppliers of High-Bandwidth Memory (HBM) for NVIDIA Blackwell and AMD MI300 architectures announced during Q4 2025 semiconductor supply chain reports.",
+      "role": "collector",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "search returned nothing; retried as 'NVIDIA Blackwell HBM supplier Q4 2025 AMD'",
+        "repeated/empty query; read the next unread result instead",
+        "asked to read result 1, which is not an unread result; read 2 instead"
+      ],
+      "children": [],
+      "created": 10.861,
+      "started": 10.862,
+      "finished": 195.419,
+      "result": {
+        "status": "ok",
+        "answer": "Samsung Electronics [S1]; SK Hynix [S1, S6]; Micron [S6]",
+        "confidence": "medium",
+        "gaps": "No findings mention companies manufacturing HBM chips specifically for AI accelerators beyond general qualification and supply agreements.",
+        "verdict": "",
+        "entities": [
+          {
+            "name": "Samsung Electronics",
+            "note": "Signed MOU with AMD for HBM4 supply; passed NVIDIA qualification for HBM3E.",
+            "sources": [
+              "S1"
+            ]
+          },
+          {
+            "name": "SK Hynix",
+            "note": "First to qualify HBM3E; planning mass production of 48GB HBM4 in Q3 2026.",
+            "sources": [
+              "S1",
+              "S6"
+            ]
+          },
+          {
+            "name": "Micron",
+            "note": "Only non-Korean supplier qualified for HBM3E; business growing over 100% year-on-year.",
+            "sources": [
+              "S6"
+            ]
+          }
+        ],
+        "sources": [
+          "S1",
+          "S6"
+        ]
+      },
+      "context_keys": [
+        "collect_for"
+      ]
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Find recent news coverage from late 2025 detailing which memory manufacturers are securing multi-year contracts with major AI accelerator makers to meet 2026 data center demand.",
+      "role": "collector",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "search returned nothing; retried as 'memory manufacturers multi-year contracts AI accelerators 2026'"
+      ],
+      "children": [],
+      "created": 10.861,
+      "started": 10.865,
+      "finished": 172.479,
+      "result": {
+        "status": "ok",
+        "answer": "SK Hynix [S2]; Samsung [S2]; Micron [S2]",
+        "confidence": "medium",
+        "gaps": "}",
+        "verdict": "",
+        "entities": [
+          {
+            "name": "SK Hynix",
+            "note": "Major HBM supplier with fully sold-out 2026 production.",
+            "sources": [
+              "S2"
+            ]
+          },
+          {
+            "name": "Samsung",
+            "note": "Major HBM supplier with fully sold-out 2026 production.",
+            "sources": [
+              "S2"
+            ]
+          },
+          {
+            "name": "Micron",
+            "note": "Major HBM supplier with fully sold-out 2026 production.",
+            "sources": [
+              "S2"
+            ]
+          }
+        ],
+        "sources": [
+          "S2"
+        ]
+      },
+      "context_keys": [
+        "collect_for"
+      ]
+    },
+    {
+      "id": 3,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Find the current market-share rankings for HBM3e and HBM4 modules published by industry analysts in early 2026, specifically focusing on tier-1 suppliers dominating the AI chip ecosystem.",
+      "role": "collector",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "no page evidence; used search snippets (3 findings)"
+      ],
+      "children": [],
+      "created": 10.862,
+      "started": 10.866,
+      "finished": 182.996,
+      "result": {
+        "status": "ok",
+        "answer": "SK Hynix [S3, S4, S5]; Samsung [S4, S5]; Micron [S5]",
+        "confidence": "medium",
+        "gaps": "No specific revenue figures provided for Samsung or Micron.",
+        "verdict": "",
+        "entities": [
+          {
+            "name": "SK Hynix",
+            "note": "Holds 50-55% global HBM market share; leads manufacturer leaderboard for HBM.",
+            "sources": [
+              "S3",
+              "S4",
+              "S5"
+            ]
+          },
+          {
+            "name": "Samsung",
+            "note": "Trails on HBM3E but racing on HBM4; part of top supplier set.",
+            "sources": [
+              "S4",
+              "S5"
+            ]
+          },
+          {
+            "name": "Micron",
+            "note": "Part of the 2026 HBM supplier set alongside SK Hynix and Samsung.",
+            "sources": [
+              "S5"
+            ]
+          }
+        ],
+        "sources": [
+          "S3",
+          "S4",
+          "S5"
+        ]
+      },
+      "context_keys": [
+        "collect_for"
+      ]
+    },
+    {
+      "id": 4,
+      "parent": 0,
+      "depth": 1,
+      "objective": "\"Samsung Electronics\" belongs in the answer to: Which companies manufacture high-bandwidth memory (HBM) chips used in AI accelerators?",
+      "role": "verifier",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [
+        "search returned nothing; retried as 'Samsung Electronics manufacturer high-bandwidth memory AI accelerator'",
+        "no page evidence; used search snippets (3 findings)"
+      ],
+      "children": [],
+      "created": 195.423,
+      "started": 195.423,
+      "finished": 251.215,
+      "result": {
+        "status": "ok",
+        "answer": "Samsung Electronics manufactures High Bandwidth Memory (HBM) chips optimized for high-performance computing and next-generation technologies [S7]. It developed the industry's first 12-stack HBM3E DRAM in February 2024 [S8] and plans to supply HBM4 chips to OpenAI for its AI processor [S9]. These findings directly confirm Samsung's role in manufacturing HBM chips used in AI accelerators.",
+        "confidence": "medium",
+        "gaps": "None",
+        "verdict": "survived",
+        "entities": [],
+        "sources": [
+          "S7",
+          "S8",
+          "S9"
+        ]
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://siliconanalysts.com/tools/hbm-analysis",
+        "title": "HBM Pricing &amp; Market Share 2026: SK Hynix, Samsung",
+        "domain": "siliconanalysts.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:41:05+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S2",
+        "url": "https://www.techtimes.com/articles/321554/20260725/samsung-sk-hynix-lock-ai-chip-supply-through-2030-950b-us-deals.htm",
+        "title": "Samsung and SK Hynix Lock In AI Chip Supply Through 2030 With $950B in US Deals",
+        "domain": "techtimes.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:41:25+00:00",
+        "first_node": 2
+      },
+      {
+        "id": "S3",
+        "url": "https://www.sourcebyspec.com/news/hbm-memory-market-share-2026-sk-hynix-holds-50-55-samsung-and-micron-chase-hbm4.html",
+        "title": "HBM Memory Market Share 2026: SK Hynix Holds 50-55%, Samsung ...",
+        "domain": "sourcebyspec.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:42:08+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S4",
+        "url": "https://presenc.ai/research/hbm-market-share-samsung-skhynix-micron-2026",
+        "title": "HBM Market Share 2026: SK hynix vs Samsung vs Micron - presenc.ai",
+        "domain": "presenc.ai",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:42:08+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S5",
+        "url": "https://www.sourcebyspec.com/news/top-hbm-memory-companies-in-2026-sk-hynix-samsung-micron.html",
+        "title": "Top HBM Memory Companies in 2026: SK hynix, Samsung, Micron",
+        "domain": "sourcebyspec.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:42:08+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S6",
+        "url": "https://quantabundance.com/articles/nvda-hbm-bottleneck",
+        "title": "NVIDIA&#x27;s HBM bottleneck - why Blackwell shipments depend on three Korean fabs · QuantAbundance",
+        "domain": "quantabundance.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:42:28+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S7",
+        "url": "https://semiconductor.samsung.com/dram/hbm/",
+        "title": "HBM | DRAM | Samsung Semiconductor Global",
+        "domain": "semiconductor.samsung.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:43:47+00:00",
+        "first_node": 4
+      },
+      {
+        "id": "S8",
+        "url": "https://semiconductor.samsung.com/news-events/tech-blog/the-perfect-harmony-created-by-samsung-hbm-powering-the-ai-era/",
+        "title": "The Perfect Harmony Created by Samsung HBM: Powering the AI Era",
+        "domain": "semiconductor.samsung.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:43:47+00:00",
+        "first_node": 4
+      },
+      {
+        "id": "S9",
+        "url": "https://www.reuters.com/world/asia-pacific/samsung-elec-supply-hbm4-chips-openai-south-korean-paper-says-2026-03-19/",
+        "title": "Samsung Elec to supply HBM4 chips to OpenAI, South Korean paper says",
+        "domain": "reuters.com",
+        "kind": "snippet",
+        "retrieved_at": "2026-10-11T05:43:47+00:00",
+        "first_node": 4
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "Samsung Electronics signed a Memorandum of Understanding (MOU) with AMD to expand their strategic collaboration on next-generation AI memory, aligning on primary HBM4 supply for the AMD Instinct MI455X GPU.",
+        "quote": "Samsung Electronics today announced it has signed a Memorandum of Understanding (MOU) with AMD to expand their strategic collaboration on next-generation AI memory...Samsung and AMD will align on primary HBM4 supply for the AMD Instinct MI455X GPU",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 80.523,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "As of September 2025, Samsung passed NVIDIA's qualification for HBM3E 12-Hi (12-layer), becoming the third supplier after SK Hynix and Micron.",
+        "quote": "Samsung finally passed NVIDIA's 12-layer HBM3E qualification in September 2025 — third supplier, after SK Hynix and Micron",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 80.527,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "SK Hynix is planning to begin mass production of its HBM4 16-Hi devices (48 gigabytes capacity) in the third quarter of 2026.",
+        "quote": "At CES 2026, SK Hynix unveiled a 16-layer HBM4 device with 48 gigabytes of capacity... SK Hynix is planning to begin mass production of these HBM4 devices in the third quarter of 2026.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 80.53,
+        "verified": true
+      },
+      {
+        "id": "F4",
+        "claim": "Samsung, SK Hynix, and Micron have extended their order books into 2027 due to the highest-ever gap between DRAM demand and supply.",
+        "quote": "The three companies that control more than 90 percent of global DRAM — Samsung, SK Hynix, and Micron — simultaneously warned of multi-year shortages as their order books extended into 2027.",
+        "source_id": "S2",
+        "node_id": 2,
+        "t": 99.671,
+        "verified": true
+      },
+      {
+        "id": "F5",
+        "claim": "All three major HBM suppliers (SK Hynix, Samsung, and Micron) had their 2026 production fully sold out before the late 2025 summit.",
+        "quote": "In the short term, no. All three major HBM suppliers — SK Hynix, Samsung, and Micron — had their 2026 production fully sold out before Friday's summit.",
+        "source_id": "S2",
+        "node_id": 2,
+        "t": 99.675,
+        "verified": true
+      },
+      {
+        "id": "F6",
+        "claim": "Meaningful new HBM capacity is not expected until 2027 or 2028 from facilities currently under construction.",
+        "quote": "Meaningful new HBM capacity is not expected until 2027 or 2028 from new facilities currently under construction.",
+        "source_id": "S2",
+        "node_id": 2,
+        "t": 99.68,
+        "verified": true
+      },
+      {
+        "id": "F7",
+        "claim": "SK Hynix holds a 50-55% revenue share in the global HBM market as of August 2026, leading ahead of Samsung and Micron.",
+        "quote": "SK Hynix leads the global HBM market with a 50-55% revenue share as of August 2026, ahead of Samsung and Micron, the only two other qualified HBM suppliers worldwide.",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 143.285,
+        "verified": true
+      },
+      {
+        "id": "F8",
+        "claim": "In early 2026, SK hynix leads the manufacturer leaderboard for HBM, while Samsung trails on HBM3E and is racing on HBM4.",
+        "quote": "SK hynix leads, Samsung trails on HBM3E and is racing on HBM4, and Micron has overtaken Samsung on some allocations.",
+        "source_id": "S4",
+        "node_id": 3,
+        "t": 143.285,
+        "verified": true
+      },
+      {
+        "id": "F9",
+        "claim": "As of July 2026, the 2026 supplier set for HBM memory is led by SK hynix, Samsung, and Micron, with SK hynix holding the dominant share on HBM3E.",
+        "quote": "The 2026 supplier set is led by SK hynix, Samsung, and Micron, with SK hynix holding the dominant share on HBM3E and pre-qualifying HBM4.",
+        "source_id": "S5",
+        "node_id": 3,
+        "t": 143.286,
+        "verified": true
+      },
+      {
+        "id": "F10",
+        "claim": "SK Hynix was the first to qualify HBM3E in 2024, preceding Samsung at the 12-Hi tier.",
+        "quote": "Micron qualified HBM3E in 2024 - later than SK Hynix, earlier than Samsung at the 12-Hi tier - and is the only non-Korean qualified supplier.",
+        "source_id": "S6",
+        "node_id": 1,
+        "t": 163.189,
+        "verified": true
+      },
+      {
+        "id": "F11",
+        "claim": "Samsung is expected to qualify on the HBM4 generation at the same tier as SK Hynix by late 2026 or early 2027.",
+        "quote": "If Samsung qualifies on the HBM4 generation (expected late 2026 / early 2027) at the same tier as SK Hynix, capacity gets bigger and the price-floor under HBM3E weakens.",
+        "source_id": "S6",
+        "node_id": 1,
+        "t": 163.193,
+        "verified": true
+      },
+      {
+        "id": "F12",
+        "claim": "Micron is the only non-Korean supplier qualified for HBM3E and has a business growing over 100% year-on-year.",
+        "quote": "Capacity is the smallest of the three; Micron's HBM business is growing 100%+ year-on-year off a small base.",
+        "source_id": "S6",
+        "node_id": 1,
+        "t": 163.196,
+        "verified": true
+      },
+      {
+        "id": "F13",
+        "claim": "Samsung Electronics manufactures High Bandwidth Memory (HBM) chips optimized for high-performance computing and next-generation technologies.",
+        "quote": "Meet HBM(High Bandwidth Memory) optimized for high-performance computing(HPC) and next-generation technologies with better capacity, bandwidth, and low voltage.",
+        "source_id": "S7",
+        "node_id": 4,
+        "t": 242.535,
+        "verified": true
+      },
+      {
+        "id": "F14",
+        "claim": "Samsung Electronics developed the industry's first 12-stack HBM3E DRAM in February 2024.",
+        "quote": "In February, 2024, Samsung Electronics announced the development of the 36GB HBM3E 12H (5th generation HBM), the industry's first 12-stack HBM3E DRAM.",
+        "source_id": "S8",
+        "node_id": 4,
+        "t": 242.535,
+        "verified": true
+      },
+      {
+        "id": "F15",
+        "claim": "Samsung Electronics plans to supply HBM4 chips to OpenAI for use in its first in-house artificial intelligence processor.",
+        "quote": "Samsung Electronics plans to supply its next-generation high-bandwidth memory (HBM4) chips to OpenAI for use in the ChatGPT maker's first in-house artificial intelligence processor.",
+        "source_id": "S9",
+        "node_id": 4,
+        "t": 242.535,
+        "verified": true
+      }
+    ]
+  }
+}

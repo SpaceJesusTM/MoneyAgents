@@ -1,0 +1,951 @@
+{
+  "question": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+  "config": {
+    "name": "baseline",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/M1",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T01:27:31-04:00",
+    "git_commit": "de16bc3c85cf3ffd2740ef3fb54e6e669a19a6d7",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "NVIDIA's data-center revenue growth over the next 12 months will likely be driven by sustained high pricing due to supply constraints and a maturing secondary market, while facing significant competitive pressure from custom silicon and AMD. Official GPU prices for H100, H200, and B200 units remain elevated between $25,000 and $45,000, with rack-level systems like the GB300 NVL72 priced at $3.7M–$4M [S1]. However, specific discounting strategies or percentages for Q3-Q4 2026 could not be established; only on-demand hourly rates and purchase bands were reported [S1].\n\nRevenue growth is supported by strong enterprise AI adoption trends, with global generative AI spending reaching $644 billion in 2025 and the average number of production models per enterprise rising to 4.2 [S3]. Conversely, NVIDIA's market share has declined from 87% in 2024 to 70–75% in 2026 due to faster growth in custom silicon (15–20% market share) and contested AMD figures [S4][S6][S8]. Supply chain constraints, including extended lead times for power semiconductors and pressure on advanced packaging, continue to impact availability [S2].\n\nUncertainty:\nNo direct evidence links secondary market volumes ($121B) or specific discounting strategies to official revenue projections. Additionally, precise enterprise adoption rates specifically for NVIDIA chips were not found, only general model counts. The exact dollar amount of revenue lost due to supply constraints or competitive pressure could not be quantified.",
+    "status": "ok",
+    "confidence": "medium",
+    "gaps": "",
+    "audit": {
+      "citations": 6,
+      "unknown_citations": [],
+      "cited_pages": 6,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "alatirok.com",
+        "axis-intelligence.com",
+        "content-site-lovat.vercel.app",
+        "gpusmith.com",
+        "randtech.com",
+        "siliconanalysts.com"
+      ],
+      "numbers": 17,
+      "numbers_in_cited_source": 15,
+      "numbers_elsewhere_in_evidence": 2,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 2,
+      "numeric_grounding": 0.882
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 697.6,
+    "wall_seconds": 697.6,
+    "time_to_first_search_result": 28.484,
+    "time_to_first_evidence": 77.847,
+    "time_to_first_page_evidence": 77.847,
+    "llm_calls": 75,
+    "llm_calls_by_kind": {
+      "route": 5,
+      "plan": 1,
+      "act": 36,
+      "deep_step": 4,
+      "extract": 13,
+      "answer": 9,
+      "review": 5,
+      "synthesize": 2
+    },
+    "llm_failed_calls": 1,
+    "llm_seconds": 690.63,
+    "llm_queue_wait_seconds": 1112.92,
+    "prompt_tokens": 53244,
+    "output_tokens": 7979,
+    "llm_prompt_eval_seconds": 236.54,
+    "llm_generation_seconds": 402.65,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 5,
+      "deep_step:generative": 4,
+      "review:generative": 5
+    },
+    "searches": 23,
+    "fetches": 8,
+    "web_calls": 31,
+    "fetch_failures": 0,
+    "search_failures": 0,
+    "web_seconds": 49.38,
+    "web_run_cache_hits": 4,
+    "web_from_cassette": 0,
+    "nodes": 11,
+    "nodes_by_mode": {
+      "WIDE": 1,
+      "ATOM": 9,
+      "DEEP": 1
+    },
+    "nodes_by_role": {
+      "research": 10,
+      "verifier": 1
+    },
+    "nodes_by_status": {
+      "ok": 11
+    },
+    "max_depth": 2,
+    "findings": 36,
+    "findings_from_pages": 36,
+    "findings_rejected": 0,
+    "sources": 8,
+    "source_domains": [
+      "alatirok.com",
+      "axis-intelligence.com",
+      "content-site-lovat.vercel.app",
+      "gpusmith.com",
+      "jefferies.com",
+      "randtech.com",
+      "scribd.com",
+      "siliconanalysts.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 1,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 4,
+      "pages_read_with_no_accepted_finding": 0,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 3,
+    "budget_hits": [
+      "wrap_up"
+    ]
+  },
+  "tree": "[WIDE] What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?  (#0, ok, 698s, confidence medium)\n│   why: Multiple independent factors need separate research.\n│   ! follow-up requested but none allowed (limit reached)\n│   ! follow-up requested but none allowed (limit reached)\n├── [ATOM] NVIDIA data-center GPU pricing trends and discounting strategies  (#1, ok, 196s, confidence medium)\n│       why: Focuses on specific pricing and discounting mechanisms for a single entity.\n├── [ATOM] Enterprise AI adoption rates and cloud provider demand for NVIDIA chips  (#2, ok, 205s, confidence medium)\n│       why: Focuses on one specific factor (enterprise AI adoption) affecting a single entity (NVIDIA).\n│       ! repeated/empty query; read the next unread result instead\n├── [DEEP] Competitive pressure from AMD and custom silicon on NVIDIA's market share  (#3, ok, 657s, verdict refuted)\n│   │   why: Objective asks to identify specific unnamed entities causing a specific effect.\n│   ├── [ATOM] What is the current market share impact of AMD and custom silicon on NVIDIA?  (#5, ok, 212s, confidence high)\n│   ├── [ATOM] What is the precise market share percentage of AMD in the 2026 data-center AI accelerator market?  (#8, ok, 203s, confidence low)\n│   ├── [ATOM] What is the specific market share percentage of AMD in the 2026 data-center AI accelerator market?  (#9, ok, 84s, confidence medium)\n│   └── [ATOM/verifier] AMD holds an estimated 6 to 8 percent share of the 2026 data-center AI accelerator market by revenue.  (#10, ok, 76s, verdict refuted)\n├── [ATOM] Supply chain constraints and chip availability impacting revenue  (#4, ok, 221s, confidence high)\n│       why: Specific factor analysis fits ATOM definition.\n├── [ATOM] Investigate specific discounting percentages and strategies for NVIDIA H100/H200/B200 GPUs in Q3-Q4 2026.  (#6, ok, 211s, confidence low)\n└── [ATOM] Analyze how secondary market dynamics influence official pricing and revenue projections.  (#7, ok, 221s, confidence medium)",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "WIDE",
+      "model_mode": "WIDE",
+      "status": "ok",
+      "reason": "Multiple independent factors need separate research.",
+      "notes": [
+        "follow-up requested but none allowed (limit reached)",
+        "follow-up requested but none allowed (limit reached)"
+      ],
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "created": 0.04,
+      "started": 0.04,
+      "finished": 697.584,
+      "result": {
+        "status": "ok",
+        "answer": "NVIDIA's data-center revenue growth over the next 12 months will likely be driven by sustained high pricing due to supply constraints and a maturing secondary market, while facing significant competitive pressure from custom silicon and AMD. Official GPU prices for H100, H200, and B200 units remain elevated between $25,000 and $45,000, with rack-level systems like the GB300 NVL72 priced at $3.7M–$4M [S1]. However, specific discounting strategies or percentages for Q3-Q4 2026 could not be established; only on-demand hourly rates and purchase bands were reported [S1].\n\nRevenue growth is supported by strong enterprise AI adoption trends, with global generative AI spending reaching $644 billion in 2025 and the average number of production models per enterprise rising to 4.2 [S3]. Conversely, NVIDIA's market share has declined from 87% in 2024 to 70–75% in 2026 due to faster growth in custom silicon (15–20% market share) and contested AMD figures [S4][S6][S8]. Supply chain constraints, including extended lead times for power semiconductors and pressure on advanced packaging, continue to impact availability [S2].\n\nUncertainty:\nNo direct evidence links secondary market volumes ($121B) or specific discounting strategies to official revenue projections. Additionally, precise enterprise adoption rates specifically for NVIDIA chips were not found, only general model counts. The exact dollar amount of revenue lost due to supply constraints or competitive pressure could not be quantified.",
+        "confidence": "medium",
+        "gaps": "",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1",
+          "S3",
+          "S4",
+          "S6",
+          "S8",
+          "S2"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "NVIDIA data-center GPU pricing trends and discounting strategies",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Focuses on specific pricing and discounting mechanisms for a single entity.",
+      "notes": [],
+      "children": [],
+      "created": 8.336,
+      "started": 8.336,
+      "finished": 204.372,
+      "result": {
+        "status": "ok",
+        "answer": "NVIDIA data-center GPU prices for H100, H200, and B200 units range from $25,000 to $45,000 [S1]. Rack-level pricing shows the GB200 NVL72 at $2M-$3M and the GB300 NVL72 at $3.7M-$4M [S1]. Pricing remains elevated through late 2026 due to a maturing secondary market and supply constraints [S1]. Specific discounting strategies are not detailed in the findings.",
+        "confidence": "medium",
+        "gaps": "No specific data on active discounting percentages or strategies.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Enterprise AI adoption rates and cloud provider demand for NVIDIA chips",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Focuses on one specific factor (enterprise AI adoption) affecting a single entity (NVIDIA).",
+      "notes": [
+        "repeated/empty query; read the next unread result instead"
+      ],
+      "children": [],
+      "created": 8.336,
+      "started": 8.338,
+      "finished": 213.244,
+      "result": {
+        "status": "ok",
+        "answer": "Global generative AI spending reached $644 billion in 2025 [S3], with enterprise infrastructure accounting for 24% of total global AI spending that year [S3]. The average number of AI models in production per enterprise rose to 4.2 by 2025, up from 1.9 in 2023 [S3]. However, the provided findings do not contain specific data on NVIDIA chip demand or current adoption rates for enterprise AI infrastructure.",
+        "confidence": "medium",
+        "gaps": "Missing specific data on NVIDIA chip demand and precise enterprise AI adoption rates beyond model counts.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S3"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 3,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Competitive pressure from AMD and custom silicon on NVIDIA's market share",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "DEEP",
+      "model_mode": "DEEP",
+      "status": "ok",
+      "reason": "Objective asks to identify specific unnamed entities causing a specific effect.",
+      "notes": [],
+      "children": [
+        5,
+        8,
+        9,
+        10
+      ],
+      "created": 8.336,
+      "started": 8.339,
+      "finished": 665.247,
+      "result": {
+        "status": "ok",
+        "answer": "In 2026, NVIDIA holds 70–75% of the data-center AI accelerator market by revenue [S4], down from 87% in 2024. Custom silicon (Google TPU, AWS Trainium, Microsoft Maia) accounts for 15–20% and grows nearly 3x faster than GPUs [S4].\n\nAMD's share is contested. While one source estimates 6–8% for the data-center segment specifically [S4], another cites a broader 5–7% figure that contradicts the upper bound of the first claim [S8, S6]. Consequently, it cannot be established whether AMD holds exactly 6–8% in the data-center segment alone.\n\nNo evidence was found regarding NVIDIA's specific revenue share in the consumer gaming market or the precise impact of AMD's custom CPU designs on overall server market penetration beyond general growth rates.",
+        "confidence": "low",
+        "gaps": "",
+        "verdict": "refuted",
+        "entities": [],
+        "sources": [
+          "S4",
+          "S8",
+          "S6"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 4,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Supply chain constraints and chip availability impacting revenue",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Specific factor analysis fits ATOM definition.",
+      "notes": [],
+      "children": [],
+      "created": 8.336,
+      "started": 8.342,
+      "finished": 229.523,
+      "result": {
+        "status": "ok",
+        "answer": "Supply chain constraints are impacting revenue through extended lead times for power semiconductors (30+ weeks) [S2], tightening memory markets that consume future capacity [S2], and pressure on advanced packaging for complex AI chips [S2].",
+        "confidence": "high",
+        "gaps": "No specific figures linking these constraints to actual revenue impact or dollar amounts are provided.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S2"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 5,
+      "parent": 3,
+      "depth": 2,
+      "objective": "What is the current market share impact of AMD and custom silicon on NVIDIA?",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 33.389,
+      "started": 33.389,
+      "finished": 245.529,
+      "result": {
+        "status": "ok",
+        "answer": "In 2026, NVIDIA controls approximately 70% to 75% of the data-center AI accelerator market by revenue [S4], down from a peak of roughly 87% in 2024 [S4]. Custom silicon from hyperscalers (Google TPU, AWS Trainium, Microsoft Maia) collectively holds near 15% to 20% of this market [S4] and is growing nearly 3x faster than GPUs [S4].",
+        "confidence": "high",
+        "gaps": "None",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S4"
+        ]
+      },
+      "context_keys": [
+        "step_kind"
+      ]
+    },
+    {
+      "id": 6,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Investigate specific discounting percentages and strategies for NVIDIA H100/H200/B200 GPUs in Q3-Q4 2026.",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 237.207,
+      "started": 237.207,
+      "finished": 448.488,
+      "result": {
+        "status": "ok",
+        "answer": "The provided findings do not contain specific discounting percentages or strategies for NVIDIA H100/H200/B200 GPUs in Q3-Q4 2026. They only report on-demand hourly rates ($2.29) and purchase price bands ($25,000–$45,000) as of mid-2026 [S1].",
+        "confidence": "low",
+        "gaps": "Missing: Specific discounting percentages, promotional strategies, or Q3-Q4 2026 pricing data.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": [
+        "follow_up"
+      ]
+    },
+    {
+      "id": 7,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Analyze how secondary market dynamics influence official pricing and revenue projections.",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 237.207,
+      "started": 237.21,
+      "finished": 458.045,
+      "result": {
+        "status": "ok",
+        "answer": "Secondary market dynamics significantly influence official pricing and revenue projections through record volume ($121B) driven by evergreen vehicles [S5][S7]. While secondary investor demand for GP-led transactions expanded, particularly in AI-focused mid-to-late stages [S7], average LP portfolio pricing remained steady at 87% of NAV [S7]. Evergreen funds now hold a 46% portfolio share [S7]. A critical gap exists: no data links these secondary market volumes or pricing trends directly to official revenue projections.",
+        "confidence": "medium",
+        "gaps": "No direct evidence connecting secondary market activity to official revenue projections.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S5",
+          "S7"
+        ]
+      },
+      "context_keys": [
+        "follow_up"
+      ]
+    },
+    {
+      "id": 8,
+      "parent": 3,
+      "depth": 2,
+      "objective": "What is the precise market share percentage of AMD in the 2026 data-center AI accelerator market?",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 266.61,
+      "started": 266.61,
+      "finished": 469.762,
+      "result": {
+        "status": "ok",
+        "answer": "The precise market share percentage of AMD in the 2026 data-center AI accelerator market cannot be determined from the provided findings. While AMD's AI accelerator business is grouped within the Data Center segment and its overall server CPU revenue share was 46.2% in 2025 [S6], no specific figure for the 2026 AI accelerator market share exists. The text notes that AMD's revenue growth rate is below what full-scale AI accelerator market penetration would deliver, but this does not quantify the actual percentage [S6].",
+        "confidence": "low",
+        "gaps": "Missing: Specific data on AMD's 2026 AI accelerator market share percentage; missing distinction between total server CPU share and isolated AI accelerator share for 2026.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S6"
+        ]
+      },
+      "context_keys": [
+        "known",
+        "step_kind"
+      ]
+    },
+    {
+      "id": 9,
+      "parent": 3,
+      "depth": 2,
+      "objective": "What is the specific market share percentage of AMD in the 2026 data-center AI accelerator market?",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 484.312,
+      "started": 484.312,
+      "finished": 567.914,
+      "result": {
+        "status": "ok",
+        "answer": "AMD holds an estimated 6 to 8 percent share of the data-center AI accelerator market by revenue in 2026 [S4]. While another finding states AMD captured roughly 5–7% market share in the broader AI accelerator market in 2026 [S8], it does not explicitly confirm this specific percentage for the data-center segment alone. A gap exists regarding whether the 5–7% figure applies strictly to data-center units or includes other AI accelerator categories.",
+        "confidence": "medium",
+        "gaps": "The finding stating 5–7% market share [S8] does not specify if it covers only the data-center segment, whereas the 6–8% revenue figure [S4] explicitly targets data-center AI accelerators.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S4",
+          "S8"
+        ]
+      },
+      "context_keys": [
+        "known",
+        "step_kind"
+      ]
+    },
+    {
+      "id": 10,
+      "parent": 3,
+      "depth": 2,
+      "objective": "AMD holds an estimated 6 to 8 percent share of the 2026 data-center AI accelerator market by revenue.",
+      "role": "verifier",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 575.192,
+      "started": 575.192,
+      "finished": 651.271,
+      "result": {
+        "status": "ok",
+        "answer": "Findings [S6] and [S8] state AMD holds a 5–7% share, directly contradicting the claim's 6–8% range. Source [S8] explicitly notes this figure contradicts the user's assertion. While [S6] mentions Nvidia's 80–88% share, it does not support AMD exceeding 7%. Thus, the evidence refutes the upper bound of the claimed percentage.",
+        "confidence": "medium",
+        "gaps": "None",
+        "verdict": "refuted",
+        "entities": [],
+        "sources": [
+          "S6",
+          "S8"
+        ]
+      },
+      "context_keys": [
+        "step_kind"
+      ]
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://gpusmith.com/articles/en/nvidia-data-center-gpu-pricing-guide",
+        "title": "NVIDIA Data Center GPU Pricing: H100 to GB200 Cost Guide | GPUSmith",
+        "domain": "gpusmith.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:17:11+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S2",
+        "url": "https://randtech.com/semiconductor-shortages-2026-supply-chain/",
+        "title": "Semiconductor Shortages Are Accelerating in 2026",
+        "domain": "randtech.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:17:43+00:00",
+        "first_node": 4
+      },
+      {
+        "id": "S3",
+        "url": "https://content-site-lovat.vercel.app/articles/enterprise-ai-adoption-statistics-2026.html",
+        "title": "Enterprise AI Adoption Statistics 2026: 50+ Data Points on Business AI Integration",
+        "domain": "content-site-lovat.vercel.app",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:18:38+00:00",
+        "first_node": 2
+      },
+      {
+        "id": "S4",
+        "url": "https://alatirok.com/ai-chip-market-share-2026/",
+        "title": "AI Chip Market Share 2026: Nvidia, AMD, Custom Silicon",
+        "domain": "alatirok.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:19:01+00:00",
+        "first_node": 5
+      },
+      {
+        "id": "S5",
+        "url": "https://www.scribd.com/document/1075516061/Evercore-H1-2026-Secondary-Market-Review",
+        "title": "Evercore H1 2026 Secondary Market Review | PDF | Secondary Market | Financial Services",
+        "domain": "scribd.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:21:56+00:00",
+        "first_node": 7
+      },
+      {
+        "id": "S6",
+        "url": "https://axis-intelligence.com/amd-statistics/",
+        "title": "AMD Statistics 2026: Revenue, Market Share, AI Growth &amp; Data Center Dominance - Axis Intelligence",
+        "domain": "axis-intelligence.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:22:13+00:00",
+        "first_node": 8
+      },
+      {
+        "id": "S7",
+        "url": "https://www.jefferies.com/wp-content/uploads/sites/4/2026/07/Jefferies-Global-Secondary-Market-Review-July-2026.pdf",
+        "title": "Jefferies - Global Secondary Market Review - July 2026",
+        "domain": "jefferies.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:23:05+00:00",
+        "first_node": 7
+      },
+      {
+        "id": "S8",
+        "url": "https://siliconanalysts.com/analysis/amd-vs-nvidia-ai-gpu-market-share-2026",
+        "title": "AMD vs NVIDIA AI GPU Market Share 2026: MI350X vs B200",
+        "domain": "siliconanalysts.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:24:37+00:00",
+        "first_node": 9
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "Purchase prices for the H100, H200, and B200 GPUs cluster in a broad band of $25,000 to $45,000 per unit as of mid-2026.",
+        "quote": "Purchase prices for the H100, H200, and B200 all cluster in a broad $25,000 to $45,000 band per GPU, but the real economics increasingly live at the system and rack level.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 77.847,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "The GB200 NVL72 rack is estimated to cost between $2 million and $3 million, while the GB300 NVL72 rack is estimated to cost between $3.7 million and $4 million.",
+        "quote": "First, the shift toward rack-scale systems as the primary unit of sale, from the GB200 NVL72 at an estimated $2 million to $3 million, to the GB300 NVL72 at $3.7 million to $4 million...",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 77.852,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "NVIDIA data center GPU pricing is expected to remain elevated through the rest of 2026 due to a maturing secondary market and tight supply chains.",
+        "quote": "Over the medium term, the combination of a maturing secondary market, a widening set of merchant and custom-silicon alternatives, and a still-tight packaging and memory supply chain suggests NVIDIA data center GPU pricing will stay elevated on new hardware through the rest of 202",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 77.857,
+        "verified": true
+      },
+      {
+        "id": "F4",
+        "claim": "Power semiconductors built on mature nodes are seeing lead times extend to 30 weeks or more.",
+        "quote": "Power semiconductors, particularly those built on mature nodes, are seeing lead times extend to 30 weeks or more.",
+        "source_id": "S2",
+        "node_id": 4,
+        "t": 109.331,
+        "verified": true
+      },
+      {
+        "id": "F5",
+        "claim": "Memory markets are tightening rapidly with pricing accelerating and long-term agreements consuming future capacity.",
+        "quote": "Memory markets are tightening rapidly, with pricing accelerating and long-term agreements consuming future capacity.",
+        "source_id": "S2",
+        "node_id": 4,
+        "t": 109.332,
+        "verified": true
+      },
+      {
+        "id": "F6",
+        "claim": "Advanced packaging and back-end capacity are under pressure as AI chips become more complex.",
+        "quote": "Advanced packaging and back-end capacity are under pressure as AI chips become more complex.",
+        "source_id": "S2",
+        "node_id": 4,
+        "t": 109.333,
+        "verified": true
+      },
+      {
+        "id": "F7",
+        "claim": "Global generative AI spending reached $644 billion in 2025, representing a 76% year-over-year increase according to the Microsoft Work Trend Index.",
+        "quote": "$644B\nGlobal generative AI spending in 2025\nMicrosoft Work Trend Index (76% YoY increase)",
+        "source_id": "S3",
+        "node_id": 2,
+        "t": 164.049,
+        "verified": true
+      },
+      {
+        "id": "F8",
+        "claim": "Enterprise AI infrastructure accounted for 24% of total global AI spending in 2025, while software and services each made up 52%.",
+        "quote": "- AI Software: 52% of total spending\n- Infrastructure: 24% of total spending\n- Services: 24% of total spending",
+        "source_id": "S3",
+        "node_id": 2,
+        "t": 164.052,
+        "verified": true
+      },
+      {
+        "id": "F9",
+        "claim": "The average number of AI models in production per enterprise is 4.2, an increase from 1.9 in 2023 according to the Gartner Enterprise AI Survey.",
+        "quote": "4.2\nAverage number of AI models in production per enterprise\nGartner Enterprise AI Survey, up from 1.9 in 2023",
+        "source_id": "S3",
+        "node_id": 2,
+        "t": 164.054,
+        "verified": true
+      },
+      {
+        "id": "F10",
+        "claim": "In 2026, Nvidia controls roughly 70 to 75 percent of the data-center AI accelerator market by revenue, while custom silicon from Google TPU, AWS Trainium, and Microsoft Maia collectively holds near 15 to 20 percent.",
+        "quote": "In 2026, Nvidia still controls roughly 70 to 75 percent of the data-center AI accelerator market by revenue, AMD holds an estimated 6 to 8 percent, and hyperscaler custom silicon (Google TPU, AWS Trainium, Microsoft Maia, Meta MTIA) collectively sits near 15 to 20 percent and is.",
+        "source_id": "S4",
+        "node_id": 5,
+        "t": 187.144,
+        "verified": true
+      },
+      {
+        "id": "F11",
+        "claim": "Nvidia's market share in data-center AI accelerators dropped from a peak of roughly 87 percent in 2024 to an estimated 73 percent in 2026.",
+        "quote": "Estimates put Nvidia at roughly 70 to 75 percent of data-center AI accelerator revenue in 2026, down from a peak near 87 percent in 2024.",
+        "source_id": "S4",
+        "node_id": 5,
+        "t": 187.146,
+        "verified": true
+      },
+      {
+        "id": "F12",
+        "claim": "Custom ASICs from Google, Amazon, and Microsoft are growing nearly 3x faster than GPUs, contributing to the growth of the hyperscaler custom silicon segment.",
+        "quote": "Nvidia still owns roughly three-quarters of data-center AI accelerators, but custom ASICs from Google, Amazon, and Microsoft are growing nearly 3x faster than GPUs.",
+        "source_id": "S4",
+        "node_id": 5,
+        "t": 187.147,
+        "verified": true
+      },
+      {
+        "id": "F13",
+        "claim": "In July 2026, the market median on-demand hourly rate for an H100 GPU was approximately $2.29 per GPU-hour.",
+        "quote": "H100 | Azure ND H100 v5: ~$12.29 ($98.32 for 8-GPU node) (Source: instances.vantage.sh) | Lambda: $3.99 to $4.29 on-demand (see text above) | Marketplace/low end (per GPU-hr) | Market median ~$2.29/hr [53]",
+        "source_id": "S1",
+        "node_id": 6,
+        "t": 346.738,
+        "verified": true
+      },
+      {
+        "id": "F14",
+        "claim": "As of mid-2026, new H100 SXM5 GPUs sell for approximately $25,000 to $40,000 per unit depending on the OEM and variant.",
+        "quote": "How much does an NVIDIA H100 cost? As detailed above, new H100 SXM5 GPUs sell for approximately $25,000 to $40,000 per unit depending on OEM and variant, while cloud rental runs $1.38 to $11.06 per GPU-hour with a market median near $2.29.",
+        "source_id": "S1",
+        "node_id": 6,
+        "t": 346.741,
+        "verified": true
+      },
+      {
+        "id": "F15",
+        "claim": "In mid-2026, the purchase price band for H100, H200, and B200 GPUs clusters between $25,000 and $45,000 per unit.",
+        "quote": "NVIDIA data center GPU pricing in mid-2026 reflects a market still defined by scarcity rather than commoditization. Purchase prices for the H100, H200, and B200 all cluster in a broad $25,000 to $45,000 band per GPU.",
+        "source_id": "S1",
+        "node_id": 6,
+        "t": 346.743,
+        "verified": true
+      },
+      {
+        "id": "F16",
+        "claim": "The H1 2026 Secondary Market Review indicates a record volume of $121 billion, marking a 19% year-over-year increase.",
+        "quote": "The H1 2026 Secondary Market Review indicates a record volume of $121 billion, marking a 19% year-over-year increase, driven primarily by GP-led transactions at $65 billion.",
+        "source_id": "S5",
+        "node_id": 7,
+        "t": 362.319,
+        "verified": true
+      },
+      {
+        "id": "F17",
+        "claim": "GP-led transactions accounted for $65 billion of the total $121 billion secondary market volume in H1 2026.",
+        "quote": "The H1 2026 Secondary Market Review indicates a record volume of $121 billion, marking a 19% year-over-year increase, driven primarily by GP-led transactions at $65 billion.",
+        "source_id": "S5",
+        "node_id": 7,
+        "t": 362.319,
+        "verified": true
+      },
+      {
+        "id": "F18",
+        "claim": "The emergence of evergreen vehicles among secondary buyers is reshaping market dynamics and providing consistent demand.",
+        "quote": "Additionally, the emergence of evergreen vehicles among secondary buyers is reshaping market dynamics, providing a consistent source of demand and liquidity.",
+        "source_id": "S5",
+        "node_id": 7,
+        "t": 362.319,
+        "verified": true
+      },
+      {
+        "id": "F19",
+        "claim": "AMD's AI accelerator business is not broken out separately in SEC filings and sits inside the Data Center segment.",
+        "quote": "AMD’s AI accelerator business sits inside the Data Center segment and is not broken out separately in SEC filings.",
+        "source_id": "S6",
+        "node_id": 8,
+        "t": 379.516,
+        "verified": true
+      },
+      {
+        "id": "F20",
+        "claim": "In 2025, AMD achieved a record revenue of $34.6B with EPYC reaching 46.2% server CPU revenue share.",
+        "quote": "2025 | Revenue hits record $34.6B; EPYC reaches 46.2% server CPU revenue share",
+        "source_id": "S6",
+        "node_id": 8,
+        "t": 379.522,
+        "verified": true
+      },
+      {
+        "id": "F21",
+        "claim": "AMD's AMERI™ score of 84.3 reflects an elite position in margins and server CPU market share, but its revenue growth rate is below what full-scale AI accelerator market penetration would deliver.",
+        "quote": "The current AMERI™ score of 84.3 out of 100 reflects AMD’s elite position in margins and server CPU market share, partially offset by a revenue growth rate that remains below what full-scale AI accelerator market penetration would deliver.",
+        "source_id": "S6",
+        "node_id": 8,
+        "t": 379.527,
+        "verified": true
+      },
+      {
+        "id": "F22",
+        "claim": "In H1 2026, secondary investor demand for GP-led transactions in the venture and growth space expanded, with investors focused on mid- and late-stage companies benefiting from AI tailwinds.",
+        "quote": "In the first half of 2026, secondary investor demand for GP-led transactions in the venture and growth space continued to expand, while managers increasingly utilized these structures to provide liquidity across their portfolios.",
+        "source_id": "S7",
+        "node_id": 7,
+        "t": 430.965,
+        "verified": true
+      },
+      {
+        "id": "F23",
+        "claim": "Evergreen funds reached $120 billion in H1 2026, representing a 46% share of portfolios, up from 41% in 2025.",
+        "quote": "Evergreen FMV reached $120 billion(1), with allocations to secondaries continuing to increase and now representing a 46% share of portfolios, up from 41% in 2025.",
+        "source_id": "S7",
+        "node_id": 7,
+        "t": 430.974,
+        "verified": true
+      },
+      {
+        "id": "F24",
+        "claim": "Average LP portfolio pricing for all strategies held steady at approximately 87% of NAV in H1 2026, consistent with year-end 2025 levels.",
+        "quote": "Average LP portfolio pricing for all strategies held steady at approximately 87% of NAV, consistent with year-end 2025 levels.",
+        "source_id": "S7",
+        "node_id": 7,
+        "t": 430.983,
+        "verified": true
+      },
+      {
+        "id": "F25",
+        "claim": "AMD captured roughly 5–7% market share in the AI accelerator market in 2026.",
+        "quote": "AMD's Instinct GPU line generated an estimated $7–8 billion in 2025, capturing roughly 5–7% market share. However, the competitive landscape is more nuanced than a two-horse race: hyperscaler custom silicon (Google TPU, AWS Trainium, Broadcom ASICs) collectively represents a andf",
+        "source_id": "S8",
+        "node_id": 9,
+        "t": 523.514,
+        "verified": true
+      },
+      {
+        "id": "F26",
+        "claim": "In China specifically, AMD shipped approximately 160K units, representing 4% of the market.",
+        "quote": "In China specifically, IDC data shows NVIDIA shipped ~2.2M units (55%) versus domestic Chinese vendors' 1.65M (41%) and AMD's ~160K (4%).",
+        "source_id": "S8",
+        "node_id": 9,
+        "t": 523.517,
+        "verified": true
+      },
+      {
+        "id": "F27",
+        "claim": "By 2028, AMD is projected to reach a market share of 10–15% as the credible merchant silicon alternative.",
+        "quote": "NVIDIA retains 60–75% through 2028, AMD reaches 10–15% as the credible merchant silicon alternative, and custom silicon captures 15–25% concentrated in cloud-locked inference.",
+        "source_id": "S8",
+        "node_id": 9,
+        "t": 523.52,
+        "verified": true
+      },
+      {
+        "id": "F28",
+        "claim": "AMD holds an estimated 6 to 8 percent share of the data-center AI accelerator market by revenue in 2026.",
+        "quote": "In 2026, Nvidia still controls roughly 70 to 75 percent of the data-center AI accelerator market by revenue, AMD holds an estimated 6 to 8 percent, and hyperscaler custom silicon collectively sits near 15 to 20 percent and growing fast.",
+        "source_id": "S4",
+        "node_id": 9,
+        "t": 551.409,
+        "verified": true
+      },
+      {
+        "id": "F29",
+        "claim": "Analyst estimates for Nvidia's 2026 market share range from about 70% to 86%, depending on whether the count is revenue or units.",
+        "quote": "There is no audited, universally agreed AI chip market share table for 2026. Analyst estimates for Nvidia range from about 70% to 86% depending on whether the count is revenue or units and what counts as an ‘accelerator.’",
+        "source_id": "S4",
+        "node_id": 9,
+        "t": 551.414,
+        "verified": true
+      },
+      {
+        "id": "F30",
+        "claim": "Nvidia's data-center segment reported $75.2 billion in Q1 FY2027, representing a 92 percent year-over-year increase.",
+        "quote": "Despite the lower share, Nvidia’s revenue is at record highs because the overall market roughly doubled; its data-center segment alone reported $75.2 billion in Q1 FY2027, up 92 percent year over year.",
+        "source_id": "S4",
+        "node_id": 9,
+        "t": 551.417,
+        "verified": true
+      },
+      {
+        "id": "F31",
+        "claim": "AMD holds an estimated 5–7% of the AI accelerator market by revenue as of mid-2026.",
+        "quote": "Nvidia commands an estimated 80–88% of the AI accelerator market by revenue as of mid-2026, with AMD holding approximately 5–7% based on Bloomberg Intelligence, TrendForce, and IDC estimates.",
+        "source_id": "S6",
+        "node_id": 10,
+        "t": 605.747,
+        "verified": true
+      },
+      {
+        "id": "F32",
+        "claim": "The 5–7% market share figure for AMD in the AI accelerator market is derived from estimates provided by Bloomberg Intelligence, TrendForce, and IDC.",
+        "quote": "AMD holds an estimated 5–7% of the AI accelerator market by revenue, constrained primarily by CUDA’s software ecosystem moat rather than hardware performance.",
+        "source_id": "S6",
+        "node_id": 10,
+        "t": 605.754,
+        "verified": true
+      },
+      {
+        "id": "F33",
+        "claim": "Nvidia commands an estimated 80–88% share of the AI accelerator market by revenue as of mid-2026.",
+        "quote": "The competitive context: Nvidia commands an estimated 80–88% of the AI accelerator market by revenue as of mid-2026, with AMD holding approximately 5–7% based on Bloomberg Intelligence, TrendForce, and IDC estimates.",
+        "source_id": "S6",
+        "node_id": 10,
+        "t": 605.759,
+        "verified": true
+      },
+      {
+        "id": "F34",
+        "claim": "AMD holds an estimated 5–7% market share of the AI accelerator market in 2026, which contradicts the claim of 6 to 8 percent.",
+        "quote": "NVIDIA ~80%, AMD ~5-7%, custom silicon rising",
+        "source_id": "S8",
+        "node_id": 10,
+        "t": 641.713,
+        "verified": true
+      },
+      {
+        "id": "F35",
+        "claim": "AMD's Instinct GPU line generated an estimated $7–8 billion in revenue in 2025, capturing roughly 5–7% market share.",
+        "quote": "AMD's Instinct GPU line generated an estimated $7–8 billion in 2025, capturing roughly 5–7% market share.",
+        "source_id": "S8",
+        "node_id": 10,
+        "t": 641.718,
+        "verified": true
+      },
+      {
+        "id": "F36",
+        "claim": "The AI accelerator total addressable market is estimated to reach $200B+ in 2026, with data as of April 2026.",
+        "quote": "The AI accelerator total addressable market has grown from roughly $55B in 2023 to an estimated $160B in 2025, heading toward $200B+ in 2026.",
+        "source_id": "S8",
+        "node_id": 10,
+        "t": 641.722,
+        "verified": true
+      }
+    ]
+  }
+}

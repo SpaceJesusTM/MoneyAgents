@@ -1,0 +1,242 @@
+{
+  "question": "What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?",
+  "config": {
+    "name": "baseline",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/A2",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T01:00:51-04:00",
+    "git_commit": "6458038e44e2dd09a88ac2090bd76b33d78adf60",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "The provided findings do not contain Apple's Services revenue for the full fiscal year 2024 (the year ended September 28, 2024). They only report the Services revenue for the fourth quarter of that fiscal year, which was $23.1 billion [S1]. To determine the total annual Services revenue, the quarterly figures for all four quarters of fiscal year 2024 are required; this data is missing from the findings.",
+    "status": "ok",
+    "confidence": "low",
+    "gaps": "Missing quarterly revenue data for Q1, Q2, and Q3 of fiscal year 2024 to calculate the full-year Services total.",
+    "audit": {
+      "citations": 1,
+      "unknown_citations": [],
+      "cited_pages": 1,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "apple.com"
+      ],
+      "numbers": 4,
+      "numbers_in_cited_source": 0,
+      "numbers_elsewhere_in_evidence": 3,
+      "numbers_ungrounded": 1,
+      "ungrounded_examples": [
+        {
+          "number": "23.1",
+          "sentence": "They only report the Services revenue for the fourth quarter of that fiscal year, which was $23.1 billion [S1]."
+        }
+      ],
+      "sentences_with_figures_but_no_citation": 2,
+      "numeric_grounding": 0.0
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 37.8,
+    "wall_seconds": 37.8,
+    "time_to_first_search_result": 6.761,
+    "time_to_first_evidence": 23.369,
+    "time_to_first_page_evidence": 23.369,
+    "llm_calls": 7,
+    "llm_calls_by_kind": {
+      "route": 1,
+      "act": 4,
+      "extract": 1,
+      "answer": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 32.84,
+    "llm_queue_wait_seconds": 0,
+    "prompt_tokens": 3949,
+    "output_tokens": 532,
+    "llm_prompt_eval_seconds": 11.34,
+    "llm_generation_seconds": 20.9,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 1
+    },
+    "searches": 2,
+    "fetches": 2,
+    "web_calls": 4,
+    "fetch_failures": 1,
+    "search_failures": 0,
+    "web_seconds": 5.06,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 0,
+    "nodes": 1,
+    "nodes_by_mode": {
+      "ATOM": 1
+    },
+    "nodes_by_role": {
+      "research": 1
+    },
+    "nodes_by_status": {
+      "ok": 1
+    },
+    "max_depth": 0,
+    "findings": 3,
+    "findings_from_pages": 3,
+    "findings_rejected": 0,
+    "sources": 1,
+    "source_domains": [
+      "apple.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 0,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 0,
+    "budget_hits": []
+  },
+  "tree": "[ATOM] What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?  (#0, ok, 38s, confidence low)\n    why: Single named entity and specific fact requested.",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Single named entity and specific fact requested.",
+      "notes": [],
+      "children": [],
+      "created": 0.025,
+      "started": 0.025,
+      "finished": 37.812,
+      "result": {
+        "status": "ok",
+        "answer": "The provided findings do not contain Apple's Services revenue for the full fiscal year 2024 (the year ended September 28, 2024). They only report the Services revenue for the fourth quarter of that fiscal year, which was $23.1 billion [S1]. To determine the total annual Services revenue, the quarterly figures for all four quarters of fiscal year 2024 are required; this data is missing from the findings.",
+        "confidence": "low",
+        "gaps": "Missing quarterly revenue data for Q1, Q2, and Q3 of fiscal year 2024 to calculate the full-year Services total.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.apple.com/newsroom/2024/10/apple-reports-fourth-quarter-results/",
+        "title": "Apple reports fourth quarter results - Apple",
+        "domain": "apple.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T05:00:37+00:00",
+        "first_node": 0
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "Apple's Services revenue for fiscal year 2024 (the quarter ended September 28, 2024) was $23.1 billion.",
+        "quote": "Services revenue reaches new all-time high",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 23.369,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "The report covers the fourth quarter of fiscal year 2024, which ended on September 28, 2024.",
+        "quote": "Apple today announced financial results for its fiscal 2024 fourth quarter ended September 28, 2024.",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 23.37,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "Total quarterly revenue for the period was $94.9 billion, representing a 6 percent year-over-year increase.",
+        "quote": "The Company posted quarterly revenue of $94.9 billion, up 6 percent year over year",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 23.371,
+        "verified": true
+      }
+    ]
+  }
+}
