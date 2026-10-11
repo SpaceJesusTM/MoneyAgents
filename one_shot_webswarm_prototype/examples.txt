@@ -1,0 +1,13 @@
+# One objective per line. A mix chosen to probe ATOM / DEEP / WIDE judgement.
+# The expected-mode hints are for the human reviewer only; they are never shown to the model.
+
+# expect ATOM (should NOT spawn agents)
+What is NVIDIA's stock ticker symbol?
+What was NVIDIA's reported data-center revenue in its most recent fiscal quarter?
+
+# expect WIDE (known entities / dimensions)
+Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year.
+What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?
+
+# expect DEEP (unknown target / dependency chain)
+Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?
