@@ -24,7 +24,7 @@ from __future__ import annotations
 import time
 
 from webswarm_baseline.decisions import AtomAction, Decider, Decision, GenerativeDecider, ReviewDecision
-from webswarm_baseline.textutil import domain_of, objective_key, overlap
+from webswarm_baseline.textutil import domain_of, objective_key, overlap, same_topic_different_entity
 
 from .primitives import Backend, Choice, Noul
 
@@ -207,6 +207,8 @@ class SystemOneDecider(Decider):
         if not fuzzy or not self._on("redundant"):
             return False
         for e in existing:
+            if same_topic_different_entity(objective, e):
+                continue     # "AMD margin" vs "Intel margin": parallel, not redundant
             sim = overlap(objective, e)
             if sim >= 0.8:
                 return True

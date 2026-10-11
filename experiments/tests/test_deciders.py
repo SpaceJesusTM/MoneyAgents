@@ -164,3 +164,30 @@ def test_rules_arm_completes_a_deep_run():
                   cfg, echo=False, decider=d, **extra)
     assert art.swarm.nodes[0].mode == "DEEP" and len(art.swarm.nodes) >= 2
     assert art.outcome["answer"]
+
+
+def test_parallel_objectives_for_different_entities_are_not_redundant():
+    """compare_v1 failure: word overlap alone dropped 'Alphabet ... revenue' as a duplicate of 'Microsoft ... revenue'."""
+    a = "Microsoft's total annual revenue for fiscal year 2024"
+    b = "Alphabet's total annual revenue for calendar year 2024"
+    c = "AMD gross margin performance for fiscal year 2024"
+    d = "Intel gross margin performance for fiscal year 2024"
+    fixed, first = RulesDecider(), RulesDecider({"redundant_mode": "lexical"})
+    assert first.redundant(d, [c]) is True                    # the first version's mistake, reproducible
+    assert fixed.redundant(d, [c]) is False and fixed.redundant(b, [a]) is False
+    # a genuine paraphrase about the same entity is still dropped
+    assert fixed.redundant("NVIDIA data center GPU pricing trends in recent quarters",
+                           ["NVIDIA data center GPU pricing trends and recent discounts"]) is True
+
+
+def test_rules_wide_keeps_one_child_per_entity():
+    from webswarm_baseline.mock import default_handlers
+    h = default_handlers()
+    h["plan"] = lambda s, u, sc: {"reason": "", "children": [
+        "Acme Corp fourth quarter revenue and data center revenue figures",
+        "Borealis Semiconductor fourth quarter revenue and data center revenue figures",
+        "Zenith Micro fourth quarter revenue and data center revenue figures"]}
+    cfg, extra = mock_setup(SwarmConfig(), handlers=h)
+    art = execute("Compare the fourth quarter revenue of Acme Corp, Borealis Semiconductor and Zenith Micro",
+                  cfg, echo=False, decider=build("rules", {}), **extra)
+    assert len(art.swarm.nodes[0].children) == 3

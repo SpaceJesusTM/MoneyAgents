@@ -9,7 +9,8 @@ from __future__ import annotations
 import re
 
 from webswarm_baseline.decisions import AtomAction, Decider, Decision, ReviewDecision
-from webswarm_baseline.textutil import content_terms, domain_of, objective_key, overlap
+from webswarm_baseline.textutil import (content_terms, domain_of, objective_key, overlap,
+                                        same_topic_different_entity)
 
 _ENTITY = re.compile(r"^\s*(which|what|name|list|identify|who)\b.{0,25}\b(companies|firms|suppliers|vendors|"
                      r"manufacturers|makers|providers|customers|competitors|countries|products)\b|"
@@ -30,7 +31,11 @@ _REPUTABLE = ("reuters.com", "apnews.com", "cnbc.com", "bloomberg.com", "ft.com"
               "marketwatch.com", "finance.yahoo.com", "investopedia.com", "wikipedia.org", "statista.com")
 _OFTEN_BLOCKED = ("wsj.com", "ft.com", "bloomberg.com", "seekingalpha.com", "barrons.com", "nytimes.com")
 
-DEFAULTS = {"coverage_to_stop": 0.6, "max_reads": 3, "redundant_overlap": 0.6}
+DEFAULTS = {"coverage_to_stop": 0.6, "max_reads": 3, "redundant_overlap": 0.6,
+            # "lexical" is the first version: word overlap only. It dropped sibling objectives that differ
+            # only by company name and is kept to reproduce that result. "entity_aware" also requires
+            # the two objectives to name the same entities.
+            "redundant_mode": "entity_aware"}
 
 
 class RulesDecider(Decider):
@@ -130,5 +135,11 @@ class RulesDecider(Decider):
 
     def redundant(self, objective: str, existing: list[str], fuzzy: bool = True) -> bool:
         key = objective_key(objective)
-        return any(key == objective_key(e) or (fuzzy and overlap(objective, e) >= self.opts["redundant_overlap"])
-                   for e in existing)
+        strict = self.opts["redundant_mode"] == "entity_aware"
+        for e in existing:
+            if key == objective_key(e):
+                return True
+            if fuzzy and overlap(objective, e) >= self.opts["redundant_overlap"] \
+                    and not (strict and same_topic_different_entity(objective, e)):
+                return True
+        return False

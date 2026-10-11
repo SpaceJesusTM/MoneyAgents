@@ -3,3 +3,6 @@ bench/cassettes/
 # Full per-run traces; results.jsonl and the comparison tables are tracked.
 results/*/runs/
 __pycache__/
+
+# quick smoke-test result sets
+results/smoke*/

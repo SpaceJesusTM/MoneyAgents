@@ -47,6 +47,22 @@ def domain_of(url: str) -> str:
     return host[4:] if host.startswith("www.") else host
 
 
+_NAME = re.compile(r"\b[A-Z][A-Za-z0-9&.\-]*[A-Za-z0-9]\b|\b[A-Z]\b")
+
+
+def named_terms(text: str) -> set[str]:
+    """Capitalised words other than the sentence-initial one: a rough stand-in for named entities."""
+    words = _NAME.findall(text or "")
+    first = (text or "").strip().split(" ", 1)[0].strip("\"'(")
+    return {w.lower() for w in words if w != first or w.isupper()}
+
+
+def same_topic_different_entity(a: str, b: str) -> bool:
+    """True when two objectives name different entities ("AMD gross margin" vs "Intel gross margin").
+    Such siblings share most of their words but are not redundant."""
+    return named_terms(a) != named_terms(b)
+
+
 def overlap(a: str, b: str) -> float:
     """Jaccard overlap of content terms; a cheap lexical similarity in [0, 1]."""
     ta, tb = set(content_terms(a)), set(content_terms(b))

@@ -43,7 +43,7 @@
       ]
     },
     "rules": {
-      "description": "All bounded decisions (route, next ATOM action, review, verify-or-not, redundancy) by deterministic rules; no model calls for control.",
+      "description": "All bounded decisions (route, next ATOM action, review, verify-or-not, redundancy) by deterministic rules; no model calls for control. NOTE: rows in result set compare_v1 ran the first version, whose word-overlap redundancy check dropped sibling objectives differing only by entity name.",
       "overrides": [
         "decider=rules",
         "verify_policy=decider"
@@ -80,7 +80,7 @@
       ]
     },
     "rules_lines": {
-      "description": "Rules decider + line-reference extraction + finish-first scheduling.",
+      "description": "Rules decider (entity-aware redundancy) + line-reference extraction + finish-first scheduling.",
       "overrides": [
         "decider=rules",
         "verify_policy=decider",
@@ -89,7 +89,7 @@
       ]
     },
     "pdf_8mb": {
-      "description": "Robustness check, not an optimization: page size cap raised from 3 MB to 8 MB (Apple's 4.9 MB financial-statements PDF was truncated and unreadable in the baseline).",
+      "description": "Robustness check, not an optimization: page size cap raised from 3 MB to 8 MB (Apple's 4.9 MB financial-statements PDF was truncated and unreadable in the baseline). Must be run with --no-cassette: cassette entries are keyed by URL, so a replay returns the baseline's truncated fetch.",
       "overrides": [
         "max_page_bytes=8000000"
       ],
@@ -107,6 +107,13 @@
         "W2",
         "M1",
         "M2"
+      ]
+    },
+    "rules_fixed": {
+      "description": "Rules decider with the entity-aware redundancy check (two objectives are redundant only if they also name the same entities).",
+      "overrides": [
+        "decider=rules",
+        "verify_policy=decider"
       ]
     }
   }
