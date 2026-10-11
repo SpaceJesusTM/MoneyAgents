@@ -1,0 +1,5 @@
+2 runs to do (0 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/sanity/results.jsonl
+[1/2] 07:15:02 W2  experience     t=215.4s q=0.833 facts=1.0 cov=1.0 ground=0.5 llm=25 dec=0 web=10 nodes=4 tps=15.8 hits=[] 
+[2/2] 07:19:17 A1  mock_jev       t=250.2s q=1.0 facts=1.0 cov=None ground=1.0 llm=16 dec=11 web=8 nodes=4 tps=14.6 hits=[] 
+done
+exit=0

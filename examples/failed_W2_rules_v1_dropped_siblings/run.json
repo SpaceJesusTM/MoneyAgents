@@ -1,0 +1,258 @@
+{
+  "question": "Compare the total annual revenue of Microsoft (fiscal year 2024), Alphabet (2024) and Amazon (2024).",
+  "config": {
+    "name": "rules",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/W2",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "rules",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "decider",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "extract_mode": "quote",
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T02:28:37-04:00",
+    "git_commit": "46dfb8833a78115405fc923f3248c4a246d218cf",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "",
+    "status": "failed",
+    "confidence": "low",
+    "gaps": "No usable evidence was retrieved.; No usable evidence was retrieved. Pages that could not be read: s206.q4cdn.com: no extractable text (script-rendered or empty page); macrotrends.net: HTTP 403.",
+    "audit": {
+      "citations": 0,
+      "unknown_citations": [],
+      "cited_pages": 0,
+      "cited_snippets": 0,
+      "cited_domains": [],
+      "numbers": 0,
+      "numbers_in_cited_source": 0,
+      "numbers_elsewhere_in_evidence": 0,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 0,
+      "numeric_grounding": null
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 18.3,
+    "wall_seconds": 18.3,
+    "time_to_first_search_result": 6.804,
+    "time_to_first_evidence": null,
+    "time_to_first_page_evidence": null,
+    "llm_calls": 3,
+    "llm_calls_by_kind": {
+      "plan": 1,
+      "extract": 1,
+      "snippet_extract": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 14.88,
+    "llm_queue_wait_seconds": 0,
+    "prompt_tokens": 1653,
+    "output_tokens": 173,
+    "llm_prompt_eval_seconds": 5.62,
+    "llm_generation_seconds": 8.98,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:rules": 3,
+      "review:rules": 2
+    },
+    "searches": 3,
+    "fetches": 3,
+    "web_calls": 6,
+    "fetch_failures": 2,
+    "search_failures": 0,
+    "web_seconds": 11.36,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 2,
+    "nodes": 3,
+    "nodes_by_mode": {
+      "WIDE": 1,
+      "ATOM": 2
+    },
+    "nodes_by_role": {
+      "research": 3
+    },
+    "nodes_by_status": {
+      "failed": 3
+    },
+    "max_depth": 1,
+    "findings": 0,
+    "findings_from_pages": 0,
+    "findings_rejected": 1,
+    "sources": 0,
+    "source_domains": [],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 1,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 1,
+      "nodes_with_no_evidence": 3,
+      "nodes_cancelled": 0
+    },
+    "interventions": 3,
+    "budget_hits": []
+  },
+  "tree": "[WIDE] Compare the total annual revenue of Microsoft (fiscal year 2024), Alphabet (2024) and Amazon (2024).  (#0, failed, 18s)\n│   why: comparison, enumeration, or 'main factors' pattern\n│   ! dropped redundant sub-objective: \"Amazon's total annual revenue for calendar year 2024\"\n├── [ATOM] Microsoft's total annual revenue for fiscal year 2024  (#1, failed, 8s)\n│       why: no multi-part or unknown-target pattern\n│       ! search returned nothing; retried as 'microsoft s total annual revenue fiscal 2024'\n└── [ATOM] Alphabet's total annual revenue for calendar year 2024  (#2, failed, 13s)\n        why: no multi-part or unknown-target pattern\n        ! no page evidence; used search snippets (0 findings)",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "Compare the total annual revenue of Microsoft (fiscal year 2024), Alphabet (2024) and Amazon (2024).",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "WIDE",
+      "model_mode": "WIDE",
+      "status": "failed",
+      "reason": "comparison, enumeration, or 'main factors' pattern",
+      "notes": [
+        "dropped redundant sub-objective: \"Amazon's total annual revenue for calendar year 2024\""
+      ],
+      "children": [
+        1,
+        2
+      ],
+      "created": 0.026,
+      "started": 0.026,
+      "finished": 18.309,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "No usable evidence was retrieved.; No usable evidence was retrieved. Pages that could not be read: s206.q4cdn.com: no extractable text (script-rendered or empty page); macrotrends.net: HTTP 403.",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Microsoft's total annual revenue for fiscal year 2024",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "failed",
+      "reason": "no multi-part or unknown-target pattern",
+      "notes": [
+        "search returned nothing; retried as 'microsoft s total annual revenue fiscal 2024'"
+      ],
+      "children": [],
+      "created": 5.024,
+      "started": 5.024,
+      "finished": 12.831,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "No usable evidence was retrieved.",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": []
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Alphabet's total annual revenue for calendar year 2024",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "failed",
+      "reason": "no multi-part or unknown-target pattern",
+      "notes": [
+        "no page evidence; used search snippets (0 findings)"
+      ],
+      "children": [],
+      "created": 5.024,
+      "started": 5.029,
+      "finished": 18.306,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "No usable evidence was retrieved. Pages that could not be read: s206.q4cdn.com: no extractable text (script-rendered or empty page); macrotrends.net: HTTP 403.",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [],
+    "findings": []
+  }
+}

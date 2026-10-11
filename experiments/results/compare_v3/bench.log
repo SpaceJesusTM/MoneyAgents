@@ -1,0 +1,21 @@
+18 runs to do (0 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/compare_v3/results.jsonl
+[1/18] 06:30:35 A1  typed_2b_plus  t=41.6s q=0.5 facts=0.0 cov=None ground=1.0 llm=3 dec=6 web=4 nodes=1 tps=19.4 hits=[] 
+[2/18] 06:31:12 A1  rules_plus     t=26.8s q=1.0 facts=1.0 cov=None ground=1.0 llm=2 dec=0 web=2 nodes=1 tps=20.5 hits=[] 
+[3/18] 06:31:41 A2  rules_plus     t=18.8s q=0.0 facts=0.0 cov=None ground=0.0 llm=3 dec=0 web=4 nodes=1 tps=29.2 hits=[] 
+[4/18] 06:32:17 A2  typed_2b_plus  t=26.3s q=0.0 facts=0.0 cov=None ground=0.0 llm=4 dec=4 web=4 nodes=1 tps=21.3 hits=[] 
+[5/18] 06:36:37 W1  typed_2b_plus  t=249.8s q=1.0 facts=1.0 cov=1.0 ground=1.0 llm=15 dec=22 web=13 nodes=4 tps=15.2 hits=[] 
+[6/18] 06:39:30 W1  rules_plus     t=162.5s q=1.0 facts=1.0 cov=1.0 ground=1.0 llm=10 dec=0 web=7 nodes=4 tps=15.2 hits=[] 
+[7/18] 06:40:34 W2  rules_plus     t=53.6s q=0.778 facts=0.333 cov=1.0 ground=1.0 llm=6 dec=0 web=8 nodes=4 tps=17.0 hits=[] 
+[8/18] 06:42:59 W2  typed_2b_plus  t=135.1s q=0.889 facts=0.667 cov=1.0 ground=1.0 llm=13 dec=19 web=10 nodes=4 tps=16.2 hits=[] 
+[9/18] 06:46:33 D1  typed_2b_plus  t=204.3s q=0.667 facts=0.0 cov=1.0 ground=1.0 llm=17 dec=16 web=10 nodes=4 tps=15.5 hits=[] 
+[10/18] 06:49:53 D1  rules_plus     t=190.2s q=0.667 facts=0.0 cov=1.0 ground=1.0 llm=15 dec=0 web=8 nodes=5 tps=14.2 hits=[] 
+[11/18] 06:51:37 D2  rules_plus     t=93.0s q=1.0 facts=1.0 cov=None ground=1.0 llm=9 dec=0 web=7 nodes=3 tps=14.5 hits=[] 
+[12/18] 06:52:20 D2  typed_2b_plus  t=33.6s q=1.0 facts=1.0 cov=None ground=1.0 llm=4 dec=5 web=4 nodes=1 tps=16.9 hits=[] 
+[13/18] 06:57:30 M1  typed_2b_plus  t=299.9s q=0.9 facts=None cov=0.8 ground=1.0 llm=20 dec=28 web=16 nodes=5 tps=15.1 hits=[] 
+[14/18] 07:00:47 M1  rules_plus     t=186.5s q=0.8 facts=None cov=0.6 ground=1.0 llm=12 dec=0 web=12 nodes=5 tps=15.7 hits=[] 
+[15/18] 07:02:40 M2  rules_plus     t=103.3s q=1.0 facts=None cov=1.0 ground=1.0 llm=7 dec=0 web=10 nodes=5 tps=16.5 hits=[] 
+[16/18] 07:07:34 M2  typed_2b_plus  t=283.2s q=1.0 facts=None cov=1.0 ground=1.0 llm=19 dec=30 web=16 nodes=5 tps=15.3 hits=[] 
+[17/18] 07:08:38 E1  typed_2b_plus  t=53.9s q=1.0 facts=1.0 cov=None ground=1.0 llm=4 dec=6 web=4 nodes=1 tps=16.6 hits=[] 
+[18/18] 07:11:25 E1  rules_plus     t=157.1s q=1.0 facts=1.0 cov=None ground=1.0 llm=11 dec=0 web=14 nodes=6 tps=15.0 hits=[] 
+done
+exit=0

@@ -8,17 +8,58 @@ measured on 2026-10-11 with the **real local model (`qwen3.5:4b-q4_K_M`) and rea
 Where Jev appears, the text says whether it is a contract test against a local stub or arithmetic
 on TypeSafe's published latency.
 
-Raw rows: `experiments/results/compare_v1/results.jsonl` (round 1) and
-`experiments/results/compare_v2/results.jsonl` (round 2).
+Raw rows: `experiments/results/compare_v1/` (round 1), `compare_v2/` (round 2) and `compare_v3/`
+(round 3), each with a `results.jsonl`; the standalone baseline pass is in `baseline_v1/`.
 
-ROUND2_PLACEHOLDER_SUMMARY
+## Bottom line
+
+1. **The big lever is what gets delegated, not how fast decisions are made.** Bounded decisions are
+   18% of the baseline's model time, so no decider, Jev included, can save more than that by being
+   faster. Arms that decided differently (fewer agents, no speculative follow-ups, earlier stops)
+   cut time to answer by 24% to 68%.
+2. **Several arms match the baseline's mean automatic quality at a third to a half of the time, but
+   none passes the strict rule I set in advance.** Each loses at least one gold fact the baseline
+   found, while finding others it missed. With 9 tasks and one run per arm, that is a trade, not a
+   proven preservation of quality.
+3. **Jev was not run.** The adapter is built and contract-tested against a local stub. A key and an
+   explicit opt-in are all that is missing.
+4. **Two findings I did not expect:** asking the same 4B model for one-token typed decisions is not
+   meaningfully faster than letting it write a reasoned decision (prompt reading dominates), and
+   reviewing child results as they arrive cost about 10% more work than waiting for the batch, with
+   no quality gain on a machine that runs one model call at a time.
+
+### All arms at a glance
+
+Ratios are totals over the tasks the arm ran, against the mean of all baseline runs of those tasks
+(the baseline ran each task two or three times with identical work). Below 1.00 is faster.
+
+| Arm | What changed | Tasks | Time to answer | Model work | Mean quality (arm / baseline) | Gold facts (arm / baseline; lost, gained) | Verdict |
+|---|---|---:|---:|---:|---:|---|---|
+| `rules_plus` | rules decider + line extraction + citation retry | 9 | 0.38 | 0.30 | 0.81 / 0.80 | 11 / 11; lost 2, gained 2 | **Keep as fast mode** |
+| `local_s1_2b` | typed decisions from a 2B model | 9 | 0.48 | 0.56 | 0.80 / 0.80 | 11 / 11; lost 1, gained 1 | **Keep; best default candidate** |
+| `typed_2b_plus` | the above + line extraction + citation retry | 9 | 0.51 | 0.47 | 0.77 / 0.80 | 10 / 11; lost 3, gained 2 | Revise (line extraction loses A1) |
+| `local_s1_4b` | typed decisions from the same 4B model | 9 | 0.76 | 0.70 | 0.79 / 0.80 | 10 / 11; lost 2, gained 1 | Revise (wrong engine for the job) |
+| `rules_fixed` | rules decider, entity-aware redundancy | 8 | 0.45 | 0.44 | 0.72 / 0.77 | 11 / 11; lost 2, gained 2 | Superseded by `rules_plus` |
+| `rules_lines` | rules + line extraction + finish-first | 8 | 0.38 | 0.36 | 0.68 / 0.77 | 11 / 11; lost 2, gained 2 | Superseded by `rules_plus` |
+| `rules` | rules decider, first version | 9 | 0.32 | 0.32 | 0.69 / 0.80 | 9 / 11; lost 3, gained 1 | **Discard** (drops parallel sub-tasks) |
+| `lines_extract` | line-reference extraction alone | 8 | 0.89 | 0.87 | 0.66 / 0.77 | 10 / 11; lost 2, gained 1 | Revise |
+| `probing` | web probing before WIDE planning | 3 | 0.64 | 0.60 | 0.81 / 0.84 | 5 / 5; lost 1, gained 1 | Revise |
+| `batch_review` | wait for the whole batch before reviewing | 3 | 0.92 | 0.90 | 0.82 / 0.84 | 6 / 5; gained 1 | Keep as the default on one model slot |
+| `finish_first` | completing calls go first in the model queue | 4 | 1.06 | 1.04 | 0.91 / 0.88 | 9 / 8; gained 1 | **Keep** (first result 16-54% sooner, free) |
+| `jev` | typed decisions from TypeSafe Jev | 0 | not run | not run | not run | not run | Blocked on a key |
+
+"Model work" is reference model time (tokens at fixed speeds). Every arm except `jev` ran live with
+the real model. `jev` was not run at all; `mock_jev` ran once as a plumbing check and was not
+benchmarked.
+
 
 ## Method
 
 - Each arm is the frozen baseline config plus the overrides in `experiments/bench/arms.json`.
   Same model, seed, temperature 0, budgets and tasks.
-- Arms were interleaved per task, with the order rotated, and each round includes its own baseline
-  rows, so an arm is always compared with a baseline that ran minutes earlier on the same code.
+- Arms were interleaved per task, with the order rotated. Rounds 1 and 2 include their own baseline
+  rows, so an arm is compared with a baseline that ran minutes earlier on the same code. Round 3
+  has no baseline of its own and is compared with the mean of the earlier baseline runs.
 - Web responses were shared through per-task recordings. A replayed response is delayed by the
   latency it originally took.
 - **Quality rule, fixed before any arm was compared:** an arm preserves quality if its mean
@@ -30,13 +71,14 @@ ROUND2_PLACEHOLDER_SUMMARY
 
 ### How noisy is the measurement?
 
-The baseline ran each task three times across the night (once alone, once in each round).
+The baseline ran each task three times across the night (once alone, once in each of rounds 1 and
+2; M2 twice, since round 2 left it out).
 
 | | Result |
 |---|---|
 | Automatic quality | identical across repeats on every task |
-| Model calls and reference model time | identical on 7 of 9 tasks, within 5% on the other two |
-| Wall-clock time to answer | varied by 2% to 20% between repeats of the same task |
+| Model calls and reference model time | identical on 7 of 9 tasks; on M1 and M2 within 5% (71 to 75 and 82 to 83 calls) |
+| Wall-clock time to answer | varied by 3% to 21% between repeats of the same task |
 
 So the baseline is close to deterministic in what it does (temperature 0, fixed seed, replayed web)
 and noisy only in how long the same work takes, because the fanless laptop slows down by up to a
@@ -119,11 +161,14 @@ They are projections, clearly not measurements.
 
 Paired with the baseline on all 9 tasks.
 
-| Arm | Time ratio (median of per-task ratios) | Reference model-time ratio | First-evidence ratio | Mean quality (arm / baseline) | Gold facts lost / gained | Preserves quality by the pre-set rule? |
+| Arm | Total time vs baseline | Reference model time vs baseline | First evidence (median of per-task ratios) | Mean quality (arm / baseline) | Gold facts lost / gained | Preserves quality by the pre-set rule? |
 |---|---:|---:|---:|---:|---|---|
-| Typed decisions, 4B (`local_s1_4b`) | 0.86 | 0.76 | 0.86 | 0.79 / 0.80 | lost 2, gained 1 | No (lost facts) |
-| Typed decisions, 2B (`local_s1_2b`) | 0.60 | 0.70 | 0.54 | 0.80 / 0.80 | lost 1, gained 1 | No (lost a fact) |
-| Rules, first version (`rules`) | 0.42 | 0.43 | 0.66 | 0.69 / 0.80 | lost 3, gained 1 | No |
+| Typed decisions, 4B (`local_s1_4b`) | 0.75 | 0.71 | 0.86 | 0.79 / 0.80 | lost 2, gained 1 | No (lost facts) |
+| Typed decisions, 2B (`local_s1_2b`) | 0.47 | 0.56 | 0.54 | 0.80 / 0.80 | lost 1, gained 1 | No (lost a fact) |
+| Rules, first version (`rules`) | 0.32 | 0.32 | 0.66 | 0.69 / 0.80 | lost 3, gained 1 | No |
+
+Ratios in this table use the same round's baseline rows; the at-a-glance table above uses the mean
+of all baseline runs, so the two can differ by a few hundredths.
 
 Per task, time to answer in seconds / automatic quality / agents:
 
@@ -167,14 +212,14 @@ Baseline cells are the mean of that round's baseline run and the standalone base
 
 *What changed:* routing, stop, read-which, review and verify-or-skip became one-token typed
 questions with probabilities from logprobs. Our hypothesis, shaped like Jev's interface.
-*Tested:* live. *Result:* 0.76 of baseline model work, same mean quality, mixed per task.
+*Tested:* live. *Result:* 0.71 of baseline model work, same mean quality, mixed per task.
 *Why it is not faster per decision:* 2.6 s per decision, dominated by reading the prompt.
 *Verdict:* **revise.** The interface is right; the same 4B model is the wrong engine for it.
 
 ### Typed decisions from a 2B model (`local_s1_2b`)
 
 *What changed:* the same questions answered by `qwen3.5:2b-q4_K_M`; research stays on the 4B model.
-*Tested:* live. *Result:* 1.0 s per decision, 0.70 of baseline model work, 0.47 of total time, same
+*Tested:* live. *Result:* 1.0 s per decision, 0.56 of baseline model work, 0.47 of total time, same
 mean quality, one precision loss, one uncited synthesis, and it never chose ENTITY_COLLECT (it
 answered E1 as a single lookup and happened to find all three names).
 *Verdict:* **keep as the default decider candidate**, with the routing weakness noted. Both models
@@ -184,7 +229,7 @@ fit in memory together (3.3 GB + about 2 GB).
 
 *What changed:* regex routing, lexical result scoring with a source prior, a coverage-based stop
 rule, no follow-ups, verification skipped when two independent sites agree, word-overlap
-redundancy. *Tested:* live. *Result:* 0.43 of baseline model work and the fastest first evidence,
+redundancy. *Tested:* live. *Result:* 0.32 of baseline model work and the fastest first evidence,
 but it **failed W2 outright**: the redundancy rule treated "Alphabet's total annual revenue" as a
 duplicate of "Microsoft's total annual revenue" and dropped it, and likewise dropped one company on
 W1. A fast wrong control decision. *Verdict:* **discard this version**; see the fixed version in
@@ -260,7 +305,7 @@ code does, instead of reviewing each arrival. *Tested:* live, 3 tasks.
 tasks, and on M1 the tree shrank from 11 agents to 9 because one review asks for follow-ups once
 instead of several reviews asking repeatedly.
 *What this says about incremental consumption:* on this hardware, reviewing each arrival cost about
-9% more model work and bought no measurable quality. With one model slot, sibling results arrive
+10% more model work and bought no measurable quality. With one model slot, sibling results arrive
 close together, so there is little "early" evidence to act on, and the 4B model used the extra
 reviews mostly to request follow-ups rather than to stop early. A manager finished early in 2 of
 88 benchmark runs, never in a baseline run, and in one of those two (probing, W2) it cancelled the
@@ -317,6 +362,53 @@ otherwise.
 
 
 
+## Round 3: two candidate configurations
+
+Built from what rounds 1 and 2 showed: add the citation retry (the commonest quality failure in
+the fast arms was a synthesis that dropped its citations) and line-reference extraction.
+
+No baseline ran in this round. Arms are compared with the mean of the three earlier baseline runs
+of each task. The laptop was at its warmest here (about 15 output tokens/s against 18 to 19
+earlier), so the wall-clock ratios are slightly unfair to these arms; model work is unaffected.
+
+| Arm | Time to answer vs baseline | Model work vs baseline | Mean quality (arm / baseline) | Gold facts (arm / baseline) | Uncited answers | First evidence vs baseline |
+|---|---:|---:|---:|---:|---:|---:|
+| `rules_plus` | 0.38 | 0.30 | 0.81 / 0.80 | 11 / 11 (lost 2, gained 2) | 0 | 0.29 |
+| `typed_2b_plus` | 0.51 | 0.47 | 0.77 / 0.80 | 10 / 11 (lost 3, gained 2) | 0 | 0.54 |
+
+| Task | Baseline (mean) | `rules_plus` | `typed_2b_plus` |
+|---|---|---|---|
+| A1 | 43 / 1.00 / 1 | 27 / 1.00 / 1 | 42 / 0.50 / 1 |
+| A2 | 37 / 0.25 / 1 | 19 / 0.00 / 1 | 26 / 0.00 / 1 |
+| W1 | 359 / 0.89 / 6 | 162 / 1.00 / 4 | 250 / 1.00 / 4 |
+| W2 | 149 / 0.83 / 4 | 54 / 0.78 / 4 | 135 / 0.89 / 4 |
+| D1 | 270 / 0.67 / 5 | 190 / 0.67 / 5 | 204 / 0.67 / 4 |
+| D2 | 48 / 0.75 / 1 | 93 / 1.00 / 3 | 34 / 1.00 / 1 |
+| M1 | 711 / 0.80 / 11 | 186 / 0.80 / 5 | 300 / 0.90 / 5 |
+| M2 | 718 / 1.00 / 12 | 103 / 1.00 / 5 | 283 / 1.00 / 5 |
+| E1 | 258 / 1.00 / 5 | 157 / 1.00 / 6 | 54 / 1.00 / 1 |
+
+Cells are time to answer in seconds / automatic quality / agents.
+
+- **Citation retry did its job.** It fired 4 times in 18 runs (W1 in both arms, W2, D2) and the
+  second attempt came back cited every time; the fallback to raw sub-results was never needed. The
+  comparable arms without it produced 5 uncited answers in 33 runs.
+- **`rules_plus` is the best speed-for-quality trade measured:** 30% of the baseline's model work,
+  the same mean automatic quality and the same number of gold facts. It got every W1 figure right
+  and cited to primary sources (its commentary still has one self-contradictory sentence), got D2
+  right by routing it DEEP and verifying, and still lost Microsoft's and
+  Alphabet's revenue on W2 for the reason given above. It is fast because it never spends a model
+  call on control and never adds follow-up work.
+- **`typed_2b_plus` lost A1 again**, the same miss as `lines_extract` in round 2 with the same
+  retrieved page. That makes the A1 failure a reproducible property of line-reference extraction on
+  that document, not noise. Without line extraction (`local_s1_2b`) the typed-2B arm answers A1
+  correctly.
+- **Untested combination worth trying first:** typed decisions from the 2B model, the baseline's
+  quote extraction, citation retry, and finish-first scheduling. Each part was measured; the four
+  together were not.
+- No arm fixed D1 (all name Amkor) or A2 (the PDF was never read). Those are search and retrieval
+  problems, and no decision policy tested here touches them.
+
 ## Router agreement on labelled objectives
 
 32 objectives labelled with the intended mode (`experiments/bench/routing_cases.json`), real local
@@ -341,7 +433,54 @@ prompt, and needed the parent's wording removed from its input, before it was us
 | Mechanism | Status |
 |---|---|
 | Jev | Adapter and contract tests only. See above. |
+| Mock Jev | One live run with the real model as a plumbing check (11 decisions, all labelled `MOCK_jev`). Its word-overlap decisions routed a one-page lookup as DEEP and took 250 s. That says nothing about Jev; it shows why mock decisions must not be benchmarked. |
+| Sibling experience sharing | One live run (W2): two scouts ran first, tips were derived from their traces ("useful evidence came from ...; these sites could not be read, skip them ...") and passed to the third agent. 215 s on a warm machine against a 149 s baseline mean, same quality. Works; not measured as an arm. |
 | Larger backbone (9B) | Not downloaded. At the measured speeds it would roughly double every run. |
 | Parallel model inference | Not tried. Ollama serialises requests here and changing `OLLAMA_NUM_PARALLEL` is a global setting. |
 
-ROUND2_PLACEHOLDER_TAIL
+## Unsuccessful or inconclusive experiments
+
+| Experiment | What happened |
+|---|---|
+| Typed decisions from the same 4B model, as a speed-up | Not a speed-up per decision: 2.6 s each, total decision time 415 s against the baseline's 457 s. |
+| Typed routing before tuning | 56% (4B) and 47% (2B) agreement; sent almost every sub-objective to WIDE because the parent's wording was in its input. |
+| Rules, first version | Dropped parallel sub-objectives as duplicates; failed W2 outright. |
+| Line-reference extraction | Lost A1, a task every other arm answers correctly. |
+| Incremental review | About 10% more model work than batch review with no measurable quality gain on this hardware. |
+| Web probing | Saved work by planning fewer children, at a coverage cost on two of three tasks. |
+| Early finish | Used twice in 88 runs; once it cancelled the agent that was about to find a required figure. |
+| PDF size cap, end to end | Inconclusive: the live re-run never opened the PDF. |
+| Verification as a quality gate | In the baseline, a verifier passed a statement about missing data and the answer was labelled verified. Rules-based "skip verification when two sites agree" was exercised but never isolated as its own arm. |
+
+## What I would do next
+
+1. **Make the stop and delegation policy the main object of study.** It moved total time by 2x to
+   3x; decision latency moved it by a few percent. Concretely: follow-ups only for a named new
+   lead, no nested managers unless the sub-objective names three or more entities, and a stop rule
+   that requires the specific figure asked for.
+2. **Run Jev on exactly these arms** once a key is available. The interesting question is not its
+   latency, which the ceiling bounds at about 18%, but whether its routing and sufficiency
+   judgements beat the 2B model's (72% routing agreement, ENTITY_COLLECT never chosen).
+3. **Fix what the baseline got wrong regardless of speed:** refuse to "verify" non-existence
+   statements, raise the page cap, add an entity-alias merge, and check the cited figure against
+   the metric named in the claim.
+4. **Test incremental review where it can matter:** with parallel inference (a second Ollama
+   instance or `OLLAMA_NUM_PARALLEL`), or with deliberately uneven branches.
+5. **More tasks and repeats.** Nine tasks, one run per arm, is enough to see 2x effects and to
+   catch broken arms. It is not enough to rank arms that differ by one fact.
+
+## Reproduce
+
+```bash
+.venv/bin/python -m experiments.bench.run_bench --name r1 --arms baseline rules local_s1_4b local_s1_2b
+.venv/bin/python -m experiments.bench.run_bench --name r2 --arms baseline rules_fixed rules_lines lines_extract batch_review probing finish_first --tasks A1 A2 W1 W2 D1 D2 M1 E1
+.venv/bin/python -m experiments.bench.run_bench --name r3 --arms typed_2b_plus rules_plus
+.venv/bin/python -m experiments.bench.compare r1          # tables
+.venv/bin/python -m experiments.bench.decision_ceiling baseline_v1
+.venv/bin/python -m experiments.bench.eval_routing
+```
+
+The first run of a task records its web responses under `experiments/bench/cassettes/`
+(git-ignored). Delete that directory to start from the live web; results will then differ from
+these, because search results change from day to day.
+

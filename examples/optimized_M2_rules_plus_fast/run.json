@@ -1,0 +1,425 @@
+{
+  "question": "What are the main drivers and risks for AMD's data center business over the next year?",
+  "config": {
+    "name": "rules_plus",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/M2",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "rules",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "decider",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "cite_retry": true,
+    "extract_mode": "lines",
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T07:02:40-04:00",
+    "git_commit": "29a9a15f1470412f04fdc18a586fde8b5f6d1414",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "AMD's data center business is experiencing explosive growth driven by strong customer adoption, but faces severe supply chain constraints that limit near-term expansion. In Q1 2026 alone, revenue hit $5.78 billion, a 57% year-over-year increase, projecting an annualized run-rate of roughly $23.1 billion [S1]. This growth is underpinned by high customer uptake across the EPYC and MI300 series. However, manufacturing capacity remains the primary risk; both product lines face fully booked CoWoS packaging queues lasting 52–78 weeks due to TSMC's near-monopolistic position in high-performance computing [S2]. With TSMC holding approximately 70% of the market share and Samsung only 7%, supply bottlenecks are structural rather than cyclical [S3]. Furthermore, geopolitical tensions could exacerbate these issues by increasing wafer costs by 25–40% if US onshore capacity is developed [S2].\n\nUncertainty: The provided results contain no evidence regarding the competitive landscape or market share dynamics between AMD and NVIDIA in enterprise AI, nor do they address regulatory policies or trade tariffs impacting global chip exports. Consequently, it cannot be established how direct competition with NVIDIA influences AMD's specific growth trajectory or what export restrictions might alter revenue projections over the next year.",
+    "status": "partial",
+    "confidence": "high",
+    "gaps": "no evidence for: Competitive landscape and market share dynamics between AMD and NVIDIA in enterp; Regulatory policies and trade tariffs impacting AMD's global data center chip ex",
+    "audit": {
+      "citations": 3,
+      "unknown_citations": [],
+      "cited_pages": 3,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "axis-intelligence.com",
+        "moodys.com",
+        "siliconanalysts.com"
+      ],
+      "numbers": 10,
+      "numbers_in_cited_source": 10,
+      "numbers_elsewhere_in_evidence": 0,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 0,
+      "numeric_grounding": 1.0
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 103.3,
+    "wall_seconds": 103.3,
+    "time_to_first_search_result": 12.563,
+    "time_to_first_evidence": 30.599,
+    "time_to_first_page_evidence": 30.599,
+    "llm_calls": 7,
+    "llm_calls_by_kind": {
+      "plan": 1,
+      "extract": 3,
+      "answer": 2,
+      "synthesize": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 100.2,
+    "llm_queue_wait_seconds": 45.59,
+    "prompt_tokens": 4639,
+    "output_tokens": 1120,
+    "llm_prompt_eval_seconds": 26.23,
+    "llm_generation_seconds": 67.89,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:rules": 5,
+      "review:rules": 4
+    },
+    "searches": 6,
+    "fetches": 4,
+    "web_calls": 10,
+    "fetch_failures": 1,
+    "search_failures": 0,
+    "web_seconds": 19.86,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 10,
+    "nodes": 5,
+    "nodes_by_mode": {
+      "WIDE": 1,
+      "ATOM": 4
+    },
+    "nodes_by_role": {
+      "research": 5
+    },
+    "nodes_by_status": {
+      "partial": 1,
+      "ok": 2,
+      "failed": 2
+    },
+    "max_depth": 1,
+    "findings": 7,
+    "findings_from_pages": 7,
+    "findings_rejected": 1,
+    "sources": 3,
+    "source_domains": [
+      "axis-intelligence.com",
+      "moodys.com",
+      "siliconanalysts.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 0,
+      "nodes_with_no_evidence": 2,
+      "nodes_cancelled": 0
+    },
+    "interventions": 2,
+    "budget_hits": []
+  },
+  "tree": "[WIDE] What are the main drivers and risks for AMD's data center business over the next year?  (#0, partial, 103s, confidence high)\n│   why: comparison, enumeration, or 'main factors' pattern\n├── [ATOM] AMD data center revenue growth trends and customer adoption rates in recent quarters  (#1, ok, 49s, confidence high)\n│       why: no multi-part or unknown-target pattern\n├── [ATOM] Competitive landscape and market share dynamics between AMD and NVIDIA in enterprise AI  (#2, failed, 7s)\n│       why: no multi-part or unknown-target pattern\n│       ! search returned nothing; retried as 'competitive landscape market share dynamics amd nvidia'\n├── [ATOM] Supply chain constraints and semiconductor manufacturing capacity for AMD EPYC and MI300 series  (#3, ok, 71s, confidence high)\n│       why: no multi-part or unknown-target pattern\n└── [ATOM] Regulatory policies and trade tariffs impacting AMD's global data center chip exports  (#4, failed, 7s)\n        why: no multi-part or unknown-target pattern\n        ! search returned nothing; retried as 'regulatory policies trade tariffs impacting amd s'",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "What are the main drivers and risks for AMD's data center business over the next year?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "WIDE",
+      "model_mode": "WIDE",
+      "status": "partial",
+      "reason": "comparison, enumeration, or 'main factors' pattern",
+      "notes": [],
+      "children": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "created": 0.031,
+      "started": 0.031,
+      "finished": 103.313,
+      "result": {
+        "status": "partial",
+        "answer": "AMD's data center business is experiencing explosive growth driven by strong customer adoption, but faces severe supply chain constraints that limit near-term expansion. In Q1 2026 alone, revenue hit $5.78 billion, a 57% year-over-year increase, projecting an annualized run-rate of roughly $23.1 billion [S1]. This growth is underpinned by high customer uptake across the EPYC and MI300 series. However, manufacturing capacity remains the primary risk; both product lines face fully booked CoWoS packaging queues lasting 52–78 weeks due to TSMC's near-monopolistic position in high-performance computing [S2]. With TSMC holding approximately 70% of the market share and Samsung only 7%, supply bottlenecks are structural rather than cyclical [S3]. Furthermore, geopolitical tensions could exacerbate these issues by increasing wafer costs by 25–40% if US onshore capacity is developed [S2].\n\nUncertainty: The provided results contain no evidence regarding the competitive landscape or market share dynamics between AMD and NVIDIA in enterprise AI, nor do they address regulatory policies or trade tariffs impacting global chip exports. Consequently, it cannot be established how direct competition with NVIDIA influences AMD's specific growth trajectory or what export restrictions might alter revenue projections over the next year.",
+        "confidence": "high",
+        "gaps": "no evidence for: Competitive landscape and market share dynamics between AMD and NVIDIA in enterp; Regulatory policies and trade tariffs impacting AMD's global data center chip ex",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1",
+          "S2",
+          "S3"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "AMD data center revenue growth trends and customer adoption rates in recent quarters",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "no multi-part or unknown-target pattern",
+      "notes": [],
+      "children": [],
+      "created": 10.392,
+      "started": 10.393,
+      "finished": 59.662,
+      "result": {
+        "status": "ok",
+        "answer": "AMD's Data Center segment generated $16.64 billion in FY2025 [S1], accounting for 48% of total revenue. In Q1 2026, revenue reached $5.78 billion, a 57% year-over-year increase [S1]. This trajectory suggests an annualized run-rate of approximately $23.1 billion [S1].",
+        "confidence": "high",
+        "gaps": "None; the provided findings cover recent quarterly and fiscal year performance trends.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Competitive landscape and market share dynamics between AMD and NVIDIA in enterprise AI",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "failed",
+      "reason": "no multi-part or unknown-target pattern",
+      "notes": [
+        "search returned nothing; retried as 'competitive landscape market share dynamics amd nvidia'"
+      ],
+      "children": [],
+      "created": 10.392,
+      "started": 10.395,
+      "finished": 17.023,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "No usable evidence was retrieved.",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": []
+    },
+    {
+      "id": 3,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Supply chain constraints and semiconductor manufacturing capacity for AMD EPYC and MI300 series",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "no multi-part or unknown-target pattern",
+      "notes": [],
+      "children": [],
+      "created": 10.392,
+      "started": 10.399,
+      "finished": 81.233,
+      "result": {
+        "status": "ok",
+        "answer": "AMD EPYC and MI300 series face fully booked CoWoS packaging queues lasting 52–78 weeks due to TSMC's near-monopolistic position in high-performance computing [S2]. TSMC holds ~70% market share, while Samsung has ~7% [S3]. Geopolitical factors may increase wafer costs by 25–40% if US onshore capacity is developed [S2]. Global semiconductor sales reached $790 billion in the prior year [S3].",
+        "confidence": "high",
+        "gaps": "None",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S2",
+          "S3"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 4,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Regulatory policies and trade tariffs impacting AMD's global data center chip exports",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "failed",
+      "reason": "no multi-part or unknown-target pattern",
+      "notes": [
+        "search returned nothing; retried as 'regulatory policies trade tariffs impacting amd s'"
+      ],
+      "children": [],
+      "created": 10.393,
+      "started": 10.401,
+      "finished": 17.053,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "No usable evidence was retrieved.",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://axis-intelligence.com/amd-statistics/",
+        "title": "AMD Statistics 2026: Revenue, Market Share, AI Growth &amp; Data Center Dominance - Axis Intelligence",
+        "domain": "axis-intelligence.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T11:01:27+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S2",
+        "url": "https://siliconanalysts.com/analysis/topic/supply-chain",
+        "title": "Supply Chain Analysis - Semiconductor Market Intelligence",
+        "domain": "siliconanalysts.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T11:01:47+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S3",
+        "url": "https://www.moodys.com/web/en/us/insights/corporations/semiconductors-in-2026-why-supply-chains-are-a-major-bottleneck.html",
+        "title": "Semiconductors in 2026: Why supply chains are a major bottleneck",
+        "domain": "moodys.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T11:02:07+00:00",
+        "first_node": 3
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "AMD's Data Center segment generated $16.64 billion in FY2025, representing 48% of total company revenue.",
+        "quote": "AMD’s Data Center segment generated $16.64 billion in FY2025, representing 48% of total company revenue. In Q1 2026, Data Center revenue reached $5.78 billion, up 57% year-over-year — tracking toward an annualized run-rate of approximately $23.1 billion.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 30.599,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "In Q1 2026, AMD's Data Center revenue reached $5.78 billion, up 57% year-over-year, tracking toward an annualized run-rate of approximately $23.1 billion.",
+        "quote": "AMD’s Data Center segment generated $16.64 billion in FY2025, representing 48% of total company revenue. In Q1 2026, Data Center revenue reached $5.78 billion, up 57% year-over-year — tracking toward an annualized run-rate of approximately $23.1 billion.",
+        "source_id": "S1",
+        "node_id": 1,
+        "t": 30.605,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "Customers like Nvidia, Apple, and AMD face fully booked allocation queues for CoWoS packaging lasting approximately 52-78 weeks due to TSMC's near-monopolistic position in high-performance computing.",
+        "quote": "This dominance creates significant pricing power and supply chain bottlenecks, particularly in CoWoS packaging, forcing customers like Nvidia, Apple, and AMD to navigate fully booked allocation queues (~52-78 weeks) and limited negotiating leverage.",
+        "source_id": "S2",
+        "node_id": 3,
+        "t": 50.149,
+        "verified": true
+      },
+      {
+        "id": "F4",
+        "claim": "TSMC's record $16.3 billion net profit and 28% revenue share from its 3nm process underscore a near-monopolistic position in high-performance computing, creating significant supply chain bottlenecks.",
+        "quote": "TSMC's record $16.3 billion net profit and 28% revenue share from its 3nm process underscore a near-monopolistic position in high-performance computing.",
+        "source_id": "S2",
+        "node_id": 3,
+        "t": 50.158,
+        "verified": true
+      },
+      {
+        "id": "F5",
+        "claim": "The landmark $500B US-Taiwan deal involves a direct investment of approximately $250B to onshore critical advanced node capacity, which is expected to increase wafer costs by 25-40% due to geopolitical security premiums.",
+        "quote": "While the direct investment of ~$250B promises to onshore critical advanced node capacity, stakeholders must prepare for a 25-40% increase in wafer costs from these new US-based fabs, a necessary premium for geopolitical security.",
+        "source_id": "S2",
+        "node_id": 3,
+        "t": 50.168,
+        "verified": true
+      },
+      {
+        "id": "F6",
+        "claim": "TSMC has a market share close to 70% in semiconductor production, while Samsung (the second-largest foundry) has around 7%",
+        "quote": "Semiconductor production is highly specialized, with advanced manufacturing concentrated in a handful of regions and dominated by a small group of firms. Indeed, TSCM has a market share close to 70%, while Samsung (the second-largest foundry) has around 7%3.",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 70.246,
+        "verified": true
+      },
+      {
+        "id": "F7",
+        "claim": "Global semiconductor sales broke the $790 billion barrier last year, representing a 25.6% increase on 2024",
+        "quote": "Chipmakers enter 2026 with rising demand and expanding capacity. Last year, global sales broke the $790 billion barrier (a 25.6% increase on 2024)1. But one of the industry’s most significant constraints may sit deep in the supply chain.",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 70.247,
+        "verified": true
+      }
+    ]
+  }
+}

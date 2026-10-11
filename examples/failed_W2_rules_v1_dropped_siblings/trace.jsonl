@@ -1,0 +1,41 @@
+{"t": 0.026, "type": "node_created", "node": 0, "parent": null, "depth": 0, "role": "research", "objective": "Compare the total annual revenue of Microsoft (fiscal year 2024), Alphabet (2024) and Amazon (2024)."}
+{"t": 0.029, "type": "decision", "node": 0, "point": "route", "value": "WIDE", "provider": "rules", "confidence": null, "reason": "comparison, enumeration, or 'main factors' pattern", "secs": 0.0, "fallback": false}
+{"t": 0.029, "type": "node_mode", "node": 0, "mode": "WIDE", "model_mode": "WIDE"}
+{"t": 5.021, "type": "llm_call", "node": 0, "kind": "plan", "attempt": 0, "ok": true, "prompt_tokens": 339, "output_tokens": 83, "prompt_secs": 0.143, "gen_secs": 4.762, "done_reason": "stop", "secs": 4.99, "queue_wait": 0.0}
+{"t": 5.021, "type": "plan", "node": 0, "reason": "Split into three distinct company-specific revenue topics.", "proposed": ["Microsoft's total annual revenue for fiscal year 2024", "Alphabet's total annual revenue for calendar year 2024", "Amazon's total annual revenue for calendar year 2024"], "probing": null}
+{"t": 5.024, "type": "node_created", "node": 1, "parent": 0, "depth": 1, "role": "research", "objective": "Microsoft's total annual revenue for fiscal year 2024"}
+{"t": 5.024, "type": "node_created", "node": 2, "parent": 0, "depth": 1, "role": "research", "objective": "Alphabet's total annual revenue for calendar year 2024"}
+{"t": 5.024, "type": "note", "node": 0, "text": "dropped redundant sub-objective: \"Amazon's total annual revenue for calendar year 2024\""}
+{"t": 5.024, "type": "redundant_dropped", "node": 0, "objective": "Amazon's total annual revenue for calendar year 2024"}
+{"t": 5.028, "type": "decision", "node": 1, "point": "route", "value": "ATOM", "provider": "rules", "confidence": null, "reason": "no multi-part or unknown-target pattern", "secs": 0.0, "fallback": false}
+{"t": 5.028, "type": "node_mode", "node": 1, "mode": "ATOM", "model_mode": "ATOM"}
+{"t": 5.029, "type": "atom_action", "node": 1, "step": 0, "action": "search", "query": "microsoft's total annual revenue fiscal 2024", "result": 0, "provider": "rules", "thought": "rule: first query = objective keywords"}
+{"t": 5.032, "type": "decision", "node": 2, "point": "route", "value": "ATOM", "provider": "rules", "confidence": null, "reason": "no multi-part or unknown-target pattern", "secs": 0.0, "fallback": false}
+{"t": 5.032, "type": "node_mode", "node": 2, "mode": "ATOM", "model_mode": "ATOM"}
+{"t": 5.032, "type": "atom_action", "node": 2, "step": 0, "action": "search", "query": "alphabet's total annual revenue calendar 2024", "result": 0, "provider": "rules", "thought": "rule: first query = objective keywords"}
+{"t": 5.032, "type": "dispatch", "node": 0, "started": [1, 2], "held": 0, "scouting": false}
+{"t": 6.804, "type": "web_call", "node": 2, "kind": "search", "target": "alphabet's total annual revenue calendar 2024", "source": "live", "secs": 1.765, "ok": true, "error": null, "n": 5}
+{"t": 6.804, "type": "atom_action", "node": 2, "step": 1, "action": "read", "query": "", "result": 1, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 7.5, "type": "web_call", "node": 2, "kind": "fetch", "target": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2024-annual-report.pdf", "source": "cassette", "secs": 0.694, "ok": false, "error": "no extractable text (script-rendered or empty page)", "status": 200, "chars": 0}
+{"t": 7.5, "type": "atom_action", "node": 2, "step": 2, "action": "read", "query": "", "result": 4, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 7.686, "type": "web_call", "node": null, "kind": "robots", "target": "https://www.statista.com/robots.txt", "source": "live", "secs": 0.186, "ok": true, "error": null}
+{"t": 7.957, "type": "web_call", "node": 1, "kind": "search", "target": "microsoft's total annual revenue fiscal 2024", "source": "live", "secs": 2.923, "ok": true, "error": null, "n": 0}
+{"t": 7.958, "type": "note", "node": 1, "text": "search returned nothing; retried as 'microsoft s total annual revenue fiscal 2024'"}
+{"t": 8.159, "type": "web_call", "node": 2, "kind": "fetch", "target": "https://www.statista.com/statistics/507742/alphabet-annual-global-revenue/", "source": "live", "secs": 0.658, "ok": true, "error": null, "status": 200, "chars": 1454}
+{"t": 10.285, "type": "llm_call", "node": 2, "kind": "extract", "attempt": 0, "ok": true, "prompt_tokens": 502, "output_tokens": 7, "prompt_secs": 1.828, "gen_secs": 0.244, "done_reason": "stop", "secs": 2.126, "queue_wait": 0.0}
+{"t": 10.285, "type": "page_read", "node": 2, "url": "https://www.statista.com/statistics/507742/alphabet-annual-global-revenue/", "domain": "statista.com", "chars": 1454, "shown_chars": 1454, "proposed": 0, "accepted": 0}
+{"t": 10.285, "type": "atom_action", "node": 2, "step": 3, "action": "read", "query": "", "result": 3, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 10.544, "type": "web_call", "node": 2, "kind": "fetch", "target": "https://www.macrotrends.net/stocks/charts/GOOG/alphabet/revenue", "source": "cassette", "secs": 0.258, "ok": false, "error": "HTTP 403", "status": 403, "chars": 0}
+{"t": 12.831, "type": "web_call", "node": 1, "kind": "search", "target": "microsoft s total annual revenue fiscal 2024", "source": "live", "secs": 4.873, "ok": true, "error": null, "n": 0}
+{"t": 12.831, "type": "atom_action", "node": 1, "step": 1, "action": "finish", "query": "", "result": 0, "provider": "rules", "thought": "rule: nothing left to read"}
+{"t": 12.831, "type": "node_end", "node": 1, "status": "failed", "mode": "ATOM", "secs": 7.807, "confidence": "low", "verdict": null}
+{"t": 12.831, "type": "child_result", "node": 0, "child": 1, "status": "failed", "pending": 1, "confidence": "low"}
+{"t": 12.832, "type": "decision", "node": 0, "point": "review", "value": "wait", "provider": "rules", "reason": "rule: wait for all sub-tasks", "follow_ups": [], "pending": 1, "done": 1}
+{"t": 18.305, "type": "llm_call", "node": 2, "kind": "snippet_extract", "attempt": 0, "ok": true, "prompt_tokens": 812, "output_tokens": 83, "prompt_secs": 3.644, "gen_secs": 3.974, "done_reason": "stop", "secs": 7.761, "queue_wait": 0.0}
+{"t": 18.305, "type": "finding_rejected", "node": 2, "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2025/q4/2024-annual-report.pdf", "claim": "Alphabet's total annual revenue for calendar year 2024 was $350.018 billion.", "quote": "Alphabet annual revenue for 2024 was $350.018B, a 13.87% increase from 2023.", "reason": "quote not found in retrieved text"}
+{"t": 18.305, "type": "note", "node": 2, "text": "no page evidence; used search snippets (0 findings)"}
+{"t": 18.306, "type": "node_end", "node": 2, "status": "failed", "mode": "ATOM", "secs": 13.277, "confidence": "low", "verdict": null}
+{"t": 18.306, "type": "child_result", "node": 0, "child": 2, "status": "failed", "pending": 0, "confidence": "low"}
+{"t": 18.308, "type": "decision", "node": 0, "point": "review", "value": "finish", "provider": "rules", "reason": "rule: all sub-tasks reported", "follow_ups": [], "pending": 0, "done": 2}
+{"t": 18.309, "type": "node_end", "node": 0, "status": "failed", "mode": "WIDE", "secs": 18.283, "confidence": "low", "verdict": null}
+{"t": 18.309, "type": "run_end", "node": 0, "status": "failed", "stragglers": 0, "removed_citations": []}

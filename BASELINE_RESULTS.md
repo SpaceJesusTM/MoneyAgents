@@ -144,8 +144,8 @@ These shaped the baseline and are recorded for honesty about how it got here.
 | Budgets: model calls, web calls, hard deadline, depth | Tested with the scripted model only (never reached live at default settings, except the hard deadline in pre-freeze attempt 2) |
 | Quote verification, citation stripping, answer audit | Live, plus unit tests |
 | SSRF guard, robots.txt | Unit-tested with literal addresses; robots.txt honoured live. No hostile page was encountered, so prompt-injection handling is untested against a real attack. |
-| Record/replay cassettes | Recorded live in this benchmark; replay unit-tested and used live in the comparison runs |
-| Web probing, experience sharing | Scripted tests only at the time of the baseline freeze; see `OPTIMIZATION_RESULTS.md` for live results |
+| Record/replay cassettes | Recorded live in this benchmark; replayed in the comparison runs, where the baseline repeated its work exactly on 7 of 9 tasks |
+| Web probing, experience sharing | Off in the baseline. Probing was later run live as a benchmark arm, experience sharing in one live run; see `OPTIMIZATION_RESULTS.md` |
 | Peak memory | Not instrumented. The 4B model occupies 3.3 GB at 8K context; no memory pressure was observed. |
 
 ## Reproduce

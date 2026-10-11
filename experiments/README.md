@@ -10,6 +10,7 @@ unless a config asks for a non-default decider.
 | `decider` | `generative` (baseline), `rules`, `local_s1`, `jev`, `mock_jev` | who makes bounded decisions: mode, next ATOM action, review verdict, verify-or-not, redundancy |
 | `verify_policy` | `always` (baseline), `decider`, `never` | whether DEEP always sends a verifier or lets the decider judge |
 | `extract_mode` | `quote` (baseline), `lines` | copy a supporting quote, or cite a numbered line |
+| `cite_retry` | `false` (baseline), `true` | if a synthesis comes back with no citations, ask once more, then fall back to the cited sub-results |
 | `scheduler` | `fifo` (baseline), `finish_first` | which queued model call gets the single model slot next |
 | `review_policy` | `incremental` (baseline), `batch` | review each arriving result, or wait for the whole batch |
 | `web_probing` | `false` (baseline), `true` | probe how the information is organised before WIDE planning |
@@ -63,12 +64,12 @@ how good its decisions are.
 # the baseline alone (records web responses to bench/cassettes/, git-ignored)
 .venv/bin/python -m experiments.bench.run_bench --name baseline_v1 --arms baseline --order arm
 
-# arms interleaved per task
-.venv/bin/python -m experiments.bench.run_bench --name compare_v1 \
-    --arms baseline rules local_s1_4b lines_extract batch_review probing finish_first
+# arms interleaved per task (arm names are in bench/arms.json)
+.venv/bin/python -m experiments.bench.run_bench --name my_compare \
+    --arms baseline rules_plus local_s1_2b finish_first
 
 # tables
-.venv/bin/python -m experiments.bench.compare compare_v1
+.venv/bin/python -m experiments.bench.compare my_compare
 .venv/bin/python -m experiments.bench.decision_ceiling baseline_v1     # how much any fast decider could save
 .venv/bin/python -m experiments.bench.eval_routing                     # router agreement with intended modes
 ```

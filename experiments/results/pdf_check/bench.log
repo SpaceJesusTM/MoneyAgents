@@ -1,0 +1,5 @@
+2 runs to do (0 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/pdf_check/results.jsonl
+[1/2] 06:28:46 A2  baseline       t=55.6s q=0.25 facts=0.0 cov=None ground=0.5 llm=7 dec=0 web=4 nodes=1 tps=17.6 hits=[] 
+[2/2] 06:29:38 A2  pdf_8mb        t=46.7s q=0.25 facts=0.0 cov=None ground=0.5 llm=7 dec=0 web=4 nodes=1 tps=18.1 hits=[] 
+done
+exit=0

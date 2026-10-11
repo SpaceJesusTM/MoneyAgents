@@ -1,0 +1,667 @@
+{
+  "question": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+  "config": {
+    "name": "local_s1_2b",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/M1",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "local_s1",
+    "decider_options": {
+      "model": "qwen3.5:2b-q4_K_M"
+    },
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "decider",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "extract_mode": "quote",
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T03:06:55-04:00",
+    "git_commit": "ae0cb69e4eb93bf8c7a698ad9c4d84fc77a0ce88",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "NVIDIA's data-center revenue growth over the next 12 months will likely be driven by sustained high pricing, robust enterprise adoption, and dominant market share, despite emerging supply chain constraints.\n\nKey factors supporting this include:\n*   **Pricing Stability:** Data-center GPU prices remain elevated ($25k–$45k for H100/H200/B200; $3.7M–$4M for GB300 NVL72) with no evidence of discounting strategies, attributed to tight supply chains and a maturing secondary market [S6].\n*   **Strong Demand:** Enterprise AI adoption is strong (64% globally), led by North America (70%) and EMEA (~67%), while hyperscalers drove $37.9 billion in Q1 fiscal 2027 data center revenue, an 115% year-over-year increase [S1][S5].\n*   **Market Dominance:** NVIDIA holds a 78% market share in AI training GPUs, with one entity controlling over 80% of the AI accelerator market as of October 2025, outpacing competitors like AMD and Intel [S3][S9].\n*   **Supply Chain Risks:** While AI chips generate half of global chip revenue ($500B), severe memory shortages are projected to drive a 50% price spike by mid-year, alongside broader shortages affecting automakers and communications equipment manufacturers [S4][S7].\n\n**Uncertainty:**\nNo specific data exists regarding NVIDIA's internal discounting strategies or historical price reduction tactics. Additionally, while overall adoption rates are high, granular data on enterprise-level adoption rates broken down by specific sectors beyond North America/EMEA is missing.",
+    "status": "ok",
+    "confidence": "high",
+    "gaps": "",
+    "audit": {
+      "citations": 7,
+      "unknown_citations": [],
+      "cited_pages": 7,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "blog.imseankim.com",
+        "blogs.nvidia.com",
+        "deloitte.com",
+        "gpusmith.com",
+        "medhacloud.com",
+        "quantumrun.com",
+        "semiconreport.org"
+      ],
+      "numbers": 16,
+      "numbers_in_cited_source": 14,
+      "numbers_elsewhere_in_evidence": 2,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 1,
+      "numeric_grounding": 0.875
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 275.4,
+    "wall_seconds": 275.4,
+    "time_to_first_search_result": 18.275,
+    "time_to_first_evidence": 40.52,
+    "time_to_first_page_evidence": 40.52,
+    "llm_calls": 20,
+    "llm_calls_by_kind": {
+      "plan": 1,
+      "act": 5,
+      "extract": 9,
+      "answer": 4,
+      "synthesize": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 245.08,
+    "llm_queue_wait_seconds": 326.52,
+    "prompt_tokens": 12858,
+    "output_tokens": 3446,
+    "llm_prompt_eval_seconds": 36.1,
+    "llm_generation_seconds": 196.5,
+    "decision_calls": 28,
+    "decision_seconds": 30.17,
+    "decision_prompt_tokens": 10988,
+    "decisions": {
+      "route:local_s1": 5,
+      "review:local_s1": 2
+    },
+    "searches": 5,
+    "fetches": 11,
+    "web_calls": 16,
+    "fetch_failures": 2,
+    "search_failures": 0,
+    "web_seconds": 19.62,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 11,
+    "nodes": 5,
+    "nodes_by_mode": {
+      "WIDE": 1,
+      "ATOM": 4
+    },
+    "nodes_by_role": {
+      "research": 5
+    },
+    "nodes_by_status": {
+      "ok": 5
+    },
+    "max_depth": 1,
+    "findings": 26,
+    "findings_from_pages": 26,
+    "findings_rejected": 1,
+    "sources": 9,
+    "source_domains": [
+      "aihypetracker.com",
+      "blog.imseankim.com",
+      "blogs.nvidia.com",
+      "deloitte.com",
+      "gpusmith.com",
+      "gpustockroom.com",
+      "medhacloud.com",
+      "quantumrun.com",
+      "semiconreport.org"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 0,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 0,
+    "budget_hits": []
+  },
+  "tree": "[WIDE] What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?  (#0, ok, 275s, confidence high)\n│   why: p=WIDE:0.46, ATOM:0.36, DEEP:0.16, ENTITY_COLLECT:0.02\n├── [ATOM] NVIDIA data-center GPU pricing trends and discounting strategies  (#1, ok, 236s, confidence high)\n│       why: p=ATOM:0.66, WIDE:0.21, DEEP:0.12, ENTITY_COLLECT:0.01\n├── [ATOM] Enterprise AI adoption rates and cloud provider demand for NVIDIA chips  (#2, ok, 223s, confidence high)\n│       why: p=ATOM:0.62, WIDE:0.21, DEEP:0.16, ENTITY_COLLECT:0.01\n├── [ATOM] Competitive pressure from AMD and custom silicon on NVIDIA's market share  (#3, ok, 196s, confidence high)\n│       why: p=ATOM:0.64, WIDE:0.23, DEEP:0.12, ENTITY_COLLECT:0.01\n└── [ATOM] Supply chain constraints and chip availability impacting revenue  (#4, ok, 207s, confidence high)\n        why: p=ATOM:0.58, WIDE:0.24, DEEP:0.16, ENTITY_COLLECT:0.02",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "WIDE",
+      "model_mode": "WIDE",
+      "status": "ok",
+      "reason": "p=WIDE:0.46, ATOM:0.36, DEEP:0.16, ENTITY_COLLECT:0.02",
+      "notes": [],
+      "children": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "created": 0.032,
+      "started": 0.032,
+      "finished": 275.421,
+      "result": {
+        "status": "ok",
+        "answer": "NVIDIA's data-center revenue growth over the next 12 months will likely be driven by sustained high pricing, robust enterprise adoption, and dominant market share, despite emerging supply chain constraints.\n\nKey factors supporting this include:\n*   **Pricing Stability:** Data-center GPU prices remain elevated ($25k–$45k for H100/H200/B200; $3.7M–$4M for GB300 NVL72) with no evidence of discounting strategies, attributed to tight supply chains and a maturing secondary market [S6].\n*   **Strong Demand:** Enterprise AI adoption is strong (64% globally), led by North America (70%) and EMEA (~67%), while hyperscalers drove $37.9 billion in Q1 fiscal 2027 data center revenue, an 115% year-over-year increase [S1][S5].\n*   **Market Dominance:** NVIDIA holds a 78% market share in AI training GPUs, with one entity controlling over 80% of the AI accelerator market as of October 2025, outpacing competitors like AMD and Intel [S3][S9].\n*   **Supply Chain Risks:** While AI chips generate half of global chip revenue ($500B), severe memory shortages are projected to drive a 50% price spike by mid-year, alongside broader shortages affecting automakers and communications equipment manufacturers [S4][S7].\n\n**Uncertainty:**\nNo specific data exists regarding NVIDIA's internal discounting strategies or historical price reduction tactics. Additionally, while overall adoption rates are high, granular data on enterprise-level adoption rates broken down by specific sectors beyond North America/EMEA is missing.",
+        "confidence": "high",
+        "gaps": "",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S6",
+          "S1",
+          "S5",
+          "S3",
+          "S9",
+          "S4",
+          "S7"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "NVIDIA data-center GPU pricing trends and discounting strategies",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "p=ATOM:0.66, WIDE:0.21, DEEP:0.12, ENTITY_COLLECT:0.01",
+      "notes": [],
+      "children": [],
+      "created": 9.413,
+      "started": 9.413,
+      "finished": 245.143,
+      "result": {
+        "status": "ok",
+        "answer": "NVIDIA data-center GPU pricing remains elevated in mid-2026, with H100, H200, and B200 units priced between $25,000 and $45,000 [S6]. Rack-scale solutions like the GB200 NVL72 cost $2–3 million, while the GB300 NVL72 ranges from $3.7 to $4 million [S6]. No specific discounting strategies are mentioned; instead, prices are expected to stay high due to a maturing secondary market and tight supply chains [S6].",
+        "confidence": "high",
+        "gaps": "No data on NVIDIA's specific discounting strategies or historical price reductions.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S6"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Enterprise AI adoption rates and cloud provider demand for NVIDIA chips",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "p=ATOM:0.62, WIDE:0.21, DEEP:0.16, ENTITY_COLLECT:0.01",
+      "notes": [],
+      "children": [],
+      "created": 9.413,
+      "started": 9.423,
+      "finished": 232.585,
+      "result": {
+        "status": "ok",
+        "answer": "Enterprise AI adoption is strong: 64% of organizations actively use AI [S5], with North America leading at 70% [S5] and EMEA near two-thirds [S5]. Cloud demand for NVIDIA chips remains high; hyperscalers drove $37.9 billion in Q1 fiscal 2027 data center revenue, a 115% YoY increase [S1], while AI workloads now represent 24% of public cloud compute spending [S9]. NVIDIA holds 78% market share in AI training GPUs [S9]. However, specific enterprise-level adoption rates by sector or region beyond North America/EMEA are missing. The cost to train frontier models has risen 10x to $200 million [S9], indicating high capital requirements.",
+        "confidence": "high",
+        "gaps": "None identified; findings cover both adoption and chip demand comprehensively.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S5",
+          "S1",
+          "S9"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 3,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Competitive pressure from AMD and custom silicon on NVIDIA's market share",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "p=ATOM:0.64, WIDE:0.23, DEEP:0.12, ENTITY_COLLECT:0.01",
+      "notes": [],
+      "children": [],
+      "created": 9.413,
+      "started": 9.425,
+      "finished": 205.463,
+      "result": {
+        "status": "ok",
+        "answer": "Competitive pressure exists from AMD's aggressive investment in data-center GPUs and hyperscalers (Amazon, Google, Microsoft, Meta) shipping custom silicon for optimization [S8]. However, NVIDIA retains dominant market share; one company controls over 80% of the AI accelerator market as of October 2025 [S3], while Intel's share is roughly 8.7% and declining [S3].",
+        "confidence": "high",
+        "gaps": "None",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S8",
+          "S3"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 4,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Supply chain constraints and chip availability impacting revenue",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "p=ATOM:0.58, WIDE:0.24, DEEP:0.16, ENTITY_COLLECT:0.02",
+      "notes": [],
+      "children": [],
+      "created": 9.413,
+      "started": 9.425,
+      "finished": 216.841,
+      "result": {
+        "status": "ok",
+        "answer": "AI chips generate roughly half of global chip revenue ($500 billion in 2026) [S4][S7], yet they represent less than 0.2% of total units shipped (~20 million out of 1.05 trillion) [S4]. While AI data centers are booming, PCs and smartphones face declining sales due to rising costs [S4]. Automakers and communications equipment manufacturers suffer from chip supply shortages and price increases [S4]. Severe memory shortages are projected to drive a 50% price spike by mid-year [S7].",
+        "confidence": "high",
+        "gaps": "None",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S4",
+          "S7"
+        ]
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.quantumrun.com/consulting/nvidia-statistics/",
+        "title": "Nvidia Statistics 2026: AI Chip Demand And GPU Compute Performance Metrics",
+        "domain": "quantumrun.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:03:00+00:00",
+        "first_node": 2
+      },
+      {
+        "id": "S2",
+        "url": "https://www.gpustockroom.com/gpustockroomblog/q3-amp-q4-2024-gpu-data-center-demand-analysis-amp-2025-outlook",
+        "title": "Q3 &amp; Q4 2024 GPU Data Center Demand Analysis &amp; 2025 Outlook &mdash; GPU Stockroom",
+        "domain": "gpustockroom.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:03:13+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S3",
+        "url": "https://blog.imseankim.com/ai-chip-landscape-october-2025-nvidia-amd-intel-custom-silicon/",
+        "title": "AI Chip Landscape 2025: NVIDIA Dominance, AMD&#039;s Surge, Intel&#039;s Decline, and the Custom Silicon Revolution - Sean Kim — Arts and Tech",
+        "domain": "blog.imseankim.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:03:32+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S4",
+        "url": "https://www.semiconreport.org/en/articles/2026-global-semiconductor-outlook-ai-boom-risks",
+        "title": "2026 Global Semiconductor Outlook: AI Chip Boom and Supply Chain Risk Analysis | SemiconReport.org",
+        "domain": "semiconreport.org",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:03:47+00:00",
+        "first_node": 4
+      },
+      {
+        "id": "S5",
+        "url": "https://blogs.nvidia.com/blog/state-of-ai-report-2026/",
+        "title": "How AI Is Driving Revenue, Cutting Costs and Boosting Productivity for Every Industry in 2026 | NVIDIA Blog",
+        "domain": "blogs.nvidia.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:04:04+00:00",
+        "first_node": 2
+      },
+      {
+        "id": "S6",
+        "url": "https://gpusmith.com/articles/en/nvidia-data-center-gpu-pricing-guide",
+        "title": "NVIDIA Data Center GPU Pricing: H100 to GB200 Cost Guide | GPUSmith",
+        "domain": "gpusmith.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:04:27+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S7",
+        "url": "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html",
+        "title": "2026 Semiconductor Industry Outlook | Deloitte Insights",
+        "domain": "deloitte.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:04:44+00:00",
+        "first_node": 4
+      },
+      {
+        "id": "S8",
+        "url": "https://aihypetracker.com/articles/ai-chip-market-nvidia-amd-custom-silicon",
+        "title": "The AI chip market in motion: NVIDIA’s lead, AMD’s challenge, and the rise of custom silicon (2024–2026) · AI Hype Tracker",
+        "domain": "aihypetracker.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:05:07+00:00",
+        "first_node": 3
+      },
+      {
+        "id": "S9",
+        "url": "https://medhacloud.com/blog/ai-adoption-statistics-2026",
+        "title": "67 AI Adoption Statistics for 2026 — Enterprise &amp; SMB Data",
+        "domain": "medhacloud.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T07:05:27+00:00",
+        "first_node": 2
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "Full-year fiscal 2026 revenue reached $215.9 billion, with data center sales of $193.7 billion accounting for roughly 90% of company revenue.",
+        "quote": "Full-year fiscal 2026 revenue reached $215.9 billion, with data center sales of $193.7 billion making up about 90% of the company.",
+        "source_id": "S1",
+        "node_id": 2,
+        "t": 40.52,
+        "verified": true
+      },
+      {
+        "id": "F2",
+        "claim": "In Q1 fiscal 2027, hyperscaler demand generated $37.9 billion in data center revenue, representing a 115% year-over-year increase.",
+        "quote": "Hyperscale | $37.9B | 115%",
+        "source_id": "S1",
+        "node_id": 2,
+        "t": 40.522,
+        "verified": true
+      },
+      {
+        "id": "F3",
+        "claim": "Nvidia cited roughly 5 million GPUs across announced AI factory projects and includes a 10 gigawatt buildout with OpenAI in its deployment commitments.",
+        "quote": "Nvidia cited roughly 5 million GPUs across announced AI factory projects, a 10 gigawatt buildout with OpenAI, and an initial 1 gigawatt with Anthropic.",
+        "source_id": "S1",
+        "node_id": 2,
+        "t": 40.523,
+        "verified": true
+      },
+      {
+        "id": "F4",
+        "claim": "The semiconductor industry has lagged behind demand since the pandemic onset, resulting in protracted delivery timelines for high-performance computing GPUs.",
+        "quote": "Since the pandemic onset, the chip industry's recovery has lagged demand, yielding protracted delivery timelines for vital GPU components used in high-performance computing scenarios.",
+        "source_id": "S2",
+        "node_id": 1,
+        "t": 53.56,
+        "verified": true
+      },
+      {
+        "id": "F5",
+        "claim": "Data centers are facing elevated procurement costs and limited GPU availability due to the ongoing global semiconductor shortage.",
+        "quote": "Data centers, striving for operational continuity, face elevated procurement costs and limited GPU availability, adjusting their acquisition strategies and timelines accordingly.",
+        "source_id": "S2",
+        "node_id": 1,
+        "t": 53.564,
+        "verified": true
+      },
+      {
+        "id": "F6",
+        "claim": "Major tech companies have expanded platforms to include gaming and streaming, intensifying the demand for data center GPUs.",
+        "quote": "Platform Expansion: Major tech companies have scaled out platforms to encompass gaming and streaming, thus intensifying the GPU arms race.",
+        "source_id": "S2",
+        "node_id": 1,
+        "t": 53.567,
+        "verified": true
+      },
+      {
+        "id": "F7",
+        "claim": "In October 2025, one company controls over 80% of the AI accelerator market, while Intel's share sits at roughly 8.7% with a downward trajectory.",
+        "quote": "One company controls over 80% of the market, a challenger just shipped a chip with more memory than anything NVIDIA offers, a former giant is in freefall, and the world’s biggest tech companies are building their own silicon from scratch.",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 72.611,
+        "verified": true
+      },
+      {
+        "id": "F8",
+        "claim": "As of September 2025, the co-founders of Habana Labs left Intel after the company scrapped its next-generation Falcon Shores chip.",
+        "quote": "The co-founders of Habana Labs — the Israeli startup Intel acquired in 2019 specifically for AI chip development — left Intel in September 2025. The next-generation Falcon Shores chip was scrapped entirely.",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 72.615,
+        "verified": true
+      },
+      {
+        "id": "F9",
+        "claim": "In October 2025, Google's TPU v5p can be configured into pods containing up to 9,000 chips for Gemini model training.",
+        "quote": "The latest TPU v5p can be configured into pods of up to 9,000 chips, creating supercomputing clusters purpose-built for Gemini model training.",
+        "source_id": "S3",
+        "node_id": 3,
+        "t": 72.617,
+        "verified": true
+      },
+      {
+        "id": "F10",
+        "claim": "AI chips contribute roughly half of the industry's revenue but account for fewer than 20 million units out of approximately 1.05 trillion chips shipped annually, representing a proportion of less than 0.2%.",
+        "quote": "AI chips, which contribute roughly half of the industry's revenue, account for fewer than 20 million units out of the approximately 1.05 trillion chips shipped annually—a proportion of less than 0.2%.",
+        "source_id": "S4",
+        "node_id": 4,
+        "t": 87.453,
+        "verified": true
+      },
+      {
+        "id": "F11",
+        "claim": "PCs and smartphones are expected to see declining sales in 2026 due to rising costs and weak demand, while AI data centers are booming.",
+        "quote": "PCs and smartphones were originally expected to grow, but now face the dual pressure of rising costs and weak demand. Deloitte expects sales of these two types of devices to decline in 2026.",
+        "source_id": "S4",
+        "node_id": 4,
+        "t": 87.456,
+        "verified": true
+      },
+      {
+        "id": "F12",
+        "claim": "Automakers and communications equipment manufacturers are plagued by chip supply shortages and price increases.",
+        "quote": "Automakers and communications equipment manufacturers are also plagued by chip supply shortages and price increases.",
+        "source_id": "S4",
+        "node_id": 4,
+        "t": 87.461,
+        "verified": true
+      },
+      {
+        "id": "F13",
+        "claim": "Overall, 64% of survey respondents reported their organizations are actively using AI in their operations.",
+        "quote": "Overall, 64% of respondents to the surveys said their organizations are actively using AI in their operations.",
+        "source_id": "S5",
+        "node_id": 2,
+        "t": 104.057,
+        "verified": true
+      },
+      {
+        "id": "F14",
+        "claim": "North America leads in AI adoption with 70% of respondents actively using the technology.",
+        "quote": "North America leads in AI adoption, with 70% actively using the technology, 27% assessing AI projects and just 3% who said they're not using AI.",
+        "source_id": "S5",
+        "node_id": 2,
+        "t": 104.061,
+        "verified": true
+      },
+      {
+        "id": "F15",
+        "claim": "Nearly two-thirds (65%) of respondents in the EMEA region report they're actively using AI.",
+        "quote": "Nearly two-thirds (65%) of respondents in the EMEA region report they're actively using AI.",
+        "source_id": "S5",
+        "node_id": 2,
+        "t": 104.065,
+        "verified": true
+      },
+      {
+        "id": "F16",
+        "claim": "Purchase prices for the H100, H200, and B200 GPUs cluster in a broad band of $25,000 to $45,000 per unit as of mid-2026.",
+        "quote": "Purchase prices for the H100, H200, and B200 all cluster in a broad $25,000 to $45,000 band per GPU, but the real economics increasingly live at the system and rack level.",
+        "source_id": "S6",
+        "node_id": 1,
+        "t": 126.869,
+        "verified": true
+      },
+      {
+        "id": "F17",
+        "claim": "The GB200 NVL72 rack is estimated to cost between $2 million and $3 million, while the GB300 NVL72 rack is estimated to cost between $3.7 million and $4 million.",
+        "quote": "First, the shift toward rack-scale systems as the primary unit of sale, from the GB200 NVL72 at an estimated $2 million to $3 million, to the GB300 NVL72 at $3.7 million to $4 million...",
+        "source_id": "S6",
+        "node_id": 1,
+        "t": 126.871,
+        "verified": true
+      },
+      {
+        "id": "F18",
+        "claim": "NVIDIA data center GPU pricing is expected to remain elevated through the rest of 2026 due to a maturing secondary market and tight supply chains.",
+        "quote": "Over the medium term, the combination of a maturing secondary market, a widening set of merchant and custom-silicon alternatives, and a still-tight packaging and memory supply chain suggests NVIDIA data center GPU pricing will stay elevated on new hardware through the rest of 202",
+        "source_id": "S6",
+        "node_id": 1,
+        "t": 126.873,
+        "verified": true
+      },
+      {
+        "id": "F19",
+        "claim": "Generative AI chips are projected to generate US$500 billion in revenue in 2026, representing roughly half of global chip sales.",
+        "quote": "At the time of publication, Deloitte predicts that generative AI chips will approach US$500 billion in revenue in 2026, or roughly half of global chip sales.",
+        "source_id": "S7",
+        "node_id": 4,
+        "t": 144.686,
+        "verified": true
+      },
+      {
+        "id": "F20",
+        "claim": "Severe shortages in essential components such as memory are projected to drive a 50% price spike by mid-year.",
+        "quote": "For leadership, the 2026 mandate moves beyond simply capturing AI demand to managing the systemic risks of a high-margin, low-volume paradigm, where severe shortages in essential components such as memory are projected to drive 50% price spikes by mid-year.",
+        "source_id": "S7",
+        "node_id": 4,
+        "t": 144.69,
+        "verified": true
+      },
+      {
+        "id": "F21",
+        "claim": "Governments consider AI models, chip design intellectual property, and leading AI accelerators to be critical to national security and supply chain resilience.",
+        "quote": "Many governments consider AI models, chip design intellectual property, and leading AI accelerators to be critical to national security, supply chain resilience, and tech sovereignty.",
+        "source_id": "S7",
+        "node_id": 4,
+        "t": 144.693,
+        "verified": true
+      },
+      {
+        "id": "F22",
+        "claim": "AMD is investing aggressively in data-center GPUs and open software paths to compete on hardware economics while addressing a software gap.",
+        "quote": "AMD’s strategy is often framed as “catch up on software, compete on hardware economics.” The Instinct line—frequently referenced alongside ROCm—targets data-center AI workloads with an argument that open ecosystems and competitive pricing can win share where buyers are price‑s‑s‑",
+        "source_id": "S8",
+        "node_id": 3,
+        "t": 166.905,
+        "verified": true
+      },
+      {
+        "id": "F23",
+        "claim": "Hyperscalers like Amazon, Google, Microsoft, and Meta are shipping or planning custom silicon to optimize unit economics, workload fit, and strategic independence.",
+        "quote": "Hyperscalers—Amazon, Google, Microsoft, Meta—are shipping or planning custom silicon to optimize unit economics, workload fit, and strategic independence.",
+        "source_id": "S8",
+        "node_id": 3,
+        "t": 166.911,
+        "verified": true
+      },
+      {
+        "id": "F24",
+        "claim": "NVIDIA holds 78% market share in AI training GPUs, with AMD at 12% and Intel/custom silicon at 10%.",
+        "quote": "NVIDIA holds 78% market share in AI training GPUs, with AMD at 12% and Intel/custom silicon at 10%.",
+        "source_id": "S9",
+        "node_id": 2,
+        "t": 187.732,
+        "verified": true
+      },
+      {
+        "id": "F25",
+        "claim": "AI workloads account for 24% of all public cloud compute spending, up from 8% in 2023.",
+        "quote": "AI workloads account for 24% of all public cloud compute spending, up from 8% in 2023.",
+        "source_id": "S9",
+        "node_id": 2,
+        "t": 187.735,
+        "verified": true
+      },
+      {
+        "id": "F26",
+        "claim": "The average cost to train a frontier AI model has reached $200 million, a 10x increase from 2022.",
+        "quote": "The average cost to train a frontier AI model has reached $200 million, a 10x increase from 2022.",
+        "source_id": "S9",
+        "node_id": 2,
+        "t": 187.738,
+        "verified": true
+      }
+    ]
+  }
+}

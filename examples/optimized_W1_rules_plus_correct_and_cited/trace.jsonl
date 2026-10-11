@@ -1,0 +1,69 @@
+{"t": 0.049, "type": "node_created", "node": 0, "parent": null, "depth": 0, "role": "research", "objective": "Compare the gross margins of NVIDIA (fiscal year 2025), AMD (fiscal year 2024) and Intel (fiscal year 2024)."}
+{"t": 0.054, "type": "decision", "node": 0, "point": "route", "value": "WIDE", "provider": "rules", "confidence": null, "reason": "comparison, enumeration, or 'main factors' pattern", "secs": 0.0, "fallback": false}
+{"t": 0.054, "type": "node_mode", "node": 0, "mode": "WIDE", "model_mode": "WIDE"}
+{"t": 5.245, "type": "llm_call", "node": 0, "kind": "plan", "attempt": 0, "ok": true, "prompt_tokens": 353, "output_tokens": 80, "prompt_secs": 0.181, "gen_secs": 3.099, "done_reason": "stop", "secs": 5.191, "queue_wait": 0.0}
+{"t": 5.245, "type": "plan", "node": 0, "reason": "Split into three distinct company-specific margin analyses.", "proposed": ["NVIDIA gross margin performance for fiscal year 2025", "AMD gross margin performance for fiscal year 2024", "Intel gross margin performance for fiscal year 2024"], "probing": null}
+{"t": 5.249, "type": "node_created", "node": 1, "parent": 0, "depth": 1, "role": "research", "objective": "NVIDIA gross margin performance for fiscal year 2025"}
+{"t": 5.249, "type": "node_created", "node": 2, "parent": 0, "depth": 1, "role": "research", "objective": "AMD gross margin performance for fiscal year 2024"}
+{"t": 5.25, "type": "node_created", "node": 3, "parent": 0, "depth": 1, "role": "research", "objective": "Intel gross margin performance for fiscal year 2024"}
+{"t": 5.252, "type": "decision", "node": 1, "point": "route", "value": "ATOM", "provider": "rules", "confidence": null, "reason": "no multi-part or unknown-target pattern", "secs": 0.0, "fallback": false}
+{"t": 5.252, "type": "node_mode", "node": 1, "mode": "ATOM", "model_mode": "ATOM"}
+{"t": 5.252, "type": "atom_action", "node": 1, "step": 0, "action": "search", "query": "nvidia gross margin performance fiscal 2025", "result": 0, "provider": "rules", "thought": "rule: first query = objective keywords"}
+{"t": 5.259, "type": "decision", "node": 2, "point": "route", "value": "ATOM", "provider": "rules", "confidence": null, "reason": "no multi-part or unknown-target pattern", "secs": 0.0, "fallback": false}
+{"t": 5.259, "type": "node_mode", "node": 2, "mode": "ATOM", "model_mode": "ATOM"}
+{"t": 5.259, "type": "atom_action", "node": 2, "step": 0, "action": "search", "query": "amd gross margin performance fiscal 2024", "result": 0, "provider": "rules", "thought": "rule: first query = objective keywords"}
+{"t": 5.261, "type": "decision", "node": 3, "point": "route", "value": "ATOM", "provider": "rules", "confidence": null, "reason": "no multi-part or unknown-target pattern", "secs": 0.0, "fallback": false}
+{"t": 5.261, "type": "node_mode", "node": 3, "mode": "ATOM", "model_mode": "ATOM"}
+{"t": 5.261, "type": "atom_action", "node": 3, "step": 0, "action": "search", "query": "intel gross margin performance fiscal 2024", "result": 0, "provider": "rules", "thought": "rule: first query = objective keywords"}
+{"t": 5.262, "type": "dispatch", "node": 0, "started": [1, 2, 3], "held": 0, "scouting": false}
+{"t": 6.974, "type": "web_call", "node": 1, "kind": "search", "target": "nvidia gross margin performance fiscal 2025", "source": "cassette", "secs": 1.711, "ok": true, "error": null, "n": 5}
+{"t": 6.975, "type": "atom_action", "node": 1, "step": 1, "action": "read", "query": "", "result": 1, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 7.492, "type": "web_call", "node": 2, "kind": "search", "target": "amd gross margin performance fiscal 2024", "source": "cassette", "secs": 2.229, "ok": true, "error": null, "n": 5}
+{"t": 7.493, "type": "atom_action", "node": 2, "step": 1, "action": "read", "query": "", "result": 2, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 7.986, "type": "web_call", "node": 2, "kind": "fetch", "target": "https://newsroom.amd.com/news/amd-reports-fourth-quarter-and-full-year-2024-fina/", "source": "cassette", "secs": 0.49, "ok": true, "error": null, "status": 200, "chars": 42940}
+{"t": 8.31, "type": "web_call", "node": 1, "kind": "fetch", "target": "https://nvidianews.nvidia.com/_gallery/download_pdf/67bf85d73d633281c6875f57/", "source": "cassette", "secs": 1.333, "ok": true, "error": null, "status": 200, "chars": 26242}
+{"t": 8.33, "type": "web_call", "node": 3, "kind": "search", "target": "intel gross margin performance fiscal 2024", "source": "cassette", "secs": 3.067, "ok": true, "error": null, "n": 5}
+{"t": 8.331, "type": "atom_action", "node": 3, "step": 1, "action": "read", "query": "", "result": 3, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 8.941, "type": "web_call", "node": 3, "kind": "fetch", "target": "https://www.nasdaq.com/press-release/intel-reports-fourth-quarter-and-full-year-2024-financial-results-2025-01-30", "source": "cassette", "secs": 0.607, "ok": true, "error": null, "status": 200, "chars": 51598}
+{"t": 20.905, "type": "llm_call", "node": 2, "kind": "extract", "attempt": 0, "ok": true, "prompt_tokens": 1302, "output_tokens": 117, "prompt_secs": 4.671, "gen_secs": 7.88, "done_reason": "stop", "secs": 12.9, "queue_wait": 0.0}
+{"t": 20.91, "type": "finding", "node": 2, "id": "F1", "source": "S1", "kind": "page", "domain": "newsroom.amd.com", "claim": "AMD's full-year 2024 gross margin was 49% on a GAAP basis."}
+{"t": 20.914, "type": "finding", "node": 2, "id": "F2", "source": "S1", "kind": "page", "domain": "newsroom.amd.com", "claim": "AMD's full-year 2024 gross margin was a record 53% on a non-GAAP basis."}
+{"t": 20.919, "type": "finding", "node": 2, "id": "F3", "source": "S1", "kind": "page", "domain": "newsroom.amd.com", "claim": "AMD's fourth quarter 2024 gross margin was 51% on a GAAP basis and 54% on a non-GAAP basis."}
+{"t": 20.919, "type": "page_read", "node": 2, "url": "https://newsroom.amd.com/news/amd-reports-fourth-quarter-and-full-year-2024-fina/", "domain": "newsroom.amd.com", "chars": 42940, "shown_chars": 3155, "proposed": 3, "accepted": 3}
+{"t": 20.919, "type": "atom_action", "node": 2, "step": 2, "action": "finish", "query": "", "result": 0, "provider": "rules", "thought": "rule: findings cover 60% of the objective's terms"}
+{"t": 44.802, "type": "llm_call", "node": 1, "kind": "extract", "attempt": 0, "ok": true, "prompt_tokens": 1632, "output_tokens": 187, "prompt_secs": 9.099, "gen_secs": 13.235, "done_reason": "stop", "secs": 23.892, "queue_wait": 12.585}
+{"t": 44.803, "type": "finding_rejected", "node": 1, "claim": "NVIDIA's GAAP gross margin for fiscal year 2025 (Q4) was 73.0%, down 1.6 percentage points from the previous quarter.", "quote": "73.0%", "reason": "figures ['1.6'] are not on the cited line"}
+{"t": 44.803, "type": "finding_rejected", "node": 1, "claim": "NVIDIA's GAAP gross margin for fiscal year 2025 (Q4) was 73.0% compared to 76.0% in Q4 FY24, representing a decline of 3.0 percentage points year-over-year.", "quote": "Down 1.6 pts", "reason": "figures ['73', '3'] are not on the cited line"}
+{"t": 44.803, "type": "finding_rejected", "node": 1, "claim": "NVIDIA's GAAP gross profit for fiscal year 2025 (Q4) was $28,723 million, calculated from revenue of $39,331 million and cost of revenue of $10,608 million.", "quote": "32,639", "reason": "figures ['28723', '39331', '10608'] are not on the cited line"}
+{"t": 44.803, "type": "page_read", "node": 1, "url": "https://nvidianews.nvidia.com/_gallery/download_pdf/67bf85d73d633281c6875f57/", "domain": "nvidianews.nvidia.com", "chars": 26242, "shown_chars": 3009, "proposed": 0, "accepted": 0}
+{"t": 44.804, "type": "atom_action", "node": 1, "step": 2, "action": "read", "query": "", "result": 2, "provider": "rules", "thought": "rule: best-scoring unread result"}
+{"t": 45.58, "type": "web_call", "node": 1, "kind": "fetch", "target": "https://s201.q4cdn.com/141608511/files/doc_financials/2025/Q425/Q4FY25-CFO-Commentary.pdf", "source": "cassette", "secs": 0.773, "ok": true, "error": null, "status": 200, "chars": 18945}
+{"t": 65.986, "type": "llm_call", "node": 3, "kind": "extract", "attempt": 0, "ok": true, "prompt_tokens": 1572, "output_tokens": 141, "prompt_secs": 10.472, "gen_secs": 9.703, "done_reason": "stop", "secs": 21.181, "queue_wait": 35.846}
+{"t": 65.999, "type": "finding", "node": 3, "id": "F4", "source": "S2", "kind": "page", "domain": "nasdaq.com", "claim": "Intel's full-year 2024 GAAP gross margin was 32.7%, down 7.3 percentage points from the prior year."}
+{"t": 66.006, "type": "finding", "node": 3, "id": "F5", "source": "S2", "kind": "page", "domain": "nasdaq.com", "claim": "Intel's full-year 2024 Non-GAAP gross margin was 36.0%, down 7.6 percentage points from the prior year."}
+{"t": 66.014, "type": "finding", "node": 3, "id": "F6", "source": "S2", "kind": "page", "domain": "nasdaq.com", "claim": "For Q4 2024, Intel reported a GAAP gross margin of 39.2% and a Non-GAAP gross margin of 42.1%."}
+{"t": 66.014, "type": "page_read", "node": 3, "url": "https://www.nasdaq.com/press-release/intel-reports-fourth-quarter-and-full-year-2024-financial-results-2025-01-30", "domain": "nasdaq.com", "chars": 51598, "shown_chars": 3146, "proposed": 3, "accepted": 3}
+{"t": 66.014, "type": "atom_action", "node": 3, "step": 2, "action": "finish", "query": "", "result": 0, "provider": "rules", "thought": "rule: findings cover 60% of the objective's terms"}
+{"t": 76.466, "type": "llm_call", "node": 2, "kind": "answer", "attempt": 0, "ok": true, "prompt_tokens": 295, "output_tokens": 100, "prompt_secs": 2.646, "gen_secs": 7.06, "done_reason": "stop", "secs": 10.473, "queue_wait": 45.074}
+{"t": 76.47, "type": "node_end", "node": 2, "status": "ok", "mode": "ATOM", "secs": 71.215, "confidence": "high", "verdict": null}
+{"t": 76.47, "type": "child_result", "node": 0, "child": 2, "status": "ok", "pending": 2, "confidence": "high"}
+{"t": 76.472, "type": "decision", "node": 0, "point": "review", "value": "wait", "provider": "rules", "reason": "rule: wait for all sub-tasks", "follow_ups": [], "pending": 2, "done": 1}
+{"t": 97.201, "type": "llm_call", "node": 1, "kind": "extract", "attempt": 0, "ok": true, "prompt_tokens": 1624, "output_tokens": 166, "prompt_secs": 9.828, "gen_secs": 10.351, "done_reason": "stop", "secs": 20.731, "queue_wait": 30.88}
+{"t": 97.202, "type": "finding_rejected", "node": 1, "claim": "For the fourth quarter of fiscal year 2025, NVIDIA's GAAP gross margin was 73.0% and its Non-GAAP gross margin was 73.5%, both down from the same period in the ", "quote": "Gross margin 73.0 % 74.6 % 76.0 % Down 1.6 pts Down 3.0 pts", "reason": "figures ['73.5'] are not on the cited line"}
+{"t": 97.208, "type": "finding", "node": 1, "id": "F7", "source": "S3", "kind": "page", "domain": "s201.q4cdn.com", "claim": "NVIDIA's GAAP gross margin for fiscal year 2025 was 75.0%, representing an increase of 2.3 percentage points compared to the prior year."}
+{"t": 97.213, "type": "finding", "node": 1, "id": "F8", "source": "S3", "kind": "page", "domain": "s201.q4cdn.com", "claim": "NVIDIA's Non-GAAP gross margin for fiscal year 2025 was 75.5%, representing an increase of 1.7 percentage points compared to the prior year."}
+{"t": 97.213, "type": "page_read", "node": 1, "url": "https://s201.q4cdn.com/141608511/files/doc_financials/2025/Q425/Q4FY25-CFO-Commentary.pdf", "domain": "s201.q4cdn.com", "chars": 18945, "shown_chars": 2959, "proposed": 2, "accepted": 2}
+{"t": 97.213, "type": "atom_action", "node": 1, "step": 3, "action": "finish", "query": "", "result": 0, "provider": "rules", "thought": "rule: findings cover 80% of the objective's terms"}
+{"t": 108.401, "type": "llm_call", "node": 3, "kind": "answer", "attempt": 0, "ok": true, "prompt_tokens": 317, "output_tokens": 121, "prompt_secs": 2.347, "gen_secs": 7.644, "done_reason": "stop", "secs": 11.193, "queue_wait": 31.194}
+{"t": 108.403, "type": "node_end", "node": 3, "status": "ok", "mode": "ATOM", "secs": 103.143, "confidence": "high", "verdict": null}
+{"t": 108.403, "type": "child_result", "node": 0, "child": 3, "status": "ok", "pending": 1, "confidence": "high"}
+{"t": 108.403, "type": "decision", "node": 0, "point": "review", "value": "wait", "provider": "rules", "reason": "rule: wait for all sub-tasks", "follow_ups": [], "pending": 1, "done": 2}
+{"t": 117.401, "type": "llm_call", "node": 1, "kind": "answer", "attempt": 0, "ok": true, "prompt_tokens": 286, "output_tokens": 87, "prompt_secs": 2.351, "gen_secs": 6.593, "done_reason": "stop", "secs": 8.998, "queue_wait": 11.19}
+{"t": 117.404, "type": "node_end", "node": 1, "status": "ok", "mode": "ATOM", "secs": 112.154, "confidence": "high", "verdict": null}
+{"t": 117.404, "type": "child_result", "node": 0, "child": 1, "status": "ok", "pending": 0, "confidence": "high"}
+{"t": 117.406, "type": "decision", "node": 0, "point": "review", "value": "finish", "provider": "rules", "reason": "rule: all sub-tasks reported", "follow_ups": [], "pending": 0, "done": 3}
+{"t": 140.142, "type": "llm_call", "node": 0, "kind": "synthesize", "attempt": 0, "ok": true, "prompt_tokens": 553, "output_tokens": 273, "prompt_secs": 3.46, "gen_secs": 18.716, "done_reason": "stop", "secs": 22.734, "queue_wait": 0.0}
+{"t": 140.143, "type": "note", "node": 0, "text": "synthesis had no citations; asked again"}
+{"t": 162.503, "type": "llm_call", "node": 0, "kind": "synthesize", "attempt": 0, "ok": true, "prompt_tokens": 586, "output_tokens": 285, "prompt_secs": 2.958, "gen_secs": 18.117, "done_reason": "stop", "secs": 22.36, "queue_wait": 0.0}
+{"t": 162.51, "type": "node_end", "node": 0, "status": "ok", "mode": "WIDE", "secs": 162.46, "confidence": "high", "verdict": null}
+{"t": 162.524, "type": "run_end", "node": 0, "status": "ok", "stragglers": 0, "removed_citations": []}
