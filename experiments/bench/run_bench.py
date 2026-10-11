@@ -109,7 +109,7 @@ def main() -> None:
 
     def wanted(arm: str, tid: str) -> bool:
         sub = arms[arm].get("subset")
-        return sub is None or tid in sub or bool(args.tasks)
+        return sub is None or tid in sub
 
     jobs = []
     for rep in range(args.repeats):

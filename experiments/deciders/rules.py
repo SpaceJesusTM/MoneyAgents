@@ -15,8 +15,9 @@ _ENTITY = re.compile(r"^\s*(which|what|name|list|identify|who)\b.{0,25}\b(compan
                      r"manufacturers|makers|providers|customers|competitors|countries|products)\b|"
                      r"^\s*which\s+(\w+\s+){0,2}\w+s\s+(are|have|supply|make|manufacture|sell|provide|design|"
                      r"produce|build|offer)\b", re.I)
-_DEEP = re.compile(r"\b(which|what|who)\b.{3,140}\b(and|,)\s+(how|when|why|what|is|are)\b|\bwhy did\b|"
-                   r"\bwhat caused\b|\bis it true\b|\bverify\b|\broot cause\b|\btrace\b", re.I)
+_DEEP = re.compile(r"\b(which|who|what (company|supplier|firm|vendor|customer|factor|country))\b.{3,140}"
+                   r"\b(and|,)\s+(how|when|why|what|where|is|are|in which)\b|\bwhy did\b|\bwhat caused\b|"
+                   r"\bis it true\b|\bverify\b|\broot cause\b|\btrace\b", re.I)
 _WIDE = re.compile(r"\bcompare\b|\bcomparison\b|\bversus\b|\bvs\.?\b|\beach of\b|\bfor each\b|\brespectively\b|"
                    r"\b(main|key|major|biggest|primary)\s+(factors|drivers|risks|reasons|trends|challenges|"
                    r"catalysts|headwinds|tailwinds)\b|\bdrivers and risks\b|\bpros and cons\b", re.I)
@@ -29,7 +30,7 @@ _REPUTABLE = ("reuters.com", "apnews.com", "cnbc.com", "bloomberg.com", "ft.com"
               "marketwatch.com", "finance.yahoo.com", "investopedia.com", "wikipedia.org", "statista.com")
 _OFTEN_BLOCKED = ("wsj.com", "ft.com", "bloomberg.com", "seekingalpha.com", "barrons.com", "nytimes.com")
 
-DEFAULTS = {"enough_findings": 3, "max_reads": 3, "redundant_overlap": 0.6}
+DEFAULTS = {"coverage_to_stop": 0.6, "max_reads": 3, "redundant_overlap": 0.6}
 
 
 class RulesDecider(Decider):
@@ -61,9 +62,9 @@ class RulesDecider(Decider):
                               thought="rule: first query = objective keywords")
         unread = [i for i in range(1, len(st.results) + 1) if i not in st.read]
         reads_ok = sum(1 for v in st.read.values() if v == "ok")
-        if len(st.findings) >= self.opts["enough_findings"] or reads_ok >= self.opts["max_reads"]:
-            return AtomAction("finish", provider=self.name,
-                              thought=f"rule: {len(st.findings)} findings from {reads_ok} pages")
+        enough, why = self._sufficient(node.objective, st.findings, reads_ok)
+        if enough:
+            return AtomAction("finish", provider=self.name, thought="rule: " + why)
         if st.findings and steps_left <= 1:
             return AtomAction("finish", provider=self.name, thought="rule: last step, have evidence")
         if unread:
@@ -72,6 +73,25 @@ class RulesDecider(Decider):
         if len(st.queries) < 2:
             return None          # nothing left to read: let the main model write a different query
         return AtomAction("finish", provider=self.name, thought="rule: nothing left to read")
+
+    def _sufficient(self, objective: str, findings: list, reads_ok: int) -> tuple[bool, str]:
+        """Crude evidence-sufficiency rule: stop when the findings mention most of what the objective
+        asks about (and include a figure if it asks for one), or after enough pages either way."""
+        if reads_ok >= self.opts["max_reads"]:
+            return True, f"{reads_ok} pages read"
+        if len(findings) < 2:
+            return False, ""
+        terms = [t for t in content_terms(objective) if not t.isdigit()]
+        said = " ".join(f.claim.lower() for f in findings)
+        cover = sum(1 for t in terms if t in said) / len(terms) if terms else 1.0
+        wants_figure = bool(re.search(r"\b(how much|how many|revenue|margin|sales|rate|growth|price|cost|share|"
+                                      r"capex|expenditure|profit|income)\b", objective, re.I))
+        has_figure = bool(re.search(r"\d", said))
+        if cover >= self.opts["coverage_to_stop"] and (has_figure or not wants_figure):
+            return True, f"findings cover {cover:.0%} of the objective's terms"
+        if reads_ok >= 2 and len(findings) >= 3:
+            return True, f"{len(findings)} findings from {reads_ok} pages"
+        return False, ""
 
     @staticmethod
     def _query(objective: str) -> str:
@@ -108,7 +128,7 @@ class RulesDecider(Decider):
         return Decision("verify", need, self.name,
                         reason=f"rule: evidence from {len(domains)} independent site(s); verify if fewer than 2")
 
-    def redundant(self, objective: str, existing: list[str]) -> bool:
+    def redundant(self, objective: str, existing: list[str], fuzzy: bool = True) -> bool:
         key = objective_key(objective)
-        return any(key == objective_key(e) or overlap(objective, e) >= self.opts["redundant_overlap"]
+        return any(key == objective_key(e) or (fuzzy and overlap(objective, e) >= self.opts["redundant_overlap"])
                    for e in existing)

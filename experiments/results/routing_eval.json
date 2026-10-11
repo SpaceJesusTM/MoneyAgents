@@ -688,5 +688,696 @@
         "reason": "Identifies specific entity (foundry) and checks a dependent fact (capacity constraint)."
       }
     ]
+  },
+  {
+    "router": "local_s1_4b",
+    "decider": "local_s1",
+    "options": {},
+    "cases": 32,
+    "agreement": 0.844,
+    "agreement_by_expected": {
+      "ATOM": "15/15",
+      "WIDE": "6/7",
+      "DEEP": "2/6",
+      "ENTITY_COLLECT": "4/4"
+    },
+    "over_delegation_below_root": "0/9",
+    "median_secs": 2.107,
+    "mean_secs": 2.138,
+    "total_secs": 68.4,
+    "predicted": {
+      "ATOM": 20,
+      "WIDE": 6,
+      "DEEP": 2,
+      "ENTITY_COLLECT": 4
+    },
+    "rows": [
+      {
+        "objective": "What was NVIDIA's data center revenue for fiscal year 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8749,
+        "secs": 2.313,
+        "reason": "p=ATOM:0.91, WIDE:0.06, DEEP:0.02, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "What is the current federal funds target rate range set by the Federal Reserve?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8143,
+        "secs": 1.994,
+        "reason": "p=ATOM:0.86, WIDE:0.09, DEEP:0.03, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "What was Apple's services revenue in fiscal 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8344,
+        "secs": 2.1,
+        "reason": "p=ATOM:0.88, WIDE:0.07, DEEP:0.03, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "How much did Microsoft spend on capital expenditures in its most recent fiscal year?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8869,
+        "secs": 2.254,
+        "reason": "p=ATOM:0.92, WIDE:0.05, DEEP:0.02, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "What gross margin did AMD report for its latest quarter?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.9131,
+        "secs": 2.07,
+        "reason": "p=ATOM:0.93, WIDE:0.05, DEEP:0.01, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "When did TSMC begin volume production of its 2nm process?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8756,
+        "secs": 2.686,
+        "reason": "p=ATOM:0.91, WIDE:0.05, ENTITY_COLLECT:0.03, DEEP:0.02"
+      },
+      {
+        "objective": "Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.816,
+        "secs": 1.984,
+        "reason": "p=WIDE:0.86, ATOM:0.13, DEEP:0.00, ENTITY_COLLECT:0.00"
+      },
+      {
+        "objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.6817,
+        "secs": 1.85,
+        "reason": "p=WIDE:0.76, ATOM:0.21, DEEP:0.02, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Compare the 2026 capital expenditure plans of Microsoft, Alphabet, Amazon and Meta.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.6088,
+        "secs": 2.221,
+        "reason": "p=WIDE:0.71, ATOM:0.27, DEEP:0.02, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "What are the key drivers and risks for Tesla's energy storage business?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.3211,
+        "secs": 2.419,
+        "reason": "p=WIDE:0.49, ATOM:0.43, DEEP:0.05, ENTITY_COLLECT:0.03"
+      },
+      {
+        "objective": "How do JPMorgan, Bank of America and Citigroup compare on net interest income this year?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.8381,
+        "secs": 2.295,
+        "reason": "p=WIDE:0.88, ATOM:0.12, DEEP:0.00, ENTITY_COLLECT:0.00"
+      },
+      {
+        "objective": "What are the main headwinds facing European automakers in 2026?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.5047,
+        "secs": 1.775,
+        "reason": "p=WIDE:0.63, ATOM:0.28, DEEP:0.07, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": 0.6569,
+        "secs": 2.044,
+        "reason": "p=DEEP:0.74, ATOM:0.12, ENTITY_COLLECT:0.07, WIDE:0.06"
+      },
+      {
+        "objective": "Which company is the largest customer of ASML's EUV lithography systems, and what share of ASML's revenue does it account for?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.6643,
+        "secs": 1.984,
+        "reason": "p=ATOM:0.75, DEEP:0.10, WIDE:0.08, ENTITY_COLLECT:0.07"
+      },
+      {
+        "objective": "Why did Intel's foundry business report an operating loss last year, and what would have to change for it to break even?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.3176,
+        "secs": 1.886,
+        "reason": "p=ATOM:0.49, WIDE:0.36, DEEP:0.11, ENTITY_COLLECT:0.04"
+      },
+      {
+        "objective": "Is it true that hyperscaler capital expenditure is growing faster than their cloud revenue?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": 0.9717,
+        "secs": 1.813,
+        "reason": "p=DEEP:0.98, ATOM:0.01, WIDE:0.01, ENTITY_COLLECT:0.00"
+      },
+      {
+        "objective": "Which memory maker gained the most high-bandwidth-memory share last year, and what drove the gain?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.23,
+        "secs": 1.807,
+        "reason": "p=ATOM:0.42, WIDE:0.33, DEEP:0.18, ENTITY_COLLECT:0.07"
+      },
+      {
+        "objective": "Which companies supply high-bandwidth memory for AI accelerators?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": 0.7375,
+        "secs": 1.8,
+        "reason": "p=ENTITY_COLLECT:0.80, ATOM:0.12, DEEP:0.05, WIDE:0.02"
+      },
+      {
+        "objective": "List the publicly traded companies that manufacture lithography equipment for advanced chips.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": 0.9744,
+        "secs": 2.115,
+        "reason": "p=ENTITY_COLLECT:0.98, ATOM:0.01, DEEP:0.01, WIDE:0.00"
+      },
+      {
+        "objective": "Which hyperscalers are designing their own AI accelerator chips?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": 0.3992,
+        "secs": 2.448,
+        "reason": "p=ENTITY_COLLECT:0.55, ATOM:0.34, DEEP:0.07, WIDE:0.04"
+      },
+      {
+        "objective": "Name the major suppliers of advanced chip packaging services.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ENTITY_COLLECT",
+        "ok": true,
+        "confidence": 0.7552,
+        "secs": 2.382,
+        "reason": "p=ENTITY_COLLECT:0.82, ATOM:0.12, DEEP:0.04, WIDE:0.02"
+      },
+      {
+        "objective": "NVIDIA data-center GPU pricing trends in recent quarters",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8944,
+        "secs": 2.695,
+        "reason": "p=ATOM:0.92, WIDE:0.05, DEEP:0.02, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Hyperscaler capital expenditure plans and demand for NVIDIA accelerators",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8728,
+        "secs": 2.248,
+        "reason": "p=ATOM:0.90, WIDE:0.05, DEEP:0.02, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Competitive pressure from AMD and custom silicon on NVIDIA's data-center market share",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8219,
+        "secs": 1.951,
+        "reason": "p=ATOM:0.87, WIDE:0.09, DEEP:0.03, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Supply chain constraints and chip availability affecting NVIDIA's data-center revenue",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8484,
+        "secs": 2.04,
+        "reason": "p=ATOM:0.89, WIDE:0.07, DEEP:0.03, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "US export controls on AI chips to China and their effect on NVIDIA sales",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.7895,
+        "secs": 2.161,
+        "reason": "p=ATOM:0.84, WIDE:0.09, DEEP:0.04, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "AMD gross margin in its most recent fiscal year",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8867,
+        "secs": 2.163,
+        "reason": "p=ATOM:0.92, WIDE:0.06, DEEP:0.02, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Tesla energy storage deployments and revenue trend",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8739,
+        "secs": 2.022,
+        "reason": "p=ATOM:0.91, WIDE:0.06, DEEP:0.02, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Battery cell supply and cost outlook for Tesla Megapack",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8736,
+        "secs": 2.282,
+        "reason": "p=ATOM:0.91, WIDE:0.06, DEEP:0.02, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Amazon 2026 capital expenditure guidance",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.8779,
+        "secs": 2.375,
+        "reason": "p=ATOM:0.91, WIDE:0.05, DEEP:0.03, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Capital expenditure plans of the three largest US cloud providers compared for 2026",
+        "depth": 1,
+        "expected": "WIDE",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.7329,
+        "secs": 2.243,
+        "reason": "p=ATOM:0.80, WIDE:0.15, DEEP:0.03, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Which foundry manufactures AMD's newest data-center CPUs, and is its capacity constrained?",
+        "depth": 1,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.6625,
+        "secs": 2.003,
+        "reason": "p=ATOM:0.75, DEEP:0.10, WIDE:0.09, ENTITY_COLLECT:0.06"
+      }
+    ]
+  },
+  {
+    "router": "local_s1_2b",
+    "decider": "local_s1",
+    "options": {
+      "model": "qwen3.5:2b-q4_K_M"
+    },
+    "cases": 32,
+    "agreement": 0.719,
+    "agreement_by_expected": {
+      "ATOM": "15/15",
+      "WIDE": "6/7",
+      "DEEP": "2/6",
+      "ENTITY_COLLECT": "0/4"
+    },
+    "over_delegation_below_root": "0/9",
+    "median_secs": 0.933,
+    "mean_secs": 0.945,
+    "total_secs": 30.2,
+    "predicted": {
+      "ATOM": 20,
+      "WIDE": 8,
+      "DEEP": 4
+    },
+    "rows": [
+      {
+        "objective": "What was NVIDIA's data center revenue for fiscal year 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.4205,
+        "secs": 0.858,
+        "reason": "p=ATOM:0.57, WIDE:0.27, DEEP:0.15, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "What is the current federal funds target rate range set by the Federal Reserve?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.2383,
+        "secs": 0.79,
+        "reason": "p=ATOM:0.43, WIDE:0.31, DEEP:0.24, ENTITY_COLLECT:0.03"
+      },
+      {
+        "objective": "What was Apple's services revenue in fiscal 2025?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.4191,
+        "secs": 0.821,
+        "reason": "p=ATOM:0.56, WIDE:0.27, DEEP:0.15, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "How much did Microsoft spend on capital expenditures in its most recent fiscal year?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.3207,
+        "secs": 0.817,
+        "reason": "p=ATOM:0.49, WIDE:0.29, DEEP:0.20, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "What gross margin did AMD report for its latest quarter?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.3099,
+        "secs": 0.824,
+        "reason": "p=ATOM:0.48, WIDE:0.31, DEEP:0.19, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "When did TSMC begin volume production of its 2nm process?",
+        "depth": 0,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.2639,
+        "secs": 0.903,
+        "reason": "p=ATOM:0.45, WIDE:0.32, DEEP:0.21, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Compare the gross margins of NVIDIA, AMD and Intel over their most recent fiscal year.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.5655,
+        "secs": 0.876,
+        "reason": "p=WIDE:0.67, ATOM:0.22, DEEP:0.10, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "What are the main factors that could affect NVIDIA's data-center revenue growth over the next 12 months?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.2839,
+        "secs": 0.913,
+        "reason": "p=WIDE:0.46, ATOM:0.36, DEEP:0.16, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Compare the 2026 capital expenditure plans of Microsoft, Alphabet, Amazon and Meta.",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.4687,
+        "secs": 0.833,
+        "reason": "p=WIDE:0.60, ATOM:0.20, DEEP:0.18, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "What are the key drivers and risks for Tesla's energy storage business?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.2547,
+        "secs": 0.814,
+        "reason": "p=WIDE:0.44, ATOM:0.33, DEEP:0.21, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "How do JPMorgan, Bank of America and Citigroup compare on net interest income this year?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.5388,
+        "secs": 0.835,
+        "reason": "p=WIDE:0.65, ATOM:0.19, DEEP:0.14, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "What are the main headwinds facing European automakers in 2026?",
+        "depth": 0,
+        "expected": "WIDE",
+        "got": "WIDE",
+        "ok": true,
+        "confidence": 0.1964,
+        "secs": 0.812,
+        "reason": "p=WIDE:0.40, ATOM:0.33, DEEP:0.25, ENTITY_COLLECT:0.03"
+      },
+      {
+        "objective": "Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, and how fast can that capacity grow?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": 0.2219,
+        "secs": 0.888,
+        "reason": "p=DEEP:0.42, WIDE:0.28, ATOM:0.22, ENTITY_COLLECT:0.09"
+      },
+      {
+        "objective": "Which company is the largest customer of ASML's EUV lithography systems, and what share of ASML's revenue does it account for?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.1536,
+        "secs": 0.93,
+        "reason": "p=ATOM:0.37, DEEP:0.31, WIDE:0.29, ENTITY_COLLECT:0.04"
+      },
+      {
+        "objective": "Why did Intel's foundry business report an operating loss last year, and what would have to change for it to break even?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "WIDE",
+        "ok": false,
+        "confidence": 0.1347,
+        "secs": 1.025,
+        "reason": "p=WIDE:0.35, ATOM:0.33, DEEP:0.29, ENTITY_COLLECT:0.03"
+      },
+      {
+        "objective": "Is it true that hyperscaler capital expenditure is growing faster than their cloud revenue?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "DEEP",
+        "ok": true,
+        "confidence": 0.2085,
+        "secs": 1.066,
+        "reason": "p=DEEP:0.41, WIDE:0.30, ATOM:0.19, ENTITY_COLLECT:0.10"
+      },
+      {
+        "objective": "Which memory maker gained the most high-bandwidth-memory share last year, and what drove the gain?",
+        "depth": 0,
+        "expected": "DEEP",
+        "got": "WIDE",
+        "ok": false,
+        "confidence": 0.1456,
+        "secs": 1.4,
+        "reason": "p=WIDE:0.36, DEEP:0.31, ATOM:0.30, ENTITY_COLLECT:0.03"
+      },
+      {
+        "objective": "Which companies supply high-bandwidth memory for AI accelerators?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.2311,
+        "secs": 1.164,
+        "reason": "p=ATOM:0.42, DEEP:0.30, WIDE:0.25, ENTITY_COLLECT:0.03"
+      },
+      {
+        "objective": "List the publicly traded companies that manufacture lithography equipment for advanced chips.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "DEEP",
+        "ok": false,
+        "confidence": 0.3644,
+        "secs": 1.038,
+        "reason": "p=DEEP:0.52, ATOM:0.22, WIDE:0.16, ENTITY_COLLECT:0.10"
+      },
+      {
+        "objective": "Which hyperscalers are designing their own AI accelerator chips?",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.2121,
+        "secs": 0.874,
+        "reason": "p=ATOM:0.41, DEEP:0.28, WIDE:0.27, ENTITY_COLLECT:0.04"
+      },
+      {
+        "objective": "Name the major suppliers of advanced chip packaging services.",
+        "depth": 0,
+        "expected": "ENTITY_COLLECT",
+        "got": "DEEP",
+        "ok": false,
+        "confidence": 0.1735,
+        "secs": 0.956,
+        "reason": "p=DEEP:0.38, ATOM:0.33, WIDE:0.24, ENTITY_COLLECT:0.05"
+      },
+      {
+        "objective": "NVIDIA data-center GPU pricing trends in recent quarters",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5525,
+        "secs": 0.962,
+        "reason": "p=ATOM:0.66, WIDE:0.21, DEEP:0.11, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Hyperscaler capital expenditure plans and demand for NVIDIA accelerators",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5573,
+        "secs": 0.97,
+        "reason": "p=ATOM:0.67, WIDE:0.19, DEEP:0.13, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Competitive pressure from AMD and custom silicon on NVIDIA's data-center market share",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5163,
+        "secs": 1.142,
+        "reason": "p=ATOM:0.64, WIDE:0.24, DEEP:0.12, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Supply chain constraints and chip availability affecting NVIDIA's data-center revenue",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.4481,
+        "secs": 0.999,
+        "reason": "p=ATOM:0.59, WIDE:0.24, DEEP:0.15, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "US export controls on AI chips to China and their effect on NVIDIA sales",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.4363,
+        "secs": 0.981,
+        "reason": "p=ATOM:0.58, WIDE:0.25, DEEP:0.16, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "AMD gross margin in its most recent fiscal year",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5937,
+        "secs": 0.937,
+        "reason": "p=ATOM:0.70, WIDE:0.18, DEEP:0.11, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Tesla energy storage deployments and revenue trend",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5572,
+        "secs": 0.957,
+        "reason": "p=ATOM:0.67, WIDE:0.21, DEEP:0.11, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Battery cell supply and cost outlook for Tesla Megapack",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5695,
+        "secs": 0.925,
+        "reason": "p=ATOM:0.68, WIDE:0.22, DEEP:0.10, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Amazon 2026 capital expenditure guidance",
+        "depth": 1,
+        "expected": "ATOM",
+        "got": "ATOM",
+        "ok": true,
+        "confidence": 0.5183,
+        "secs": 0.963,
+        "reason": "p=ATOM:0.64, WIDE:0.21, DEEP:0.14, ENTITY_COLLECT:0.02"
+      },
+      {
+        "objective": "Capital expenditure plans of the three largest US cloud providers compared for 2026",
+        "depth": 1,
+        "expected": "WIDE",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.3084,
+        "secs": 1.004,
+        "reason": "p=ATOM:0.48, WIDE:0.37, DEEP:0.14, ENTITY_COLLECT:0.01"
+      },
+      {
+        "objective": "Which foundry manufactures AMD's newest data-center CPUs, and is its capacity constrained?",
+        "depth": 1,
+        "expected": "DEEP",
+        "got": "ATOM",
+        "ok": false,
+        "confidence": 0.3309,
+        "secs": 0.951,
+        "reason": "p=ATOM:0.50, WIDE:0.25, DEEP:0.23, ENTITY_COLLECT:0.02"
+      }
+    ]
   }
 ]

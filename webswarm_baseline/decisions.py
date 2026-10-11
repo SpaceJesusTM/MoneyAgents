@@ -70,8 +70,12 @@ class Decider:
     def needs_verification(self, node, claim: str, steps: list[dict]) -> Decision:
         return Decision("verify", True, self.name, reason="policy: verify every candidate")
 
-    def redundant(self, objective: str, existing: list[str]) -> bool:
-        """Baseline check is lexical: only exact duplicates after normalisation are dropped."""
+    def redundant(self, objective: str, existing: list[str], fuzzy: bool = True) -> bool:
+        """Baseline check is lexical: only exact duplicates after normalisation are dropped.
+
+        `fuzzy` tells deciders with a similarity test whether it applies: it is True only for a WIDE
+        manager's research children. A DEEP step or a verifier's claim legitimately resembles its
+        parent's objective, so those are only checked for exact duplication."""
         key = objective_key(objective)
         return any(key == objective_key(e) for e in existing)
 

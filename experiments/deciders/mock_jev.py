@@ -51,6 +51,7 @@ def heuristic_answer(state, q: dict) -> dict:
 class MockJevBackend(Backend):
     name = "MOCK_jev"
     external = False
+    answers_in_one_request = True
 
     def __init__(self, tracer=None):
         self.tracer = tracer

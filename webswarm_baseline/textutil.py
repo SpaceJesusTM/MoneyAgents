@@ -157,12 +157,37 @@ def select_passages(text: str, focus: str, max_chars: int) -> str:
     return "\n".join(out)
 
 
+_KEY_FIGURE = re.compile(r"\$\s?\d[\d,]*(?:\.\d+)?|\d[\d,]*(?:\.\d+)?\s?(?:%|percent|billion|million|"
+                         r"trillion|thousand|bn\b|mn\b|bps|basis points)|\d[\d,]*\.\d+", re.I)
+
+
+def key_figures(text: str) -> list[str]:
+    """Substantive figures in a claim: money, percentages, magnitudes, decimals. Dates, years and bare
+    counts are left out, because a claim may restate its period ("fiscal 2025") from context."""
+    out = []
+    for m in _KEY_FIGURE.finditer(text or ""):
+        out += numbers_in(re.match(r"\$?\s?[\d,.]+", m.group(0)).group(0).replace(" ", "") + "%")
+    return list(dict.fromkeys(out))
+
+
 def number_lines(excerpt: str, max_len: int = 320) -> list[str]:
-    """Split an excerpt into citable lines (long paragraphs are cut at sentence ends)."""
-    out: list[str] = []
+    """Split an excerpt into citable lines (long paragraphs are cut at sentence ends).
+
+    PDF text arrives hard-wrapped mid-sentence, so a line that does not end a sentence is joined
+    with a following line that starts in lower case before the lines are numbered."""
+    merged: list[str] = []
     for line in excerpt.splitlines():
         line = line.strip()
-        if not line or line == "[...]":
+        if not line:
+            continue
+        if (merged and merged[-1] != "[...]" and line != "[...]" and line[0].islower() and "|" not in line
+                and not merged[-1].endswith((".", "!", "?", ":", ";")) and len(merged[-1]) + len(line) < max_len):
+            merged[-1] += " " + line
+        else:
+            merged.append(line)
+    out: list[str] = []
+    for line in merged:
+        if line == "[...]":
             continue
         while len(line) > max_len:
             cut = line.rfind(". ", 0, max_len)

@@ -39,6 +39,7 @@ class JevError(RuntimeError):
 class JevBackend(Backend):
     name = "jev"
     external = True
+    answers_in_one_request = True   # the API evaluates all questions of a request in parallel
 
     def __init__(self, api_key: str | None = None, *, url: str | None = None, model: str = DEFAULT_MODEL,
                  timeout: float = 10.0, max_retries: int = 3, backoff: float = 0.5,

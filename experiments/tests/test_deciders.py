@@ -141,3 +141,26 @@ def test_local_backend_noul_and_score():
 def test_unknown_decider_name_is_rejected():
     with pytest.raises(ValueError, match="unknown decider"):
         build("nope", {})
+
+
+def test_rules_router_does_not_call_a_plain_two_part_lookup_deep():
+    q = "What was NVIDIA's Data Center revenue for fiscal year 2025, and how much did it grow from the prior year?"
+    assert RulesDecider().route(N(q), MODES).value == "ATOM"
+
+
+def test_fuzzy_redundancy_applies_only_when_asked():
+    d = RulesDecider()
+    parent = "Which partner constrains Acme Corp advanced packaging supply, and how fast can it grow?"
+    step = "Which partner constrains Acme Corp advanced packaging supply?"
+    assert d.redundant(step, [parent], fuzzy=True) is True       # a WIDE child restating its parent is dropped
+    assert d.redundant(step, [parent], fuzzy=False) is False     # a DEEP step narrowing its parent is kept
+    assert d.redundant(parent, [parent], fuzzy=False) is True    # exact duplicates are always dropped
+
+
+def test_rules_arm_completes_a_deep_run():
+    cfg, extra = mock_setup(SwarmConfig().override(["verify_policy=decider"]), root_mode="DEEP")
+    d = build("rules", {})
+    art = execute("Which partner constrains Acme Corp advanced packaging supply, and how fast can it grow?",
+                  cfg, echo=False, decider=d, **extra)
+    assert art.swarm.nodes[0].mode == "DEEP" and len(art.swarm.nodes) >= 2
+    assert art.outcome["answer"]

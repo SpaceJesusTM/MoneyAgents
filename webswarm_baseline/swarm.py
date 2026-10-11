@@ -38,8 +38,8 @@ from .decisions import AtomAction, Decider, Decision, ReviewDecision
 from .evidence import EvidenceStore, Finding, audit_answer, cited_ids, strip_unknown_citations
 from .llm import LLMError
 from .runtime import Budget, BudgetExceeded, Cancelled, Tracer
-from .textutil import (clean_page_text, domain_of, norm, number_lines, numbers_in, objective_key,
-                       select_passages)
+from .textutil import (clean_page_text, domain_of, key_figures, norm, number_lines, numbers_in,
+                       objective_key, select_passages)
 from .web import SearchResult, WebClient
 
 MANAGER_MODES = ("WIDE", "DEEP", "ENTITY_COLLECT")
@@ -474,8 +474,8 @@ class Swarm:
                 self.tracer.event("finding_rejected", node.id, claim=claim[:160], quote="",
                                   reason=f"cited line {i} does not exist")
                 continue
-            near = " ".join(lines[max(0, i - 2):i + 1])
-            missing = [n for n in numbers_in(claim) if n not in set(numbers_in(near))]
+            near = set(numbers_in(" ".join(lines[max(0, i - 2):i + 1])))
+            missing = [n for n in key_figures(claim) if n not in near]
             if missing:
                 self.tracer.event("finding_rejected", node.id, claim=claim[:160], quote=lines[i - 1][:160],
                                   reason=f"figures {missing[:3]} are not on the cited line")
@@ -666,7 +666,8 @@ class Swarm:
         started = []
         for spec in specs:
             obj = spec["objective"]
-            if self.decider.redundant(obj, existing):
+            fuzzy = node.mode == "WIDE" and spec.get("role", "research") == "research"
+            if self.decider.redundant(obj, existing, fuzzy=fuzzy):
                 self._note(node, f"dropped redundant sub-objective: {obj[:100]!r}")
                 self.tracer.event("redundant_dropped", node.id, objective=obj)
                 continue

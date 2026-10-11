@@ -193,3 +193,17 @@ def test_config_overrides_and_validation():
         SwarmConfig().override(["no_such_key=1"])
     with pytest.raises(ValueError):
         SwarmConfig.from_dict({"bogus": 1})
+
+
+def test_key_figures_ignores_dates_and_counts():
+    from webswarm_baseline.textutil import key_figures
+    claim = "For the quarter ended January 26, 2025 (fiscal 2025), revenue was $35.6 billion, up 93% across 3 segments"
+    assert key_figures(claim) == ["35.6", "93"]
+    assert key_figures("Gross margin was 75.0 percent and EPS 2.94") == ["75", "2.94"]
+
+
+def test_number_lines_rejoins_hard_wrapped_sentences():
+    from webswarm_baseline.textutil import number_lines
+    pdf = "Record quarterly Data Center revenue of $35.6 billion, up 16% from Q3 and up 93% from a\nyear ago\nOutlook\n[...]\nA | B | C"
+    assert number_lines(pdf) == ["Record quarterly Data Center revenue of $35.6 billion, up 16% from Q3 and up 93% from a year ago",
+                                 "Outlook", "A | B | C"]

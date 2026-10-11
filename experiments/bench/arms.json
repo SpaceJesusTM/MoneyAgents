@@ -13,10 +13,8 @@
       "subset": [
         "W1",
         "W2",
-        "D1",
         "M1",
-        "M2",
-        "E1"
+        "M2"
       ]
     },
     "probing": {
@@ -39,7 +37,6 @@
       "subset": [
         "W1",
         "W2",
-        "D1",
         "M1",
         "M2",
         "E1"
@@ -98,6 +95,18 @@
       ],
       "subset": [
         "A2"
+      ]
+    },
+    "experience": {
+      "description": "Sibling experience sharing (WebSwarm section 3.3): two scouts first, then tips to the remaining siblings.",
+      "overrides": [
+        "experience_sharing=true"
+      ],
+      "subset": [
+        "W1",
+        "W2",
+        "M1",
+        "M2"
       ]
     }
   }

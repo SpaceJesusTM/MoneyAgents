@@ -29,14 +29,28 @@ from webswarm_baseline.textutil import domain_of, objective_key, overlap
 from .primitives import Backend, Choice, Noul
 
 ROUTE_CRITERIA = {
-    "ATOM": "One focused lookup a single researcher can do with a few searches: a named entity and a "
-            "specific fact, metric or narrow topic.",
-    "WIDE": "Several named entities to compare, or several independent factors/dimensions that each need "
-            "their own research before being combined.",
-    "DEEP": "The key entity or cause is not named and must be discovered first and then examined, or a "
-            "claim needs step-by-step checking.",
-    "ENTITY_COLLECT": "The answer itself is a list of entities that has to be discovered.",
+    "ATOM": "a focused lookup one researcher can do with a few searches: a named entity and a fact, metric "
+            "or single topic",
+    "WIDE": "several named entities to compare, or several independent factors that each need separate research",
+    "DEEP": "the question first asks WHICH unnamed entity or cause, then asks something that depends on it; "
+            "or it asks whether a claim is true",
+    "ENTITY_COLLECT": "the answer is itself a list of entities that must be discovered",
 }
+
+# The same worked examples the generative router's prompt uses, so the two routers differ in how they
+# answer (one token with probabilities vs. a written reason), not in what they were told.
+ROUTE_INSTRUCTIONS = """How should the research objective be investigated?
+Examples:
+"What was Apple's services revenue in fiscal 2024?" -> ATOM
+"TSMC advanced packaging capacity expansion plans" -> ATOM
+"Competition from Samsung and Micron in Apple's memory supply" -> ATOM (one topic, although it names two companies)
+"Compare the operating margins of Ford, GM and Toyota last year." -> WIDE
+"What are the main risks to Tesla's automotive margins next year?" -> WIDE
+"Which supplier's capacity most limits Boeing 737 deliveries, and when will it recover?" -> DEEP
+"Is it true that US shale output is falling while rig counts rise?" -> DEEP
+"Which companies make lithography equipment for advanced chips?" -> ENTITY_COLLECT
+If the objective is already one part of a larger question, the answer is ATOM unless it explicitly asks to \
+compare three or more named entities, or asks which unnamed entity is responsible for something."""
 
 DEFAULTS = {
     "delegate_threshold": 0.6,      # below the root: delegate only if P(mode) >= this, else ATOM
@@ -73,13 +87,13 @@ class SystemOneDecider(Decider):
             return self._generative.route(node, modes)
         sw = self.swarm
         t0 = time.perf_counter()
-        parent = sw.nodes.get(node.parent) if node.parent is not None else None
+        # The parent's wording is deliberately left out of the state: with it, the one-token router
+        # answered for the parent ("main factors..." -> WIDE) on every sub-objective it was shown.
         state = f"Research objective: {node.objective}\n"
-        state += (f"This objective is one part that a manager already split out of: {parent.objective}\n"
-                  if parent else "This is the user's original question.\n")
-        ans = self.backend.ask(state, {"mode": Choice(
-            "How should this research objective be investigated?", {m: ROUTE_CRITERIA[m] for m in modes})},
-            node=node, kind="route")["mode"]
+        state += ("This objective is already one part of a larger question.\n" if node.parent is not None
+                  else "This is the user's original question.\n")
+        ans = self.backend.ask(state, {"mode": Choice(ROUTE_INSTRUCTIONS, {m: ROUTE_CRITERIA[m] for m in modes})},
+                               node=node, kind="route")["mode"]
         mode, p = ans.choice, ans.probabilities.get(ans.choice, 1.0)
         reason = "p=" + ", ".join(f"{k}:{v:.2f}" for k, v in sorted(ans.probabilities.items(), key=lambda x: -x[1]))
         if (ans.confidence or 1.0) < self.opts["fallback_below"]:
@@ -111,12 +125,18 @@ class SystemOneDecider(Decider):
                 {"true": "every part of the objective is answered by specific facts in the findings",
                  "false": "an important part of the objective is still unanswered"})
         if unread:
-            opts = {f"R{i}": f"[{domain_of(st.results[i - 1].url)}] {st.results[i - 1].title[:80]} - "
-                             f"{st.results[i - 1].snippet[:130]}" for i in unread}
+            opts = {f"R{i}": f"[{domain_of(st.results[i - 1].url)}] {st.results[i - 1].title[:70]} - "
+                             f"{st.results[i - 1].snippet[:100]}" for i in unread}
             opts["NONE"] = "none of these would help; a different search is needed"
             questions["next"] = Choice("Which search result should be opened next to find evidence for the "
                                        "research objective? Prefer official or primary sources.", opts)
-        ans = self.backend.ask(state, questions, node=node, kind="atom_next")
+        if getattr(self.backend, "answers_in_one_request", False) or len(questions) < 2:
+            ans = self.backend.ask(state, questions, node=node, kind="atom_next")
+        else:
+            # a local model answers one question per call, so stop after "sufficient" when it says yes
+            ans = self.backend.ask(state, {"sufficient": questions["sufficient"]}, node=node, kind="atom_next")
+            if ans["sufficient"].noul < self.opts["sufficient_threshold"]:
+                ans.update(self.backend.ask(state, {"next": questions["next"]}, node=node, kind="atom_next"))
         if "sufficient" in ans and ans["sufficient"].noul >= self.opts["sufficient_threshold"]:
             return AtomAction("finish", provider=self.name, thought=f"P(sufficient)={ans['sufficient'].noul:.2f}")
         if "next" in ans and ans["next"].choice != "NONE":
@@ -180,11 +200,11 @@ class SystemOneDecider(Decider):
 
     # ---- redundancy -------------------------------------------------------------------------
 
-    def redundant(self, objective: str, existing: list[str]) -> bool:
+    def redundant(self, objective: str, existing: list[str], fuzzy: bool = True) -> bool:
         key = objective_key(objective)
         if any(key == objective_key(e) for e in existing):
             return True
-        if not self._on("redundant"):
+        if not fuzzy or not self._on("redundant"):
             return False
         for e in existing:
             sim = overlap(objective, e)
