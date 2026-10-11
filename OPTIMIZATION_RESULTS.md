@@ -190,7 +190,132 @@ duplicate of "Microsoft's total annual revenue" and dropped it, and likewise dro
 W1. A fast wrong control decision. *Verdict:* **discard this version**; see the fixed version in
 round 2.
 
-ROUND2_PLACEHOLDER_BODY
+## Round 2: other mechanisms, and the fixed rules
+
+Paired with the baseline rows of the same round. Task M2 was left out of round 2 to save time, so
+"8 tasks" means all but M2. Mechanisms that can only act under a WIDE root ran on the tasks where
+they can act.
+
+| Arm | Tasks | Total time vs baseline | Reference model time vs baseline | Model calls (arm / baseline) | Web calls | Agents | Mean quality (arm / baseline) | Gold facts found (arm / baseline) | Preserves quality by the pre-set rule? |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| Rules, fixed (`rules_fixed`) | 8 | 0.45 | 0.44 | 65 / 220 | 60 / 105 | 28 / 34 | 0.72 / 0.77 | 11 / 11 | No (lost 2, gained 2; one uncited synthesis) |
+| Rules + line extraction + finish-first (`rules_lines`) | 8 | 0.38 | 0.36 | 66 / 220 | 62 / 105 | 29 / 34 | 0.68 / 0.77 | 11 / 11 | No (same, two uncited syntheses) |
+| Line-reference extraction (`lines_extract`) | 8 | 0.89 | 0.87 | 207 / 220 | 102 / 105 | 32 / 34 | 0.67 / 0.77 | 10 / 11 | No (lost 2 on A1, gained 1) |
+| Batch review (`batch_review`) | 3 | 0.93 | 0.91 | 124 / 141 | 56 / 60 | 19 / 21 | 0.82 / 0.84 | 6 / 5 | Yes |
+| Web probing (`probing`) | 3 | 0.65 | 0.61 | 95 / 141 | 45 / 60 | 14 / 21 | 0.81 / 0.84 | 5 / 5 | No (lost 1, gained 1; coverage down on M1) |
+| Finish-first scheduling (`finish_first`) | 4 | 1.08 | 1.04 | 168 / 168 | 82 / 79 | 26 / 26 | 0.91 / 0.88 | 9 / 8 | Yes |
+
+Per task, time to answer in seconds / automatic quality / agents:
+
+| Task | Baseline | Rules fixed | Rules + lines | Line extraction | Batch review | Probing | Finish-first |
+|---|---|---|---|---|---|---|---|
+| A1 | 46 / 1.00 / 1 | 26 / 1.00 / 1 | 24 / 1.00 / 1 | 44 / 0.50 / 1 | | | |
+| A2 | 41 / 0.25 / 1 | 18 / 0.00 / 1 | 17 / 0.00 / 1 | 35 / 0.00 / 1 | | | |
+| W1 | 343 / 0.89 / 6 | 211 / 0.67 / 4 | 120 / 0.67 / 4 | 252 / 0.67 / 4 | 363 / 0.83 / 6 | 249 / 1.00 / 4 | 434 / 1.00 / 6 |
+| W2 | 135 / 0.83 / 4 | 64 / 0.78 / 4 | 41 / 0.78 / 4 | 166 / 0.83 / 4 | 143 / 0.83 / 4 | 221 / 0.78 / 5 | 151 / 0.83 / 4 |
+| D1 | 274 / 0.67 / 5 | 116 / 0.50 / 4 | 152 / 0.67 / 5 | 223 / 0.67 / 5 | | | |
+| D2 | 50 / 0.75 / 1 | 64 / 1.00 / 3 | 64 / 0.50 / 3 | 35 / 0.75 / 1 | | | |
+| M1 | 719 / 0.80 / 11 | 188 / 0.80 / 5 | 157 / 0.80 / 5 | 690 / 0.90 / 11 | 610 / 0.80 / 9 | 309 / 0.65 / 5 | 735 / 0.80 / 11 |
+| E1 | 255 / 1.00 / 5 | 154 / 1.00 / 6 | 130 / 1.00 / 6 | 216 / 1.00 / 5 | | | 250 / 1.00 / 5 |
+
+On A2 no arm found the fact. The baseline's 0.25 there is grounding credit for an answer that says
+"not found" and adds an invented figure; the 0.00 arms returned no answer at all. Do not read that
+row as the baseline being better.
+
+### Rules, fixed (`rules_fixed`)
+
+*What changed:* the redundancy rule now also requires two objectives to name the same entities.
+*Tested:* live. *Result:* **0.44 of baseline model work with the same number of gold facts (11 of
+16)**, but not the same facts. It found Intel's margin (W1) and TSMC (D2), which the baseline
+missed, and lost Microsoft's and Alphabet's revenue (W2): its keyword query for Microsoft returned
+nothing and the rule gives up there instead of asking the model for another query, and the pages
+it picked for Alphabet could not be read. W1's facts were all correct but the synthesis came back
+without citations. First evidence arrived in 20 s (median) against 44 s.
+*Verdict:* **keep as the fast mode, not as the default.** It is the cheapest arm by a wide margin
+and its routing is the best measured, but it gives up after an empty search, and with no
+follow-ups it cannot recover from a branch that found nothing.
+
+### Line-reference extraction (`lines_extract`)
+
+*What changed:* the page is shown as numbered lines; the model cites a line number instead of
+copying a quote, and every money, percentage or decimal figure in a claim must appear on the cited
+line or the one next to it. Our hypothesis. *Tested:* live.
+*Result per extraction call:* output 230 to 133 tokens (-42%), prompt 1,019 to 1,188 tokens (+17%),
+17.5 to 14.1 s (-19%). 15 claims were rejected for carrying a figure that was not on the cited
+line; the baseline's quote check rejected 9 for a different reason and would have let those 15
+through. *Result per run:* 0.87 of baseline model work.
+*Quality, mixed:* its W1 answer has all three companies with GAAP and non-GAAP labelled correctly,
+where the baseline misses Intel and mislabels NVIDIA's, and it had the best M1 coverage (4 of 5
+dimensions against 3).
+It also **lost A1**, a task every other arm gets right: the extractor cited quarterly lines and
+never the line holding the full-year figure. And its W1 synthesis dropped the citations.
+*Verdict:* **revise.** The stricter claim check is worth keeping. The A1 miss needs a look at how
+the numbered excerpt changes what the 4B model attends to.
+
+### Batch review (`batch_review`)
+
+*What changed:* the manager waits for the whole batch before reviewing, as WebSwarm's reference
+code does, instead of reviewing each arrival. *Tested:* live, 3 tasks.
+*Result:* 0.91 of baseline model work, same quality. Reviews dropped from 13 to 4 across the three
+tasks, and on M1 the tree shrank from 11 agents to 9 because one review asks for follow-ups once
+instead of several reviews asking repeatedly.
+*What this says about incremental consumption:* on this hardware, reviewing each arrival cost about
+9% more model work and bought no measurable quality. With one model slot, sibling results arrive
+close together, so there is little "early" evidence to act on, and the 4B model used the extra
+reviews mostly to request follow-ups rather than to stop early. A manager finished early in 2 of
+88 benchmark runs, never in a baseline run, and in one of those two (probing, W2) it cancelled the
+agent that was about to find Amazon's figure.
+*Verdict:* incremental review is **not a win here**. It should pay off when children finish far
+apart (parallel inference, or mixed fast and slow branches); that is untested.
+
+### Web probing (`probing`)
+
+*What changed:* one search and one model call classify how the information is organised before a
+WIDE plan (paper, simplified). *Tested:* live, 3 tasks.
+*Result:* 0.61 of baseline model work and 25% fewer web calls (45 against 60), which is the
+direction the paper reports (fewer tool calls at similar accuracy). But the mechanism here was
+blunt: the probe called all three tasks `centralized` or `centralized_with_gaps`, which caps the
+plan at 2 or 3 children. That helped W1 (4 agents, all three margins found, quality 1.00) and hurt
+the other two: on W2 the manager finished early and cancelled the Amazon agent, and on M1, an open-ended multi-factor question that is not
+centralized in any useful sense, the 5-agent tree dropped the competition dimension and the answer
+carried two figures found in no retrieved text.
+*Verdict:* **revise.** The saving is real, but it comes from planning fewer children, and a 4B
+model judging topology from ten snippets is not reliable enough to decide that. Three tasks is too
+few to say more.
+
+### Finish-first scheduling (`finish_first`)
+
+*What changed:* when several agents are waiting for the single model slot, calls that complete a
+node (answers, synthesis, extraction) go ahead of calls that start new work. Our hypothesis.
+*Tested:* live, 4 tasks.
+*Result:* total time and model work unchanged (1.08 and 1.04, inside the noise), as expected,
+since the same calls are made in a different order. What moved is when evidence becomes available:
+
+| Task | First child result reaches the root: baseline | finish-first |
+|---|---:|---:|
+| W1 | 168 s | 120 s |
+| W2 | 79 s | 52 s |
+| M1 | 221 s | 102 s |
+| E1 | 175 s | 147 s |
+
+Time to first source-grounded finding moved the same way (median 77 s to 60 s).
+*Verdict:* **keep.** It costs nothing and delivers the first usable branch 16% to 54% sooner. That
+matters for time-sensitive use and is a precondition for incremental review to be worth anything.
+
+### Page size cap (`pdf_8mb`), a robustness check
+
+*Why:* the baseline could not answer A2 because Apple's financial-statements PDF is 4.9 MB and the
+3 MB response cap truncated it. *Tested:* partly.
+- At the fetch level the fix works: with `max_page_bytes=8000000` the same URL returns 8,956
+  characters of text including the line "Services 24,972 22,314 96,169 85,200".
+- End to end it is **inconclusive**. Replaying from the recording cannot test it (recordings are
+  keyed by URL, so the replay returns the truncated fetch). A live re-run without the recording got
+  different search results that night and the agent never opened the PDF, so both the baseline and
+  the 8 MB run again answered "not found".
+*Verdict:* raise the cap (it is one config value), and treat A2 as still unsolved until a run shows
+otherwise.
+
+
 
 ## Router agreement on labelled objectives
 
