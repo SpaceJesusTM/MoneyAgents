@@ -1009,6 +1009,8 @@ class Swarm:
         answer, removed = strip_unknown_citations(answer, known)
         if removed:
             self._note(node, f"removed citations to unknown sources: {removed}")
+        if self.cfg.cite_retry and not cited_ids(answer) and any(self.nodes[c].result.sources for c in usable):
+            answer = self._recite(node, rt, usable, words, is_root, known)
         failed = [c for c in rt.done if c not in usable]
         gaps = []
         if failed:
@@ -1024,6 +1026,28 @@ class Swarm:
                                  confidence=conf, gaps="; ".join(gaps), verdict=verdicts[-1] if verdicts else "",
                                  sources=cited_ids(answer))
         return {"next": ""}
+
+    def _recite(self, node: Node, rt: ManagerRT, usable: list, words: int, is_root: bool, known: set) -> str:
+        """cite_retry: a synthesis that dropped every citation is not acceptable when the sub-results
+        were cited. Ask once more, more bluntly; if that also fails, return the cited sub-results as
+        they are rather than fluent uncited prose."""
+        self._note(node, "synthesis had no citations; asked again")
+        stricter = (prompts.SYNTH_SYSTEM.format(words=words, extra=prompts.SYNTH_ROOT_EXTRA if is_root else "") +
+                    "\n- Your previous draft cited no sources. Every sentence that states a fact MUST end with the "
+                    "source id(s) copied from the results, like [S3].")
+        try:
+            again = self.llm.text("synthesize", node, stricter, prompts.SYNTH_USER.format(
+                today=self.today, objective=node.objective,
+                results=self._render_child_results(rt, 170, usable_only=True),
+                missing="\n".join(f"- {self.nodes[c].objective}" for c in rt.done if c not in usable) or "(nothing)"),
+                max_tokens=int(words * 2.0) + 120)
+            again, _ = strip_unknown_citations(again, known)
+            if cited_ids(again):
+                return again
+        except (LLMError, BudgetExceeded) as e:
+            self._note(node, f"second synthesis failed ({e})")
+        self._note(node, "still no citations; returning the cited sub-results instead of uncited prose")
+        return "\n".join(f"- {self.nodes[c].objective}: {self.nodes[c].result.answer}" for c in usable)
 
     def _synth_entity(self, node: Node, rt: ManagerRT) -> NodeResult:
         """The merged table is the answer; it is written out directly rather than re-generated."""

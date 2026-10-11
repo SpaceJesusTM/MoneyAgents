@@ -115,6 +115,33 @@
         "decider=rules",
         "verify_policy=decider"
       ]
+    },
+    "jev": {
+      "description": "NOT RUN (no API key). Typed decisions answered by TypeSafe Jev over its REST API. Running this arm sends research text to a paid external service: it needs TYPESAFE_API_KEY in the environment, and naming this arm is the explicit opt-in.",
+      "overrides": [
+        "decider=jev",
+        "verify_policy=decider",
+        "decider_options.allow_external_calls=true"
+      ]
+    },
+    "typed_2b_plus": {
+      "description": "Candidate configuration: typed decisions from the 2B model + line-reference extraction + citation retry.",
+      "overrides": [
+        "decider=local_s1",
+        "verify_policy=decider",
+        "decider_options.model=qwen3.5:2b-q4_K_M",
+        "extract_mode=lines",
+        "cite_retry=true"
+      ]
+    },
+    "rules_plus": {
+      "description": "Candidate configuration: rules decider (entity-aware) + line-reference extraction + citation retry.",
+      "overrides": [
+        "decider=rules",
+        "verify_policy=decider",
+        "extract_mode=lines",
+        "cite_retry=true"
+      ]
     }
   }
 }

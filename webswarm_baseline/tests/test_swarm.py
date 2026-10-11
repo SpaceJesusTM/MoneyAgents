@@ -504,3 +504,37 @@ def test_default_extract_mode_is_unchanged_by_the_optional_variant():
     art = run()
     kinds = art.stats["llm_calls_by_kind"]
     assert kinds["extract"] >= 1 and art.stats["findings_from_pages"] > 0
+
+
+# ---- optional: citation retry ---------------------------------------------------------------------
+
+def _uncited_then(second):
+    h = default_handlers()
+    calls = {"n": 0}
+
+    def synthesize(system, user, schema):
+        calls["n"] += 1
+        return "Acme grew strongly and supply is easing." if calls["n"] == 1 else second
+    h["synthesize"] = synthesize
+    return h, calls
+
+
+def test_cite_retry_asks_again_when_a_synthesis_drops_every_citation():
+    h, calls = _uncited_then("Acme revenue was $4.2 billion [S1].")
+    art = run(handlers=h, overrides=["cite_retry=true"])
+    assert calls["n"] == 2 and cited_ids(art.outcome["answer"]) == ["S1"]
+    assert any("asked again" in n for n in art.swarm.nodes[0].notes)
+
+
+def test_cite_retry_falls_back_to_cited_sub_results_rather_than_uncited_prose():
+    h, calls = _uncited_then("Still fluent, still uncited.")
+    art = run(handlers=h, overrides=["cite_retry=true"])
+    assert calls["n"] == 2 and cited_ids(art.outcome["answer"])
+    assert art.outcome["answer"].startswith("- Acme Corp")
+    assert art.outcome["audit"]["citations"] >= 1
+
+
+def test_without_cite_retry_the_baseline_behaviour_is_unchanged():
+    h, calls = _uncited_then("unused")
+    art = run(handlers=h)
+    assert calls["n"] == 1 and cited_ids(art.outcome["answer"]) == [] and SwarmConfig().cite_retry is False

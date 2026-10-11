@@ -72,6 +72,8 @@ class SwarmConfig:
     verify_policy: str = "always"       # DEEP candidate verification: always | decider | never
     allow_entity_collect: bool = True
     final_audit: bool = True            # programmatic citation + numeric grounding audit of the answer
+    cite_retry: bool = False            # if a synthesis comes back with no citations although its inputs
+                                        # had them: ask once more, then fall back to the cited sub-results
     extract_mode: str = "quote"         # quote: model copies a supporting quote (baseline)
                                         # lines: page shown as numbered lines, model cites a line number
 
