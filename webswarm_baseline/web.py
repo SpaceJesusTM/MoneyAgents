@@ -130,7 +130,9 @@ def html_to_text(html: str, url: str = "") -> tuple[str, str]:
 
 def pdf_to_text(data: bytes, max_pages: int = 15) -> str:
     try:
+        import logging
         from pypdf import PdfReader
+        logging.getLogger("pypdf").setLevel(logging.ERROR)   # font-table warnings are noise here
         reader = PdfReader(io.BytesIO(data))
         out = []
         for page in reader.pages[:max_pages]:

@@ -38,7 +38,8 @@ from .decisions import AtomAction, Decider, Decision, ReviewDecision
 from .evidence import EvidenceStore, Finding, audit_answer, cited_ids, strip_unknown_citations
 from .llm import LLMError
 from .runtime import Budget, BudgetExceeded, Cancelled, Tracer
-from .textutil import clean_page_text, domain_of, norm, objective_key, select_passages
+from .textutil import (clean_page_text, domain_of, norm, number_lines, numbers_in, objective_key,
+                       select_passages)
 from .web import SearchResult, WebClient
 
 MANAGER_MODES = ("WIDE", "DEEP", "ENTITY_COLLECT")
@@ -436,20 +437,51 @@ class Swarm:
         focus = f"{node.objective} {st.last_query}"
         text = clean_page_text(page.text)   # quotes are checked against the same text the model saw
         excerpt = select_passages(text, focus, self.cfg.page_chars)
-        out = self.llm.json("extract", node, prompts.EXTRACT_SYSTEM.format(max_findings=3),
-                            prompts.EXTRACT_USER.format(objective=self._atom_objective(node),
-                                                        title=(page.title or r.title)[:120],
-                                                        domain=domain_of(page.final_url or r.url), text=excerpt),
-                            prompts.EXTRACT_SCHEMA, max_tokens=340)
+        head = dict(objective=self._atom_objective(node), title=(page.title or r.title)[:120],
+                    domain=domain_of(page.final_url or r.url))
+        if self.cfg.extract_mode == "lines":
+            proposals = self._extract_by_line(node, excerpt, head)
+        else:
+            out = self.llm.json("extract", node, prompts.EXTRACT_SYSTEM.format(max_findings=3),
+                                prompts.EXTRACT_USER.format(text=excerpt, **head),
+                                prompts.EXTRACT_SCHEMA, max_tokens=340)
+            proposals = [(f.get("claim", ""), f.get("quote", "")) for f in out.get("findings", [])[:4]]
+        out = {"findings": proposals}
         accepted = 0
-        for f in out.get("findings", [])[:4]:
-            got = self.evidence.record(f.get("claim", ""), f.get("quote", ""), r.url, page.title or r.title,
-                                       "page", node.id, text)
+        for claim, quote in proposals:
+            got = self.evidence.record(claim, quote, r.url, page.title or r.title, "page", node.id, text)
             if got and got not in st.findings:
                 st.findings.append(got)
                 accepted += 1
         self.tracer.event("page_read", node.id, url=r.url, domain=domain_of(r.url), chars=len(page.text),
                           shown_chars=len(excerpt), proposed=len(out.get("findings", [])), accepted=accepted)
+
+    def _extract_by_line(self, node: Node, excerpt: str, head: dict) -> list[tuple[str, str]]:
+        """extract_mode="lines": the model cites a line number; the line itself becomes the quote.
+
+        The quote is exact by construction, so the check moves to the claim: every figure in the
+        claim must appear on the cited line or the line next to it, otherwise it is dropped."""
+        lines = number_lines(excerpt)
+        shown = "\n".join(f"[{i}] {ln}" for i, ln in enumerate(lines, 1))
+        out = self.llm.json("extract", node, prompts.EXTRACT_LINES_SYSTEM.format(max_findings=3),
+                            prompts.EXTRACT_USER.format(text=shown, **head),
+                            prompts.EXTRACT_LINES_SCHEMA, max_tokens=220)
+        proposals = []
+        for f in out.get("findings", [])[:4]:
+            i = int(f.get("line") or 0)
+            claim = str(f.get("claim", ""))
+            if not 1 <= i <= len(lines):
+                self.tracer.event("finding_rejected", node.id, claim=claim[:160], quote="",
+                                  reason=f"cited line {i} does not exist")
+                continue
+            near = " ".join(lines[max(0, i - 2):i + 1])
+            missing = [n for n in numbers_in(claim) if n not in set(numbers_in(near))]
+            if missing:
+                self.tracer.event("finding_rejected", node.id, claim=claim[:160], quote=lines[i - 1][:160],
+                                  reason=f"figures {missing[:3]} are not on the cited line")
+                continue
+            proposals.append((claim, lines[i - 1][:400]))
+        return proposals
 
     def _snippet_fallback(self, node: Node, st: AtomState) -> None:
         """No page yielded evidence: fall back to the search-result snippets, marked as weaker."""

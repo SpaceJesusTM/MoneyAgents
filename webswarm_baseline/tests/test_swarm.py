@@ -466,3 +466,41 @@ def test_deep_verify_step_phrased_as_a_question_is_investigated_instead():
     assert [k.role for k in kids] == ["research", "research", "verifier"]
     assert kids[2].objective.startswith("Borealis Semiconductor will double")
     assert any("phrased as a question" in x for x in art.swarm.nodes[0].notes)
+
+
+# ---- optional: line-reference extraction ----------------------------------------------------------
+
+def test_line_mode_cites_lines_and_builds_exact_quotes():
+    art = run(overrides=["extract_mode=lines"])
+    assert art.outcome["status"] == "ok" and art.stats["findings_from_pages"] > 0
+    store = art.swarm.evidence
+    for f in store.findings:                      # every stored quote is verbatim page text
+        assert f.quote in store.text_of(f.source_id)
+    seen = [e for e in art.tracer.events if e["type"] == "page_read"]
+    assert seen and all(e["accepted"] <= e["proposed"] for e in seen)
+
+
+def test_line_mode_rejects_claims_whose_figures_are_not_on_the_cited_line():
+    h = default_handlers("ATOM")
+
+    def extract(system, user, schema):
+        rows = [(int(n), t) for n, t in re.findall(r"^\[(\d+)\] (.*)$", user, re.M)]
+        n, text = next((n, t) for n, t in rows if "$2.9 billion" in t)
+        return {"findings": [{"claim": "Data center revenue was $2.9 billion", "line": n},
+                             {"claim": "Data center revenue was $7.7 billion", "line": n},      # wrong figure
+                             {"claim": "Something on a line that does not exist", "line": 999}]}
+
+    h["extract"] = extract
+    art = run(handlers=h, root_mode="ATOM", overrides=["extract_mode=lines"])
+    claims = [f.claim for f in art.swarm.evidence.findings if art.swarm.evidence.sources[f.source_id].kind == "page"]
+    assert "Data center revenue was $2.9 billion" in claims
+    assert not any("7.7" in c for c in claims)
+    reasons = [e["reason"] for e in art.tracer.events if e["type"] == "finding_rejected"]
+    assert any("not on the cited line" in r for r in reasons) and any("does not exist" in r for r in reasons)
+
+
+def test_default_extract_mode_is_unchanged_by_the_optional_variant():
+    assert SwarmConfig().extract_mode == "quote"
+    art = run()
+    kinds = art.stats["llm_calls_by_kind"]
+    assert kinds["extract"] >= 1 and art.stats["findings_from_pages"] > 0

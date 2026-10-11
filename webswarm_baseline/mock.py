@@ -87,6 +87,9 @@ def default_handlers(root_mode: str = "WIDE") -> dict:
         return {"thought": "scripted", "action": "read", "query": "", "result": unread[0]}
 
     def extract(system, user, schema):
+        if "line" in schema["properties"]["findings"]["items"]["properties"]:   # extract_mode="lines"
+            rows = [(int(n), t) for n, t in re.findall(r"^\[(\d+)\] (.*)$", user, re.M) if re.search(r"\d", t)]
+            return {"findings": [{"claim": t[:280], "line": n} for n, t in rows[:3]]}
         text = user.split("<<<UNTRUSTED", 1)[1]
         sents = [s.strip() for s in re.split(r"(?<=[.])\s+", text) if re.search(r"\d", s) and len(s.split()) >= 6]
         return {"findings": [{"claim": s, "quote": s} for s in dict.fromkeys(sents[:3])]}

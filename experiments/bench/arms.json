@@ -7,30 +7,98 @@
     },
     "batch_review": {
       "description": "Manager waits for the whole batch before reviewing (what the WebSwarm reference code does), instead of reviewing each arrival.",
-      "overrides": ["review_policy=batch"],
-      "subset": ["W1", "W2", "D1", "M1", "M2", "E1"]
+      "overrides": [
+        "review_policy=batch"
+      ],
+      "subset": [
+        "W1",
+        "W2",
+        "D1",
+        "M1",
+        "M2",
+        "E1"
+      ]
     },
     "probing": {
       "description": "Web probing before WIDE planning (WebSwarm section 3.3).",
-      "overrides": ["web_probing=true"],
-      "subset": ["W1", "W2", "M1", "M2"]
+      "overrides": [
+        "web_probing=true"
+      ],
+      "subset": [
+        "W1",
+        "W2",
+        "M1",
+        "M2"
+      ]
     },
     "finish_first": {
       "description": "Model-slot scheduler serves calls that complete a node before calls that start new work.",
-      "overrides": ["scheduler=finish_first"],
-      "subset": ["W1", "W2", "D1", "M1", "M2", "E1"]
+      "overrides": [
+        "scheduler=finish_first"
+      ],
+      "subset": [
+        "W1",
+        "W2",
+        "D1",
+        "M1",
+        "M2",
+        "E1"
+      ]
     },
     "rules": {
       "description": "All bounded decisions (route, next ATOM action, review, verify-or-not, redundancy) by deterministic rules; no model calls for control.",
-      "overrides": ["decider=rules", "verify_policy=decider"]
+      "overrides": [
+        "decider=rules",
+        "verify_policy=decider"
+      ]
     },
     "local_s1_4b": {
       "description": "Bounded decisions as typed one-token questions answered by the same 4B model via logprobs (local System One-style).",
-      "overrides": ["decider=local_s1", "verify_policy=decider"]
+      "overrides": [
+        "decider=local_s1",
+        "verify_policy=decider"
+      ]
     },
     "local_s1_2b": {
       "description": "Same typed decisions answered by the smaller qwen3.5:2b model; research still by the 4B model.",
-      "overrides": ["decider=local_s1", "verify_policy=decider", "decider_options.model=qwen3.5:2b-q4_K_M"]
+      "overrides": [
+        "decider=local_s1",
+        "verify_policy=decider",
+        "decider_options.model=qwen3.5:2b-q4_K_M"
+      ]
+    },
+    "lines_extract": {
+      "description": "Extraction cites a numbered line instead of copying a quote (fewer output tokens; quote exact by construction; claim figures must be on the cited line).",
+      "overrides": [
+        "extract_mode=lines"
+      ]
+    },
+    "combined": {
+      "description": "Typed decisions from the 4B model + line-reference extraction + finish-first scheduling.",
+      "overrides": [
+        "decider=local_s1",
+        "verify_policy=decider",
+        "extract_mode=lines",
+        "scheduler=finish_first"
+      ]
+    },
+    "rules_lines": {
+      "description": "Rules decider + line-reference extraction + finish-first scheduling.",
+      "overrides": [
+        "decider=rules",
+        "verify_policy=decider",
+        "extract_mode=lines",
+        "scheduler=finish_first"
+      ]
+    },
+    "pdf_8mb": {
+      "description": "Robustness check, not an optimization: page size cap raised from 3 MB to 8 MB (Apple's 4.9 MB financial-statements PDF was truncated and unreadable in the baseline).",
+      "overrides": [
+        "max_page_bytes=8000000"
+      ],
+      "subset": [
+        "A2"
+      ]
     }
   }
 }

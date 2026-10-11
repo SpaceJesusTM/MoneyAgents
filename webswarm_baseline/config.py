@@ -72,6 +72,8 @@ class SwarmConfig:
     verify_policy: str = "always"       # DEEP candidate verification: always | decider | never
     allow_entity_collect: bool = True
     final_audit: bool = True            # programmatic citation + numeric grounding audit of the answer
+    extract_mode: str = "quote"         # quote: model copies a supporting quote (baseline)
+                                        # lines: page shown as numbered lines, model cites a line number
 
     budgets: Budgets = field(default_factory=Budgets)
 

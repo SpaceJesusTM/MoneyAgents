@@ -157,6 +157,23 @@ def select_passages(text: str, focus: str, max_chars: int) -> str:
     return "\n".join(out)
 
 
+def number_lines(excerpt: str, max_len: int = 320) -> list[str]:
+    """Split an excerpt into citable lines (long paragraphs are cut at sentence ends)."""
+    out: list[str] = []
+    for line in excerpt.splitlines():
+        line = line.strip()
+        if not line or line == "[...]":
+            continue
+        while len(line) > max_len:
+            cut = line.rfind(". ", 0, max_len)
+            cut = cut + 1 if cut > max_len // 3 else max_len
+            out.append(line[:cut].strip())
+            line = line[cut:].strip()
+        if line:
+            out.append(line)
+    return out
+
+
 def quote_in_text(quote: str, text: str) -> bool:
     """True if `quote` really occurs in `text` (exactly, or with small whitespace/markup drift).
 

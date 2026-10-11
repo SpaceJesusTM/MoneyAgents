@@ -1,0 +1,14 @@
+9 runs to do (0 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/baseline_v1/results.jsonl
+[1/9] 00:59:58 A1  baseline       t=42.4s q=1.0 facts=1.0 cov=None ground=1.0 llm=7 dec=0 web=3 nodes=1 tps=25.8 hits=[] 
+EOF marker not found
+[2/9] 01:00:51 A2  baseline       t=37.8s q=0.25 facts=0.0 cov=None ground=0.5 llm=7 dec=0 web=4 nodes=1 tps=25.5 hits=[] 
+EOF marker not found
+incorrect startxref pointer(4)
+parsing for Object Streams
+Token exceeds maximum length of 64 bytes.
+Object 4924 0 not defined.
+[3/9] 01:07:35 W1  baseline       t=388.4s q=0.889 facts=0.667 cov=1.0 ground=1.0 llm=44 dec=0 web=20 nodes=6 tps=17.7 hits=[] 
+incorrect startxref pointer(4)
+parsing for Object Streams
+Object 2505 0 not defined.
+[4/9] 01:10:24 W2  baseline       t=153.7s q=0.833 facts=1.0 cov=1.0 ground=0.5 llm=26 dec=0 web=10 nodes=4 tps=22.0 hits=[] 

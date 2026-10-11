@@ -4,10 +4,11 @@ Session started 2026-10-10 ~23:40 local. Branch `3-prototype-webswarm-subagents`
 
 ## Current status
 
-- **Stage:** C (repairing and validating the baseline with live runs), heading to freeze.
-- **Last verified working command:** `.venv/bin/python -m pytest webswarm_baseline/tests -q` (61 passed)
-- **Last successful real-model + live-web run:** ATOM factual question, correct answer with a primary source, 54 s (see Results).
-- **Baseline frozen?** not yet.
+- **Stage:** D (baseline benchmark running), with stage E code (optimization arms) written and unit-tested.
+- **Last verified working command:** `.venv/bin/python -m pytest webswarm_baseline/tests experiments/tests -q` (99 passed)
+- **Last successful real-model + live-web runs:** ATOM (54 s, correct), WIDE on the NVIDIA question (579 s, 10 agents, 6 cited pages), DEEP (365 s, investigate / verify / re-investigate).
+- **Baseline frozen?** yes: commit `6458038`, local tag `webswarm-baseline-v1`, config `webswarm_baseline/configs/baseline.json`.
+  Code added after the freeze is opt-in (`extract_mode=lines`) or logging-only; defaults are unchanged.
 
 ## Completed
 
@@ -16,13 +17,16 @@ Session started 2026-10-10 ~23:40 local. Branch `3-prototype-webswarm-subagents`
 - [x] Preflight: Ollama 0.40.0, `qwen3.5:4b-q4_K_M` installed, 42 GB free disk, no API keys in the environment
 - [x] Baseline package `webswarm_baseline/` (ATOM, WIDE, DEEP, ENTITY_COLLECT, incremental collection, budgets, traces)
 - [x] Keyless live web search and guarded page fetching, PDF reading, record/replay cassettes
-- [x] 61 tests (deterministic helpers + orchestration with a scripted model)
-- [x] First live ATOM and WIDE runs; fixes applied from what they showed
-- [ ] Live DEEP and ENTITY_COLLECT runs
-- [ ] Baseline frozen and benchmarked
-- [ ] Jev adapter + contract tests
-- [ ] Local optimization variants
-- [ ] Baseline vs optimized comparison
+- [x] Tests: 99 passing (deterministic helpers, orchestration with a scripted model, Jev contract, deciders, grader)
+- [x] Live ATOM, WIDE and DEEP runs; three rounds of fixes from what they showed
+- [x] Baseline frozen (commit + tag)
+- [x] Jev REST adapter + contract tests against a local stub + labeled mock
+- [x] Local optimization code: rules decider, local typed-decision backend (logprobs), finish-first scheduler, line-reference extraction, web probing, experience sharing
+- [x] Benchmark suite (9 tasks), grader, comparison and decision-ceiling tooling
+- [ ] Baseline benchmark (running)
+- [ ] Live smoke test of each optimization arm
+- [ ] Comparison benchmark (baseline vs arms, interleaved)
+- [ ] `BASELINE_RESULTS.md`, `OPTIMIZATION_RESULTS.md`, final handoff
 
 ## Architecture decisions so far (details will go in DESIGN_DECISIONS.md)
 
@@ -79,9 +83,9 @@ Session started 2026-10-10 ~23:40 local. Branch `3-prototype-webswarm-subagents`
 
 ## Resume here
 
-1. Check the second live WIDE run (`webswarm_baseline/runs/` or scratch log) for decomposition quality after the prompt fixes.
-2. Live-test DEEP and ENTITY_COLLECT questions; fix what breaks.
-3. Freeze: commit, tag `webswarm-baseline-v1`, record manifest.
-4. Build the benchmark task suite and harness under `experiments/`; record cassettes with the baseline.
-5. Deciders: rules, local typed-decision model (logprobs), Jev REST adapter + mock.
-6. Run arms, grade, write `BASELINE_RESULTS.md` and `OPTIMIZATION_RESULTS.md`.
+1. If the baseline benchmark did not finish: `.venv/bin/python -m experiments.bench.run_bench --name baseline_v1 --arms baseline --order arm` (it resumes; finished rows are skipped).
+2. Smoke-test arms on one task: `.venv/bin/python -m experiments.bench.run_bench --name smoke --arms rules local_s1_4b lines_extract --tasks A1`.
+3. Router agreement for the typed routers: `.venv/bin/python -m experiments.bench.eval_routing local_s1_4b local_s1_2b`.
+4. Comparison: `.venv/bin/python -m experiments.bench.run_bench --name compare_v1 --arms baseline rules local_s1_4b lines_extract batch_review probing finish_first pdf_8mb`.
+5. Tables: `.venv/bin/python -m experiments.bench.compare compare_v1` and `.venv/bin/python -m experiments.bench.decision_ceiling baseline_v1`.
+6. Write `BASELINE_RESULTS.md` and `OPTIMIZATION_RESULTS.md` from the result files; copy representative runs to `examples/`.

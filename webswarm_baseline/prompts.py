@@ -125,6 +125,26 @@ EXTRACT_SCHEMA = {"type": "object",
                       "required": ["claim", "quote"]}}},
                   "required": ["findings"]}
 
+# Optional variant (config extract_mode="lines"): the page is shown as numbered lines and the model
+# points at a line instead of copying a quote. Fewer output tokens, and the quote is exact by construction.
+EXTRACT_LINES_SYSTEM = """\
+You extract evidence for a research objective from one web page. The page is shown as numbered lines.
+
+Return up to {max_findings} findings. Each finding has:
+- "claim": one specific fact relevant to the objective, with exact figures, dates and names from the page.
+  Say which period, company and metric each figure refers to.
+- "line": the number of the line that states this fact.
+
+Put the facts that most directly answer the objective first.
+Use only what the page says. If the page has nothing relevant, return an empty list. """ + UNTRUSTED_RULE
+
+EXTRACT_LINES_SCHEMA = {"type": "object",
+                        "properties": {"findings": {"type": "array", "maxItems": 5, "items": {
+                            "type": "object",
+                            "properties": {"claim": _s(300), "line": {"type": "integer"}},
+                            "required": ["claim", "line"]}}},
+                        "required": ["findings"]}
+
 SNIPPET_EXTRACT_USER = """\
 OBJECTIVE: {objective}
 
