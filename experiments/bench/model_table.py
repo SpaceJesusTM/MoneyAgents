@@ -58,8 +58,8 @@ def main() -> None:
     print("\n## Memory (sampled every 5 s; swap is system-wide)\n")
     print("| Arm | Minutes sampled | Runner peak | Swap start / peak / end (MB) | Pageouts | Swapouts | Lowest free memory |")
     print("|---|---:|---:|---|---:|---:|---:|")
-    for label in ("4b", "9b"):
-        m = memory(RESULTS / name / f"memory_{label}.csv")
+    for path in sorted((RESULTS / name).glob("memory_*.csv")):
+        label, m = path.stem.replace("memory_", ""), memory(path)
         if m:
             print(f"| {label} | {m['minutes']} | {m['runner_peak_mb']} MB | {m['swap_start_mb']} / {m['swap_peak_mb']} / "
                   f"{m['swap_end_mb']} | {m['pageouts']} | {m['swapouts']} | {m['free_pct_min']}% |")

@@ -137,7 +137,7 @@ class Swarm:
                  evidence: EvidenceStore, decider: Decider):
         self.cfg, self.llm, self.web, self.tracer = cfg, llm, web, tracer
         self.budget, self.evidence, self.decider = budget, evidence, decider
-        self.today = date.today().isoformat()
+        self.today = cfg.as_of or date.today().isoformat()
         self.root_question = ""
         self.nodes: dict[int, Node] = {}
         self._rt: dict[int, ManagerRT] = {}

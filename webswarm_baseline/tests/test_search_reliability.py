@@ -289,3 +289,28 @@ def test_an_agent_still_rewords_a_query_that_was_answered_with_nothing():
                   llm_factory=extra["llm_factory"], web_kwargs={"provider": p, "fetcher": mock_fetch})
     assert any("retried as" in n for n in art.swarm.nodes[0].notes) and art.outcome["status"] == "ok"
     assert art.stats["web_provenance"]["search"]["no_answer"] == 0
+
+
+# ---- replaying on another day --------------------------------------------------------------------------
+
+def test_the_date_shown_to_the_model_can_be_pinned_so_a_recording_replays_on_another_day():
+    """Found 2026-10-12: two baseline replays diverged from the previous day's because every prompt
+    says "Today: <date>", and with the date changed the model wrote one search query differently."""
+    seen = []
+    h = default_handlers("ATOM")
+    inner = h["act"]
+
+    def act(system, user, schema):
+        seen.append(user.splitlines()[0])
+        return inner(system, user, schema)
+
+    h["act"] = act
+    cfg, extra = mock_setup(SwarmConfig().override(["as_of=2026-10-11"]), handlers=h)
+    execute("Acme Corp fourth quarter revenue", cfg, echo=False, **extra)
+    assert seen and set(seen) == {"Today: 2026-10-11"}
+    seen.clear()
+    cfg, extra = mock_setup(SwarmConfig(), handlers=h)
+    execute("Acme Corp fourth quarter revenue", cfg, echo=False, **extra)
+    assert seen and all(line.startswith("Today: 20") and line != "Today: 2026-10-11" for line in seen)
+    assert SwarmConfig().as_of == ""
+

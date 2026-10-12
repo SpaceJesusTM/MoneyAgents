@@ -60,6 +60,10 @@ class SwarmConfig:
                                   # (financial text runs ~2.2 chars/token, so this is ~1.4k prompt tokens)
     respect_robots: bool = True
     min_search_interval: float = 0.7   # seconds between searches (provider politeness)
+    as_of: str = ""                    # the date given to the model as "today" (YYYY-MM-DD); empty = the real
+                                       # date. Every prompt carries the date, and one changed token can change a
+                                       # query, so a recording only replays exactly on the day it was made
+                                       # unless this is pinned to that day
     search_attempts: int = 2           # tries per search when the provider gives no valid answer
     search_deadline: float = 25.0      # seconds one provider call may take before it counts as a timeout
     search_breaker: int = 3            # failed searches in a row before search is treated as unavailable
