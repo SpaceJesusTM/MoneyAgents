@@ -32,14 +32,14 @@ from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from . import prompts
+from . import guards, prompts
 from .config import SwarmConfig
 from .decisions import AtomAction, Decider, Decision, ReviewDecision
 from .evidence import EvidenceStore, Finding, audit_answer, cited_ids, strip_unknown_citations
 from .llm import LLMError
 from .runtime import Budget, BudgetExceeded, Cancelled, Tracer
 from .textutil import (clean_page_text, domain_of, key_figures, norm, number_lines, numbers_in,
-                       objective_key, select_passages)
+                       objective_key, quote_in_text, select_passages)
 from .web import SearchResult, WebClient
 
 MANAGER_MODES = ("WIDE", "DEEP", "ENTITY_COLLECT")
@@ -127,6 +127,7 @@ class ManagerRT:
     phase: str = ""                                  # ENTITY_COLLECT: discover | verify
     table: list = field(default_factory=list)        # ENTITY_COLLECT merged entities
     early_finish: bool = False
+    verify_refused: bool = False                     # verify_guard: there was no checkable claim to send
 
 
 class Swarm:
@@ -141,6 +142,7 @@ class Swarm:
         self._threads: list[threading.Thread] = []
         self._lock = threading.RLock()
         self.failed_domains: dict[str, str] = {}
+        self.root_comparison = None      # numeric_guard: the figures lined up for the root's comparison
         self.graph = self._build_graph()
         decider.bind(self)
 
@@ -186,9 +188,22 @@ class Swarm:
         res = root.result or NodeResult()
         answer, removed = strip_unknown_citations(res.answer, set(self.evidence.sources))
         audit = audit_answer(answer, self.evidence) if self.cfg.final_audit else {}
-        self.tracer.event("run_end", root.id, status=root.status, stragglers=stragglers,
+        status, confidence, gaps = root.status, res.confidence, res.gaps
+        if audit and (self.cfg.numeric_guard or self.cfg.claim_checks):
+            check = guards.consistency_audit(answer, self.evidence.snapshot()["findings"],
+                                             set(self.evidence.sources), self.root_comparison)
+            audit["consistency"] = check
+            if not check["clean"]:        # whatever got past the retries is still said out loud here
+                status = "partial" if status == "ok" else status
+                confidence = "medium" if confidence == "high" else confidence
+                if "check failed" not in gaps and "computed correction" not in gaps:
+                    found = [i["detail"] for i in check["ordering_issues"][:1]] + \
+                            [guards.describe_label_issue(i) for i in
+                             (check["period_conflicts"] + check["basis_conflicts"])[:2]]
+                    gaps = "; ".join(filter(None, [gaps, "consistency check failed: " + "; ".join(found)]))
+        self.tracer.event("run_end", root.id, status=status, stragglers=stragglers,
                           removed_citations=removed)
-        return {"answer": answer, "status": root.status, "confidence": res.confidence, "gaps": res.gaps,
+        return {"answer": answer, "status": status, "confidence": confidence, "gaps": gaps,
                 "audit": audit, "removed_citations": removed, "stragglers": stragglers}
 
     def _new_node(self, objective: str, parent: Node | None, role: str = "research",
@@ -432,8 +447,12 @@ class Swarm:
             st.read[idx] = page.error or "empty page"
             with self._lock:
                 self.failed_domains[domain_of(r.url)] = st.read[idx]
+            if page.truncated and self.cfg.oversize_policy == "fail":
+                self._note(node, f"page not read, {domain_of(r.url)}: {st.read[idx]}")
             return
         st.read[idx] = "ok"
+        if page.partial and self.cfg.oversize_policy == "fail":
+            self._note(node, f"long document, {domain_of(r.url)}: {page.partial}")
         focus = f"{node.objective} {st.last_query}"
         text = clean_page_text(page.text)   # quotes are checked against the same text the model saw
         excerpt = select_passages(text, focus, self.cfg.page_chars)
@@ -449,12 +468,28 @@ class Swarm:
         out = {"findings": proposals}
         accepted = 0
         for claim, quote in proposals:
-            got = self.evidence.record(claim, quote, r.url, page.title or r.title, "page", node.id, text)
+            got = self._record(node, claim, quote, r.url, page.title or r.title, "page", text)
             if got and got not in st.findings:
                 st.findings.append(got)
                 accepted += 1
         self.tracer.event("page_read", node.id, url=r.url, domain=domain_of(r.url), chars=len(page.text),
                           shown_chars=len(excerpt), proposed=len(out.get("findings", [])), accepted=accepted)
+
+    def _record(self, node: Node, claim: str, quote: str, url: str, title: str, kind: str, text: str):
+        """Store a proposed finding. With claim_checks on, a claim whose quote is real is first tied
+        to that quote: unsupported figures and unsupported GAAP / non-GAAP labels do not get through."""
+        basis = ""
+        if self.cfg.claim_checks and quote_in_text(quote, text):
+            chk = guards.check_claim(claim, quote, text)
+            if not chk.ok:
+                self.tracer.event("finding_rejected", node.id, url=url, claim=claim[:160], quote=quote[:160],
+                                  reason=chk.reason)
+                return None
+            if chk.claim != claim:
+                self.tracer.event("finding_adjusted", node.id, url=url, before=claim[:240], after=chk.claim[:240],
+                                  reason=chk.reason)
+            claim, basis = chk.claim, chk.basis
+        return self.evidence.record(claim, quote, url, title, kind, node.id, text, basis=basis)
 
     def _extract_by_line(self, node: Node, excerpt: str, head: dict) -> list[tuple[str, str]]:
         """extract_mode="lines": the model cites a line number; the line itself becomes the quote.
@@ -500,8 +535,8 @@ class Swarm:
                 continue
             r = rows[i - 1]
             snippet_text = f"{r.title} {r.snippet}"
-            got = self.evidence.record(f.get("claim", ""), f.get("quote", ""), r.url, r.title, "snippet",
-                                       node.id, snippet_text)
+            got = self._record(node, f.get("claim", ""), f.get("quote", ""), r.url, r.title, "snippet",
+                               snippet_text)
             if got and got not in st.findings:
                 st.findings.append(got)
         self._note(node, f"no page evidence; used search snippets ({len(st.findings)} findings)")
@@ -518,13 +553,22 @@ class Swarm:
         known = {f.source_id for f in st.findings}
         try:
             if node.role == "verifier":
+                guard = self.cfg.verify_guard
                 out = self.llm.json("answer", node, prompts.VERIFY_ANSWER_SYSTEM,
                                     prompts.VERIFY_ANSWER_USER.format(today=self.today, objective=node.objective,
                                                                       findings=findings),
                                     prompts.VERIFY_ANSWER_SCHEMA, max_tokens=260)
                 answer, _ = strip_unknown_citations(out.get("answer", ""), known)
-                return NodeResult(status="ok", answer=answer, verdict=out.get("verdict", "unverifiable"),
-                                  confidence="medium", gaps=out.get("gaps", ""), sources=cited_ids(answer))
+                verdict, conf = out.get("verdict", "unverifiable"), "medium"
+                if guard:
+                    said = verdict
+                    verdict, why = guards.checked_verdict(node.objective, verdict, answer, bool(cited_ids(answer)))
+                    if why:
+                        self._note(node, f"verdict {said!r} not accepted: {why}")
+                    if not any(self.evidence.sources[s].kind == "page" for s in cited_ids(answer)):
+                        conf = "low"     # judged from search snippets alone: no page was read
+                return NodeResult(status="ok", answer=answer, verdict=verdict,
+                                  confidence=conf, gaps=out.get("gaps", ""), sources=cited_ids(answer))
             if node.role == "collector":
                 target = node.context.get("collect_for", node.objective)
                 out = self.llm.json("answer", node, prompts.ENTITY_ANSWER_SYSTEM,
@@ -540,13 +584,14 @@ class Swarm:
                                   confidence="medium" if ents else "low", gaps=out.get("gaps", ""),
                                   sources=sorted({s for e in ents for s in e["sources"]}))
             words = 200 if node.parent is None else 110
-            out = self.llm.json("answer", node, prompts.ANSWER_SYSTEM.format(words=words),
-                                prompts.ANSWER_USER.format(today=self.today, objective=node.objective,
-                                                           findings=findings),
+            user = prompts.ANSWER_USER.format(today=self.today, objective=node.objective, findings=findings)
+            out = self.llm.json("answer", node, prompts.ANSWER_SYSTEM.format(words=words), user,
                                 prompts.ANSWER_SCHEMA, max_tokens=int(words * 2.2) + 80)
             answer, removed = strip_unknown_citations(out.get("answer", ""), known)
             if removed:
                 self._note(node, f"removed citations to unknown sources: {removed}")
+            if self.cfg.claim_checks:
+                answer, out = self._check_labels(node, st, answer, out, user, words, known)
             status = "ok" if cited_ids(answer) else "partial"
             if failures and status == "ok" and not out.get("gaps"):
                 out["gaps"] = ""
@@ -555,6 +600,41 @@ class Swarm:
         except (LLMError, BudgetExceeded) as e:
             self._note(node, f"answer step failed ({e}); returning raw findings")
             return self._raw_result(node, st, "answer not written (model call failed)")
+
+    def _check_labels(self, node: Node, st: AtomState, answer: str, out: dict, user: str, words: int,
+                      known: set) -> tuple[str, dict]:
+        """claim_checks, at the answer step: a figure must keep the period (quarter / full year) and
+        the basis (GAAP / non-GAAP) of the finding it came from. One retry that names the problem. If
+        the label is still wrong, the written answer is dropped and the findings are returned as they
+        were extracted (each already tied to its quote), marked low-confidence, with the reason as a
+        gap. A parent then reads correctly labelled statements instead of a fluent wrong one."""
+        mine = [asdict(f) for f in st.findings]
+
+        def issues_in(text: str) -> list[dict]:
+            return guards.period_conflicts(text, mine, known) + guards.basis_conflicts(text, mine, known)
+
+        issues = issues_in(answer)
+        if not issues:
+            return answer, out
+        problems = "; ".join(guards.describe_label_issue(i) for i in issues[:2])
+        self.tracer.event("label_issue", node.id, stage="first draft", issues=issues)
+        self._note(node, f"answer mislabels a figure ({problems}); asked again")
+        try:
+            again = self.llm.json("answer", node,
+                                  prompts.ANSWER_SYSTEM.format(words=words) + prompts.LABEL_RETRY_RULE.format(problems=problems),
+                                  user, prompts.ANSWER_SCHEMA, max_tokens=int(words * 2.2) + 80)
+            second, _ = strip_unknown_citations(again.get("answer", ""), known)
+            left = issues_in(second)
+            if not left and cited_ids(second):
+                return second, again
+            self.tracer.event("label_issue", node.id, stage="second draft", issues=left)
+        except (LLMError, BudgetExceeded) as e:
+            self._note(node, f"second answer failed ({e})")
+        self._note(node, "figure still mislabelled; answer replaced by the findings as extracted")
+        raw = " ".join(f"{f.claim.rstrip('. ')} [{f.source_id}]." for f in st.findings[:6])
+        facts = "; ".join(guards.label_fact(i) for i in issues[:2])
+        out = dict(out, confidence="low", gaps=(str(out.get("gaps") or "") + f" Note: {facts}.").strip()[:400])
+        return raw, out
 
     # =============================================================================================
     # managers: plan
@@ -929,8 +1009,17 @@ class Swarm:
         candidate = next((s for s in reversed(rt.steps) if s["kind"] == "investigate" and s["answer"]), None)
         if rt.verified or self.cfg.verify_policy == "never" or candidate is None:
             return "synthesize"
-        claim = text if len(text) > 25 else re.sub(r"\s*\[S\d+(?:,\s*S\d+)*\]", "", candidate["answer"])
-        claim = " ".join(claim.split()[:60])
+        if self.cfg.verify_guard:
+            claim = self._checkable_claim(node, rt, text)
+            if not claim:
+                rt.verify_refused = True
+                self._note(node, "no verifier sent: nothing found so far is a positive, checkable statement "
+                                 "(only reports of missing information)")
+                self.tracer.event("verify_refused", node.id, text=(text or candidate["answer"])[:240])
+                return "synthesize"
+        else:
+            claim = text if len(text) > 25 else re.sub(r"\s*\[S\d+(?:,\s*S\d+)*\]", "", candidate["answer"])
+            claim = " ".join(claim.split()[:60])
         if self.cfg.verify_policy == "decider":
             d = self.decider.needs_verification(node, claim, rt.steps)
             self._decision(node, d)
@@ -942,6 +1031,23 @@ class Swarm:
         rt.verified = True
         rt.to_dispatch = [{"objective": claim, "role": "verifier", "forced_mode": "ATOM", "step_kind": "verify"}]
         return "dispatch"
+
+    def _checkable_claim(self, node: Node, rt: ManagerRT, text: str) -> str:
+        """verify_guard: the newest statement that asserts something about the world, or "".
+
+        The model's own verify / finish text is tried first, then the investigate answers from the
+        latest back to the first. Clauses that report missing information, or that talk about the
+        evidence rather than the subject, are never part of what a verifier is asked to check."""
+        options = ([text] if len(text) > 25 else []) + \
+                  [s["answer"] for s in reversed(rt.steps) if s["kind"] == "investigate" and s["answer"]]
+        for i, option in enumerate(options):
+            claim = guards.verifiable_part(option)
+            if claim:
+                if i:
+                    self._note(node, "the latest result only reports missing information; "
+                                     "verifying an earlier finding instead")
+                return claim
+        return ""
 
     # ---- ENTITY_COLLECT -----------------------------------------------------------------------
 
@@ -993,16 +1099,25 @@ class Swarm:
         is_root = node.parent is None
         words = 320 if is_root else 150
         known = set(self.evidence.sources)
+        system = prompts.SYNTH_SYSTEM.format(words=words, extra=prompts.SYNTH_ROOT_EXTRA if is_root else "")
+        user = prompts.SYNTH_USER.format(
+            today=self.today, objective=node.objective,
+            results=self._render_child_results(rt, 170, usable_only=True),
+            missing="\n".join(f"- {self.nodes[c].objective}" for c in rt.done if c not in usable) or "(nothing)")
+        cmp = None
+        if self.cfg.numeric_guard:       # line the compared figures up in code; the model only writes them up
+            cmp = guards.build_comparison(node.objective, [
+                (self.nodes[c].objective, self.nodes[c].result.answer, bool(self.nodes[c].context.get("follow_up")))
+                for c in sorted(usable) if self.nodes[c].role == "research"])
+            block = cmp.prompt_block() if cmp else ""
+            if block:
+                user += "\n\n" + block
+                self.tracer.event("comparison", node.id, kind=cmp.kind, order=cmp.order_text(),
+                                  warnings=cmp.warnings, rows=[(r.entity, r.raw, r.ambiguous) for r in cmp.rows])
+            if is_root:
+                self.root_comparison = cmp
         try:
-            answer = self.llm.text("synthesize", node,
-                                   prompts.SYNTH_SYSTEM.format(words=words,
-                                                               extra=prompts.SYNTH_ROOT_EXTRA if is_root else ""),
-                                   prompts.SYNTH_USER.format(
-                                       today=self.today, objective=node.objective,
-                                       results=self._render_child_results(rt, 170, usable_only=True),
-                                       missing="\n".join(f"- {self.nodes[c].objective}" for c in rt.done
-                                                         if c not in usable) or "(nothing)"),
-                                   max_tokens=int(words * 2.0) + 120)
+            answer = self.llm.text("synthesize", node, system, user, max_tokens=int(words * 2.0) + 120)
         except (LLMError, BudgetExceeded) as e:
             self._note(node, f"synthesis failed ({e}); returning sub-results joined")
             answer = "\n".join(f"- {self.nodes[c].objective}: {self.nodes[c].result.answer}" for c in usable)
@@ -1017,15 +1132,94 @@ class Swarm:
             gaps.append("no evidence for: " + "; ".join(self.nodes[c].objective[:80] for c in failed))
         if rt.early_finish:
             gaps.append("finished before all sub-tasks reported")
+        weak = False      # set by a guard: the answer must not be reported as complete or high-confidence
+        if self.cfg.numeric_guard or self.cfg.claim_checks:
+            answer, notes, weak = self._check_synthesis(node, answer, cmp, system, user, words, known)
+            gaps += notes
         verdicts = [s["verdict"] for s in rt.steps if s["kind"] == "verify"]
         conf = _combine_confidence([self.nodes[c].result.confidence for c in usable
                                     if self.nodes[c].role == "research"])
         if verdicts:
             conf = {"survived": "high", "weakened": "medium", "refuted": "low"}.get(verdicts[-1], conf)
-        node.result = NodeResult(status="ok" if cited_ids(answer) and not failed else "partial", answer=answer,
-                                 confidence=conf, gaps="; ".join(gaps), verdict=verdicts[-1] if verdicts else "",
-                                 sources=cited_ids(answer))
+        if self.cfg.verify_guard and node.mode == "DEEP":
+            open_steps = self._unresolved_steps(rt)
+            if open_steps:
+                gaps.append("not established: " + "; ".join(s["text"][:110] for s in open_steps[:2]))
+                weak = True
+            if rt.verify_refused:
+                gaps.append("not independently verified: there was no positive claim to check")
+            checker = next((self.nodes[s["node"]] for s in reversed(rt.steps) if s["kind"] == "verify"), None)
+            if checker is not None and checker.result and checker.result.confidence == "low":
+                weak = True          # the verdict rests on search snippets, not on a page that was read
+        if weak and conf == "high":
+            conf = "medium"
+        node.result = NodeResult(status="ok" if cited_ids(answer) and not failed and not weak else "partial",
+                                 answer=answer, confidence=conf, gaps="; ".join(gaps),
+                                 verdict=verdicts[-1] if verdicts else "", sources=cited_ids(answer))
         return {"next": ""}
+
+    @staticmethod
+    def _unresolved_steps(rt: ManagerRT) -> list:
+        """verify_guard: the investigate steps at the end of a DEEP chain that came back without an
+        answer (nothing found, or only a report of what is missing), oldest first."""
+        tail = []
+        for s in reversed([s for s in rt.steps if s["kind"] == "investigate"]):
+            if s["answer"] and not guards.is_non_answer(s["answer"]):
+                break
+            tail.append(s)
+        return tail[::-1]
+
+    def _check_synthesis(self, node: Node, answer: str, cmp, system: str, user: str, words: int,
+                         known: set) -> tuple[str, list[str], bool]:
+        """After a manager has written its answer: ordering statements are checked against the figures
+        (numeric_guard) and quarter / full-year / GAAP labels against the findings (claim_checks).
+
+        One retry that names what is wrong. A clean second draft replaces the first. Otherwise the
+        better draft is kept, a labelled, code-written correction is appended for a wrong ordering,
+        and a label problem is listed as a gap. Returns (answer, gap notes, whether a problem
+        remains, in which case the answer must not be reported as complete or high-confidence)."""
+        notes = [f"comparison caveat: {w}" for w in (cmp.warnings if cmp else [])]
+        ranking, metric = (cmp.ranking(), cmp.metric) if cmp else (None, None)
+        findings = self.evidence.snapshot()["findings"] if self.cfg.claim_checks else []
+
+        def problems(text: str) -> tuple[list, list]:
+            order = guards.ordering_issues(text, ranking, metric) if self.cfg.numeric_guard else []
+            labels = guards.period_conflicts(text, findings, known) + guards.basis_conflicts(text, findings, known) \
+                if self.cfg.claim_checks else []
+            return order, labels
+
+        def describe(order: list, labels: list) -> list[str]:
+            return [i["detail"] for i in order[:3]] + [guards.describe_label_issue(i) for i in labels[:2]]
+
+        order, labels = problems(answer)
+        if not order and not labels:
+            return answer, notes, False
+        self.tracer.event("numeric_issue" if order else "label_issue", node.id, stage="first draft",
+                          issues=order + labels)
+        self._note(node, f"answer contradicts its evidence ({describe(order, labels)[0]}); asked again")
+        rule = (prompts.ORDERING_RETRY_RULE.format(problems="; ".join(describe(order, []))) if order else "") + \
+               (prompts.LABEL_RETRY_RULE.format(problems="; ".join(describe([], labels))) if labels else "")
+        try:
+            again = self.llm.text("synthesize", node, system + rule, user, max_tokens=int(words * 2.0) + 120)
+            again, _ = strip_unknown_citations(again, known)
+            order2, labels2 = problems(again)
+            if cited_ids(again) or not cited_ids(answer):       # never trade a cited draft for an uncited one
+                if not order2 and not labels2:
+                    return again, notes, False
+                if len(order2) + len(labels2) < len(order) + len(labels):
+                    answer, order, labels = again, order2, labels2
+            self.tracer.event("numeric_issue" if order2 else "label_issue", node.id, stage="second draft",
+                              issues=order2 + labels2)
+        except (LLMError, BudgetExceeded) as e:
+            self._note(node, f"second synthesis failed ({e})")
+        if order:
+            self._note(node, "ordering still contradicts the figures; appended a computed correction")
+            notes.append("an ordering statement in the answer contradicts its figures; a computed correction is appended")
+            answer = answer.rstrip() + "\n\n" + guards.correction_note(order, cmp)
+        if labels:
+            self._note(node, "a figure is still mislabelled; listed as a gap")
+            notes.append("label check failed: " + "; ".join(describe([], labels)))
+        return answer, notes, True
 
     def _recite(self, node: Node, rt: ManagerRT, usable: list, words: int, is_root: bool, known: set) -> str:
         """cite_retry: a synthesis that dropped every citation is not acceptable when the sub-results

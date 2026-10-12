@@ -152,6 +152,17 @@
       "subset": [
         "A1"
       ]
+    },
+    "reliability": {
+      "description": "Reliability pass (not an optimization): baseline plus the three deterministic guards and explicit, bounded handling of oversized responses. Same switches as webswarm_baseline/configs/reliability_v1.json.",
+      "overrides": [
+        "verify_guard=true",
+        "claim_checks=true",
+        "numeric_guard=true",
+        "oversize_policy=fail",
+        "max_pdf_bytes=8000000",
+        "pdf_max_pages=40"
+      ]
     }
   }
 }

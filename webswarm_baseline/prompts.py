@@ -393,3 +393,19 @@ PROBE_SCHEMA = {"type": "object",
                                "hubs": {"type": "array", "maxItems": 3, "items": {"type": "integer"}},
                                "axis": _s(40), "note": _s(200)},
                 "required": ["topology", "hubs", "axis", "note"]}
+
+# ---- reliability guards: retry rules -----------------------------------------------------------------
+# The guards never change a first-attempt prompt except for one block of code-computed figures added
+# to a comparison synthesis (numeric_guard). An earlier version also appended a rule to the DEEP and
+# verifier prompts; it was removed because it changed the model's first step, which sent the patched
+# run down a different search path from the baseline before any guard had acted. These two rules are
+# appended only when a check has failed and the model is asked once more.
+
+ORDERING_RETRY_RULE = """
+- Your previous draft contradicted the figures: {problems}. Compare the numbers digit by digit before saying
+  which is higher or lower, and keep every source citation."""
+
+LABEL_RETRY_RULE = """
+- Your previous draft mislabelled a figure: {problems}. Give each figure only with the period (a quarter or the
+  full year) and the basis (GAAP or non-GAAP) that its finding states. If the figure that was asked for is not
+  available, say that it was not found; do not put another figure in its place."""

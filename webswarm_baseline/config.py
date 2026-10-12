@@ -77,6 +77,20 @@ class SwarmConfig:
     extract_mode: str = "quote"         # quote: model copies a supporting quote (baseline)
                                         # lines: page shown as numbered lines, model cites a line number
 
+    # --- reliability guards: all off in the frozen baseline; configs/reliability_v1.json turns them on ---
+    verify_guard: bool = False          # DEEP: only a positive, checkable claim is sent to a verifier, and a
+                                        # statement about missing information can never come back "survived"
+    claim_checks: bool = False          # extraction: a claim's figures must be in its quote, and a GAAP /
+                                        # non-GAAP label must be one the passage actually shows
+    numeric_guard: bool = False         # synthesis: compared figures are sorted by code, and an ordering
+                                        # statement that contradicts the figures is caught and corrected
+    oversize_policy: str = "truncate"   # a response cut off by the size or time limit is
+                                        # truncate: parsed as far as it arrived, without saying so (baseline)
+                                        # fail: an explicit error; nothing from it is parsed
+    max_pdf_bytes: int = 0              # separate size limit for PDFs (filings are often 3-8 MB);
+                                        # 0 = same as max_page_bytes
+    pdf_max_pages: int = 15             # pages of a PDF that are parsed
+
     budgets: Budgets = field(default_factory=Budgets)
 
     def to_dict(self) -> dict:
@@ -94,6 +108,8 @@ class SwarmConfig:
         bunknown = set(b) - bknown
         if bunknown:
             raise ValueError(f"unknown budget keys: {sorted(bunknown)}")
+        if d.get("oversize_policy", "truncate") not in ("truncate", "fail"):
+            raise ValueError(f"unknown oversize_policy {d['oversize_policy']!r}")
         return cls(**d, budgets=Budgets(**b))
 
     @classmethod

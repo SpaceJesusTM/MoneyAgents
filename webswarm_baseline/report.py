@@ -70,6 +70,7 @@ def compute_stats(tracer, swarm, budget, wall: float) -> dict:
         "fetches": len(fetches),
         "web_calls": len(searches) + len(fetches),
         "fetch_failures": sum(1 for e in fetches if not e["ok"]),
+        "fetch_truncated": sum(1 for e in fetches if e.get("truncated")),   # body cut off by a size/time limit
         "search_failures": sum(1 for e in searches if not e["ok"]),
         "web_seconds": total(real, "secs"),
         "web_run_cache_hits": sum(1 for e in web if e["source"] == "run_cache" and e["kind"] != "robots"),
@@ -82,6 +83,9 @@ def compute_stats(tracer, swarm, budget, wall: float) -> dict:
         "findings": len(findings),
         "findings_from_pages": len(page_findings),
         "findings_rejected": sum(1 for e in ev if e["type"] == "finding_rejected"),
+        "findings_adjusted": sum(1 for e in ev if e["type"] == "finding_adjusted"),
+        "guard_events": dict(Counter(e["type"] for e in ev if e["type"] in (
+            "verify_refused", "numeric_issue", "label_issue", "comparison", "finding_adjusted"))),
         "sources": len(swarm.evidence.sources),
         "source_domains": sorted({s.domain for s in swarm.evidence.sources.values()}),
         "redundancy": {
@@ -242,6 +246,19 @@ def render_report(question: str, outcome: dict, swarm, stats: dict, cfg) -> str:
         for u in a.get("ungrounded_examples", [])[:5]:
             parts.append(f"  - ungrounded figure `{u['number']}` in: {u['sentence']}")
         parts.append("")
+        c = a.get("consistency")
+        if c is not None:
+            parts += ["## Consistency checks (programmatic, no model involved)", "",
+                      f"- ordering statements that contradict the figures: {len(c['ordering_issues'])}"]
+            parts += [f"  - {i['detail']} — in: {i['sentence']}" for i in c["ordering_issues"][:5]]
+            parts.append(f"- GAAP / non-GAAP labels that contradict the cited passage: {len(c['basis_conflicts'])}")
+            parts += [f"  - {b['figure']} is called {b['said']}, the passage shows {b['passage_shows']} — in: "
+                      f"{b['sentence']}" for b in c["basis_conflicts"][:5]]
+            parts.append(f"- quarter / full-year labels that contradict the finding: {len(c.get('period_conflicts', []))}")
+            parts += [f"  - {b['figure']} is given as {b['said']}, the finding says {b['finding_says']} — in: "
+                      f"{b['sentence']}" for b in c.get("period_conflicts", [])[:5]]
+            parts += [f"- comparison caveat: {w}" for w in c["mixed_basis_or_period"]]
+            parts.append("")
     parts += ["## Agent tree", "", "```", render_tree(swarm.nodes), "```", "",
               "## Statistics", "", "```", format_stats(stats), "```", ""]
     return "\n".join(parts)

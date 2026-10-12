@@ -36,6 +36,8 @@ class Finding:
     node_id: int
     t: float             # seconds since run start
     verified: bool       # the quote was found in the retrieved text
+    basis: str = ""      # accounting basis the passage shows for the quoted figures: gaap | non-gaap | both
+                         # | "" (not shown, or not checked). Only filled when claim_checks is on.
 
 
 class EvidenceStore:
@@ -60,7 +62,7 @@ class EvidenceStore:
             return self.sources[sid]
 
     def record(self, claim: str, quote: str, url: str, title: str, kind: str, node_id: int,
-               text: str) -> Finding | None:
+               text: str, basis: str = "") -> Finding | None:
         """Check a proposed finding against the retrieved `text` and store it if its quote is real.
 
         The source is only registered once a finding from it has been accepted, so a page that
@@ -73,9 +75,11 @@ class EvidenceStore:
             self.tracer.event("finding_rejected", node_id, url=url, claim=claim[:160],
                               quote=quote[:160], reason="quote not found in retrieved text")
             return None
-        return self.add_finding(claim, quote, self.add_source(url, title, kind, node_id, text), node_id, text)
+        return self.add_finding(claim, quote, self.add_source(url, title, kind, node_id, text), node_id, text,
+                                basis)
 
-    def add_finding(self, claim: str, quote: str, source: Source, node_id: int, text: str) -> Finding | None:
+    def add_finding(self, claim: str, quote: str, source: Source, node_id: int, text: str,
+                    basis: str = "") -> Finding | None:
         """Store a finding only if its quote really appears in `text`. Returns None when rejected."""
         claim, quote = (claim or "").strip(), (quote or "").strip()
         if len(claim) < 8:
@@ -90,7 +94,7 @@ class EvidenceStore:
                 if f.source_id == source.id and f.claim.lower() == claim.lower():
                     return f
             f = Finding(f"F{len(self.findings) + 1}", claim[:400], quote[:400], source.id, node_id,
-                        round(self.tracer.now(), 3), True)
+                        round(self.tracer.now(), 3), True, basis)
             self.findings.append(f)
         self.tracer.event("finding", node_id, id=f.id, source=source.id, kind=source.kind,
                           domain=source.domain, claim=f.claim[:200])

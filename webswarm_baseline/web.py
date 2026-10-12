@@ -34,6 +34,8 @@ ALLOWED_TYPES = ("text/html", "application/xhtml+xml", "text/plain", "applicatio
                  "application/json", "application/xml", "text/xml")
 MAX_TEXT_CHARS = 80_000
 MAX_REDIRECTS = 5
+PDF_PARSE_SECONDS = 15.0      # oversize_policy="fail": stop parsing a PDF after this long (checked between pages)
+LEGACY_PAGE_CAP = 3_000_000   # recordings made before truncation was marked were all cut at this size
 
 
 @dataclass
@@ -54,6 +56,8 @@ class Page:
     text: str = ""
     error: str = ""
     nbytes: int = 0
+    truncated: bool = False   # the body was cut off by the size or time limit, or the connection dropped
+    partial: str = ""         # e.g. "read 15 of 212 PDF pages": the text is the front of a longer document
 
     @property
     def ok(self) -> bool:
@@ -128,20 +132,49 @@ def html_to_text(html: str, url: str = "") -> tuple[str, str]:
     return title, text[:MAX_TEXT_CHARS]
 
 
-def pdf_to_text(data: bytes, max_pages: int = 15) -> str:
+def pdf_extract(data: bytes, max_pages: int = 15, seconds: float | None = None) -> dict:
+    """Text of the first `max_pages` pages, plus how much of the document that was.
+
+    Bounded three ways: pages, characters (MAX_TEXT_CHARS) and, when `seconds` is given, parse time
+    (checked between pages; one pathological page cannot be interrupted). pypdf applies its own
+    limits to decompressed stream sizes. A file that cannot be parsed yields no text and an error."""
+    out = {"text": "", "pages": 0, "pages_read": 0, "error": ""}
     try:
         import logging
         from pypdf import PdfReader
         logging.getLogger("pypdf").setLevel(logging.ERROR)   # font-table warnings are noise here
         reader = PdfReader(io.BytesIO(data))
-        out = []
+        out["pages"] = len(reader.pages)
+        parts, t0 = [], time.perf_counter()
         for page in reader.pages[:max_pages]:
-            out.append(page.extract_text() or "")
-            if sum(len(x) for x in out) > MAX_TEXT_CHARS:
+            parts.append(page.extract_text() or "")
+            out["pages_read"] += 1
+            if sum(len(x) for x in parts) > MAX_TEXT_CHARS:
                 break
-        return "\n".join(out)[:MAX_TEXT_CHARS]
-    except Exception:  # noqa: BLE001
-        return ""
+            if seconds is not None and time.perf_counter() - t0 > seconds:
+                out["error"] = "parse time limit reached"
+                break
+        out["text"] = "\n".join(parts)[:MAX_TEXT_CHARS]
+    except Exception as e:  # noqa: BLE001
+        out.update(text="", error=f"unreadable PDF ({type(e).__name__})")
+    return out
+
+
+def pdf_to_text(data: bytes, max_pages: int = 15) -> str:
+    return pdf_extract(data, max_pages)["text"]
+
+
+@dataclass
+class _Got:
+    """Result of one guarded GET."""
+    status: int = 0
+    url: str = ""
+    ctype: str = ""
+    body: bytes = b""
+    err: str = ""
+    truncated: str = ""          # "" | "size" | "time" | "connection": why the body is incomplete
+    declared: int | None = None  # Content-Length, when the server sent one
+    cap: int = 0                 # the byte limit that applied to this response
 
 
 # ---- search providers ---------------------------------------------------------------------------
@@ -233,12 +266,42 @@ class WebClient:
 
     def fetch(self, url: str, node=None) -> Page:
         url = (url or "").strip()
-        resp = self._call("fetch", url, lambda: self._live_fetch(url), node, label=url)
+        key, on_replay = url, None
+        if self.cfg.oversize_policy == "fail" and self.cassette and self.cfg.web_mode in ("replay", "replay_or_record"):
+            key, on_replay = self._truncated_recording(url)
+        resp = self._call("fetch", key, lambda: self._live_fetch(url), node, label=url, on_replay=on_replay)
         return Page(**{k: resp.get(k, v) for k, v in asdict(Page(url=url)).items()})
+
+    def _cap_for(self, ctype: str, url: str) -> int:
+        """Byte limit for a response: PDFs may have their own, larger one (config max_pdf_bytes)."""
+        is_pdf = "application/pdf" in (ctype or "").lower() or urlsplit(url).path.lower().endswith(".pdf")
+        return max(self.cfg.max_page_bytes, self.cfg.max_pdf_bytes) if is_pdf else self.cfg.max_page_bytes
+
+    def _truncated_recording(self, url: str):
+        """oversize_policy="fail" meeting a recording that holds a cut-off body.
+
+        Recordings are keyed by URL, so replaying one would hand back the truncated body whatever
+        the limit is now. If a larger limit applies today, the page is looked up (and, when
+        recording is allowed, fetched again) under a second key that names the limit; the original
+        recording is never overwritten. Otherwise the replay is turned into the explicit failure
+        a live fetch would produce."""
+        entry = self.cassette.get("fetch", url)
+        r = (entry or {}).get("response") or {}
+        cut = r.get("truncated") or ("truncated" not in r and (r.get("nbytes") or 0) == LEGACY_PAGE_CAP)
+        if not entry or not cut:
+            return url, None
+        cap, had = self._cap_for(r.get("content_type", ""), url), r.get("nbytes") or 0
+        if cap > had:
+            return f"{url}#cap={cap}", None
+
+        def explicit(resp: dict) -> dict:
+            return {**resp, "truncated": True, "text": "", "title": "",
+                    "error": f"too large: the recorded copy was cut off at {had:,} bytes (limit {cap:,}); nothing parsed"}
+        return url, explicit
 
     # ---- shared call path: run memo -> budget -> cassette -> live ----
 
-    def _call(self, kind: str, key: str, live, node, label: str, budgeted: bool = True) -> dict:
+    def _call(self, kind: str, key: str, live, node, label: str, budgeted: bool = True, on_replay=None) -> dict:
         """`budgeted=False` is for robots.txt lookups: they run inside a page fetch, so they must not
         count against the page budget or wait for a second concurrency slot (that would deadlock)."""
         nid = getattr(node, "id", None)
@@ -264,6 +327,8 @@ class WebClient:
             t0 = time.perf_counter()
             if entry is not None:
                 resp, source = entry["response"], "cassette"
+                if on_replay is not None:
+                    resp = on_replay(resp)
                 if self.cfg.replay_latency:
                     time.sleep(min(float(entry.get("latency", 0.0)), 30.0))
             elif mode == "replay":
@@ -292,6 +357,8 @@ class WebClient:
         finally:
             extra = {"n": len(resp.get("results", []))} if kind == "search" else \
                     {"status": resp.get("status"), "chars": len(resp.get("text") or "")} if kind == "fetch" else {}
+            if kind == "fetch":      # only present when true, so ordinary fetch events look as they always did
+                extra.update({k: resp[k] for k in ("truncated", "partial") if resp.get(k)})
             self.tracer.event("web_call", nid, kind=kind, target=label[:200], source=source,
                               secs=round(secs, 3), ok=not resp.get("error"),
                               error=(resp.get("error") or None), **extra)
@@ -323,8 +390,12 @@ class WebClient:
             return self._fetcher(url)
         if self.cfg.respect_robots and not self._robots_allow(url):
             return {"url": url, "error": "disallowed by robots.txt"}
-        status, final, ctype, body, err = self._guarded_get(url, self.cfg.fetch_timeout, self.cfg.max_page_bytes)
+        strict = self.cfg.oversize_policy == "fail"
+        got = self._guarded_get(url, self.cfg.fetch_timeout, self.cfg.max_page_bytes, self.cfg.max_pdf_bytes, strict)
+        status, final, ctype, body, err = got.status, got.url, got.ctype, got.body, got.err
         base = {"url": url, "final_url": final, "status": status, "content_type": ctype, "nbytes": len(body)}
+        if got.truncated:
+            base["truncated"] = True
         if err:
             return {**base, "error": err}
         if status >= 400:
@@ -332,8 +403,17 @@ class WebClient:
         main = ctype.split(";")[0].strip().lower()
         if main and not any(main == t for t in ALLOWED_TYPES):
             return {**base, "error": f"content type {main!r} not supported"}
+        if strict and got.truncated:
+            return {**base, "error": _incomplete(got)}
         if main == "application/pdf" or body[:5] == b"%PDF-":
-            text, title = pdf_to_text(body), ""
+            pdf = pdf_extract(body, self.cfg.pdf_max_pages, PDF_PARSE_SECONDS if strict else None)
+            text, title = pdf["text"], ""
+            if pdf["pages"]:
+                base.update(pdf_pages=pdf["pages"], pdf_pages_read=pdf["pages_read"])
+                if pdf["pages_read"] < pdf["pages"]:
+                    base["partial"] = f"read {pdf['pages_read']} of {pdf['pages']} PDF pages"
+            if strict and pdf["error"] and len(text) < 200:
+                return {**base, "error": pdf["error"]}
         else:
             enc = "utf-8"
             m = re.search(r"charset=([\w\-]+)", ctype, re.I)
@@ -344,36 +424,61 @@ class WebClient:
             return {**base, "title": title, "text": text, "error": "no extractable text (script-rendered or empty page)"}
         return {**base, "title": title, "text": text}
 
-    def _guarded_get(self, url: str, timeout: float, max_bytes: int) -> tuple[int, str, str, bytes, str]:
-        """GET with the SSRF guard applied to every hop and a hard cap on body size and time."""
+    def _guarded_get(self, url: str, timeout: float, max_bytes: int, pdf_bytes: int = 0,
+                     strict: bool = False) -> _Got:
+        """GET with the SSRF guard applied to every hop and a hard cap on body size and time.
+
+        The body is never read past the cap. Whether it was cut short is reported in `truncated`;
+        with `strict`, a response whose declared length already exceeds the cap is refused before
+        any of its body is downloaded."""
         deadline = time.perf_counter() + timeout * 2
         for _ in range(MAX_REDIRECTS + 1):
             reason = validate_url(url)
             if reason:
-                return 0, url, "", b"", f"blocked: {reason}"
+                return _Got(url=url, err=f"blocked: {reason}")
             try:
                 r = self.session.get(url, timeout=(5, timeout), stream=True, allow_redirects=False)
             except requests.RequestException as e:
-                return 0, url, "", b"", f"{type(e).__name__}"
+                return _Got(url=url, err=f"{type(e).__name__}")
             try:
                 if r.status_code in (301, 302, 303, 307, 308) and r.headers.get("Location"):
                     url = urljoin(url, r.headers["Location"])
                     continue
                 ctype = r.headers.get("Content-Type", "")
+                is_pdf = "application/pdf" in ctype.lower() or urlsplit(url).path.lower().endswith(".pdf")
+                cap = max(max_bytes, pdf_bytes) if (is_pdf and pdf_bytes) else max_bytes
+                length = r.headers.get("Content-Length", "")
+                got = _Got(r.status_code, url, ctype, cap=cap, declared=int(length) if length.isdigit() else None)
+                if strict and got.declared is not None and got.declared > cap and r.status_code < 400:
+                    got.truncated = "size"
+                    return got
                 chunks, total = [], 0
                 try:
-                    for chunk in r.iter_content(65536):
+                    stream = r.iter_content(65536)
+                    for chunk in stream:
                         chunks.append(chunk)
                         total += len(chunk)
-                        if total >= max_bytes or time.perf_counter() > deadline:
+                        if total >= cap:
+                            # more to come? known from the declared length, from having overshot the cap,
+                            # or (exactly at the cap, length unknown) by looking for one more chunk
+                            more = got.declared > cap if got.declared is not None else \
+                                (total > cap or bool(next(stream, b"")))
+                            got.truncated = "size" if more else ""
+                            break
+                        if time.perf_counter() > deadline:
+                            if got.declared is None or total < got.declared:
+                                got.truncated = "time"
                             break
                 except requests.RequestException as e:
                     if not chunks:
-                        return r.status_code, url, ctype, b"", f"{type(e).__name__}"
-                return r.status_code, url, ctype, b"".join(chunks)[:max_bytes], ""
+                        got.err = f"{type(e).__name__}"
+                        return got
+                    got.truncated = got.truncated or "connection"
+                got.body = b"".join(chunks)[:cap]
+                return got
             finally:
                 r.close()
-        return 0, url, "", b"", "too many redirects"
+        return _Got(url=url, err="too many redirects")
 
     def _robots_allow(self, url: str) -> bool:
         p = urlsplit(url)
@@ -383,9 +488,10 @@ class WebClient:
             rp = self._robots.get(origin)
         if not known:
             def live():
-                status, _, _, body, err = self._guarded_get(origin + "/robots.txt", 4.0, 200_000)
-                return {"status": status, "text": body.decode("utf-8", "replace") if (not err and status == 200) else "",
-                        "error": err}
+                got = self._guarded_get(origin + "/robots.txt", 4.0, 200_000)
+                ok = not got.err and got.status == 200
+                return {"status": got.status, "text": got.body.decode("utf-8", "replace") if ok else "",
+                        "error": got.err}
             try:
                 resp = self._call("robots", origin, live, None, label=origin + "/robots.txt", budgeted=False)
             except Exception:  # noqa: BLE001
@@ -401,6 +507,16 @@ class WebClient:
         return rp.can_fetch(USER_AGENT, url)
 
 
+def _incomplete(got: _Got) -> str:
+    """The explicit error for a body that did not arrive whole (oversize_policy="fail")."""
+    if got.truncated == "size":
+        size = f"{got.declared:,} bytes declared" if got.declared is not None else f"more than {got.cap:,} bytes"
+        return f"too large: {size}, limit {got.cap:,}; nothing parsed"
+    if got.truncated == "time":
+        return "download did not finish within the time limit; the partial content was discarded"
+    return "connection dropped during download; the partial content was discarded"
+
+
 def validate_scheme(url: str) -> str | None:
     """Cheap pre-filter for search results (no DNS): only http(s) links are kept."""
     try:
@@ -410,4 +526,4 @@ def validate_scheme(url: str) -> str | None:
 
 
 __all__ = ["WebClient", "SearchResult", "Page", "Cassette", "validate_url", "html_to_text",
-           "pdf_to_text", "domain_of", "USER_AGENT"]
+           "pdf_to_text", "pdf_extract", "domain_of", "USER_AGENT"]
