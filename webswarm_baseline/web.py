@@ -365,6 +365,10 @@ class _Empty(Exception):
 
 
 PROVIDERS = {"ddgs": DDGSProvider}
+CANARY_QUERY = "Apple Inc investor relations"   # a query that always has results, used to test the provider
+CANARY_TTL = 120.0                              # seconds a canary verdict is trusted
+TRANSIENT_FETCH = ("Timeout", "ConnectionError", "ConnectTimeout", "ReadTimeout", "SSLError", "ChunkedEncodingError",
+                   "ProxyError", "download did not finish", "connection dropped")
 
 
 # ---- record / replay ----------------------------------------------------------------------------
@@ -404,8 +408,17 @@ class WebClient:
         if cfg.web_mode != "live" and not cfg.cassette:
             raise ValueError(f"web_mode={cfg.web_mode} needs a cassette directory")
         self.cfg, self.tracer, self.budget = cfg, tracer, budget
-        self.provider = provider or PROVIDERS[cfg.search_provider]()
+        if provider is None:
+            provider = PROVIDERS[cfg.search_provider]()
+            if hasattr(provider, "deadline"):
+                provider.deadline = cfg.search_deadline
+        self.provider = provider
         self._fetcher = fetcher  # test hook: fn(url) -> response dict
+        self._fail_streak = 0            # searches in a row that got no valid answer
+        self._open_until = 0.0           # monotonic time until which search is treated as unavailable
+        self._canary: tuple[float, bool] | None = None
+        if cfg.web_mode != "replay":
+            tracer.event("net_profile", None, ipv6_route=ipv6_route(), name_lookups=prefer_usable_addresses())
         self.cassette = Cassette(cfg.cassette) if cfg.cassette else None
         self._sem = threading.Semaphore(max(1, cfg.web_concurrency))
         self._lock = threading.Lock()
@@ -421,12 +434,19 @@ class WebClient:
 
     # ---- public ----
 
-    def search(self, query: str, node=None) -> list[SearchResult]:
+    def search(self, query: str, node=None) -> SearchResults:
+        """Results for `query`. If the search could not be answered at all, the list is empty and its
+        `error` / `kind` say so; callers must not read that as "nothing exists"."""
         query = re.sub(r"\s+", " ", query or "").strip()[:300]
+        out = SearchResults()
         if not query:
-            return []
+            return out
         resp = self._call("search", norm(query), lambda: self._live_search(query), node, label=query)
-        return [SearchResult(**r) for r in resp.get("results", [])]
+        out.extend(SearchResult(**r) for r in resp.get("results", []))
+        if resp.get("error"):
+            out.error = str(resp["error"])
+            out.kind = resp.get("error_kind") or ("replay_miss" if "not in cassette" in out.error else "recorded_failure")
+        return out
 
     def fetch(self, url: str, node=None) -> Page:
         url = (url or "").strip()
@@ -488,6 +508,8 @@ class WebClient:
                 self.budget.take_web()
             mode = self.cfg.web_mode
             entry = self.cassette.get(kind, key) if (self.cassette and mode in ("replay", "replay_or_record")) else None
+            if entry is not None and kind == "search" and entry["response"].get("error") and mode == "replay_or_record":
+                entry = None      # a failure recorded by an older version is not an answer: ask again
             t0 = time.perf_counter()
             if entry is not None:
                 resp, source = entry["response"], "cassette"
@@ -509,14 +531,18 @@ class WebClient:
                 finally:
                     if budgeted:
                         self._sem.release()
-                # A search that got no valid answer says nothing about the web, so it is never recorded:
-                # a recorded timeout would be replayed to every later run as if it were a result.
-                failed_search = kind == "search" and bool(resp.get("error"))
-                if self.cassette and mode in ("record", "replay_or_record") and not failed_search:
-                    self.cassette.put(kind, key, resp, time.perf_counter() - t0)
+                # A request that got no valid answer (timeout, dropped connection, rate limit) says nothing
+                # about the web, so it is never recorded: a recorded timeout would be replayed to every
+                # later run as if it were the page or the result list. An empty result list, an HTTP 403
+                # or a page that is too large ARE answers, and are recorded.
+                unanswered = bool(resp.get("transient")) or (kind == "search" and bool(resp.get("error")))
+                if self.cassette and mode in ("record", "replay_or_record") and not unanswered:
+                    self.cassette.put(kind, key, {k: v for k, v in resp.items() if k != "attempts"},
+                                      time.perf_counter() - t0)
             secs = time.perf_counter() - t0
-            with self._lock:
-                self._memo[mkey] = resp
+            if not (source == "live" and resp.get("transient")):     # a transient failure may be retried later
+                with self._lock:
+                    self._memo[mkey] = resp
             return resp
         except Exception as e:
             resp, source = {"error": f"{type(e).__name__}: {e}"[:200]}, "refused"
@@ -526,6 +552,7 @@ class WebClient:
                     {"status": resp.get("status"), "chars": len(resp.get("text") or "")} if kind == "fetch" else {}
             if kind == "fetch":      # only present when true, so ordinary fetch events look as they always did
                 extra.update({k: resp[k] for k in ("truncated", "partial") if resp.get(k)})
+            extra.update({k: resp[k] for k in ("error_kind", "transient", "attempts", "provider") if resp.get(k)})
             self.tracer.event("web_call", nid, kind=kind, target=label[:200], source=source,
                               secs=round(secs, 3), ok=not resp.get("error"),
                               error=(resp.get("error") or None), **extra)
@@ -537,20 +564,64 @@ class WebClient:
     # ---- live implementations ----
 
     def _live_search(self, query: str) -> dict:
-        with self._search_lock:  # be polite to the provider: space searches out
-            wait = self.cfg.min_search_interval - (time.perf_counter() - self._last_search)
-            if wait > 0:
-                time.sleep(wait)
-            self._last_search = time.perf_counter()
-        rows = self.provider.search(query, self.cfg.search_results)
-        seen, out = set(), []
-        for r in rows:
-            if r["url"] in seen or validate_scheme(r["url"]):
+        """Ask the provider, with bounded retries. Returns {"results": [...]} when the provider answered
+        (an empty list is an answer) or {"error", "error_kind", "transient": True} when it did not."""
+        if time.monotonic() < self._open_until:
+            return {"error": f"search unavailable: {self.cfg.search_breaker} searches in a row got no answer; "
+                             f"not asking again for up to {self.cfg.search_cooldown:.0f} s",
+                    "error_kind": "unavailable", "transient": True}
+        failure, attempts = SearchFailure("internal", "no attempt made"), 0
+        for attempts in range(1, max(1, self.cfg.search_attempts) + 1):
+            with self._search_lock:  # be polite to the provider: space searches out
+                wait = self.cfg.min_search_interval - (time.perf_counter() - self._last_search)
+                if wait > 0:
+                    time.sleep(wait)
+                self._last_search = time.perf_counter()
+            try:
+                rows = self.provider.search(query, self.cfg.search_results)
+            except SearchFailure as f:
+                failure = f
+                if f.kind == "rate_limited":
+                    time.sleep(min(2.0 * attempts, 5.0))      # asking again at once only makes this worse
                 continue
-            seen.add(r["url"])
-            out.append({"title": r["title"][:200], "url": r["url"], "snippet": r["snippet"][:400],
-                        "date": str(r.get("date") or "")[:32]})
-        return {"results": out}
+            except Exception as e:  # noqa: BLE001 - a provider bug is a failed search, not a crashed run
+                failure = SearchFailure("internal", f"{type(e).__name__}: {e}")
+                break
+            if not rows and not self._provider_answers():
+                failure = SearchFailure("rate_limited", "empty result, and a control query that always has results "
+                                                        "also came back empty: the provider is not answering")
+                break
+            self._fail_streak = 0
+            seen, out = set(), []
+            for r in rows:
+                if r["url"] in seen or validate_scheme(r["url"]):
+                    continue
+                seen.add(r["url"])
+                out.append({"title": r["title"][:200], "url": r["url"], "snippet": r["snippet"][:400],
+                            "date": str(r.get("date") or "")[:32]})
+            return {"results": out, "attempts": attempts}
+        self._fail_streak += 1
+        if self._fail_streak >= self.cfg.search_breaker:
+            self._open_until = time.monotonic() + self.cfg.search_cooldown
+            self._fail_streak = 0
+            self.tracer.event("search_unavailable", None, after=self.cfg.search_breaker,
+                              cooldown=self.cfg.search_cooldown, last_kind=failure.kind)
+        return {"error": f"search failed ({failure.kind}): {failure.detail}"[:300], "error_kind": failure.kind,
+                "transient": True, "attempts": attempts}
+
+    def _provider_answers(self) -> bool:
+        """An empty result is only an answer if the provider is answering. `ddgs` reports "no results"
+        when its engines serve rate-limit pages, so on an empty result a query that always has results
+        is tried (at most once every CANARY_TTL seconds)."""
+        now = time.monotonic()
+        if self._canary is None or now - self._canary[0] > CANARY_TTL:
+            try:
+                ok = bool(self.provider.search(CANARY_QUERY, 3))
+            except Exception:  # noqa: BLE001
+                ok = False
+            self._canary = (now, ok)
+            self.tracer.event("search_canary", None, ok=ok)
+        return self._canary[1]
 
     def _live_fetch(self, url: str) -> dict:
         if self._fetcher is not None:
@@ -564,6 +635,8 @@ class WebClient:
         if got.truncated:
             base["truncated"] = True
         if err:
+            if any(t in err for t in TRANSIENT_FETCH):
+                return {**base, "error": err, "error_kind": "network", "transient": True}
             return {**base, "error": err}
         if status >= 400:
             return {**base, "error": f"HTTP {status}"}
@@ -571,7 +644,8 @@ class WebClient:
         if main and not any(main == t for t in ALLOWED_TYPES):
             return {**base, "error": f"content type {main!r} not supported"}
         if strict and got.truncated:
-            return {**base, "error": _incomplete(got)}
+            cut = {"transient": True, "error_kind": "network"} if got.truncated in ("time", "connection") else {}
+            return {**base, "error": _incomplete(got), **cut}
         if main == "application/pdf" or body[:5] == b"%PDF-":
             pdf = pdf_extract(body, self.cfg.pdf_max_pages, PDF_PARSE_SECONDS if strict else None)
             text, title = pdf["text"], ""
@@ -692,5 +766,5 @@ def validate_scheme(url: str) -> str | None:
         return "malformed"
 
 
-__all__ = ["WebClient", "SearchResult", "Page", "Cassette", "validate_url", "html_to_text",
-           "pdf_to_text", "pdf_extract", "domain_of", "USER_AGENT"]
+__all__ = ["WebClient", "SearchResult", "SearchResults", "SearchFailure", "Page", "Cassette", "validate_url",
+           "html_to_text", "pdf_to_text", "pdf_extract", "domain_of", "USER_AGENT", "ipv6_route", "Ipv4Tunnel"]

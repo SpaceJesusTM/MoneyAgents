@@ -75,6 +75,16 @@ def compute_stats(tracer, swarm, budget, wall: float) -> dict:
         "web_seconds": total(real, "secs"),
         "web_run_cache_hits": sum(1 for e in web if e["source"] == "run_cache" and e["kind"] != "robots"),
         "web_from_cassette": sum(1 for e in real if e["source"] == "cassette"),
+        # where each run's evidence came from: needed before two runs can be compared at all
+        "web_provenance": {kind: {"replayed": sum(1 for e in rows if e["source"] == "cassette" and e["ok"]),
+                                  "live": sum(1 for e in rows if e["source"] == "live" and e["ok"]),
+                                  "no_answer": sum(1 for e in rows if not e["ok"] and
+                                                   (e.get("transient") or e["source"] == "cassette_miss")),
+                                  "failed": sum(1 for e in rows if not e["ok"] and not
+                                                (e.get("transient") or e["source"] == "cassette_miss"))}
+                           for kind, rows in (("search", searches), ("fetch", fetches))},
+        "search_no_answer_by_kind": dict(Counter(e.get("error_kind") or "unknown" for e in searches
+                                                 if not e["ok"])),
         "nodes": len(nodes),
         "nodes_by_mode": dict(Counter(n.mode or "UNROUTED" for n in nodes)),
         "nodes_by_role": dict(Counter(n.role for n in nodes)),

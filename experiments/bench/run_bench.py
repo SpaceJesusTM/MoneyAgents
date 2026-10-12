@@ -42,7 +42,7 @@ KEEP = ["answer_seconds", "wall_seconds", "time_to_first_evidence", "time_to_fir
         "searches", "fetches", "web_calls", "fetch_failures", "search_failures", "web_seconds",
         "web_from_cassette", "nodes", "nodes_by_mode", "nodes_by_status", "max_depth", "findings",
         "findings_from_pages", "findings_rejected", "sources", "redundancy", "interventions", "budget_hits",
-        "fetch_truncated", "findings_adjusted", "guard_events"]
+        "fetch_truncated", "findings_adjusted", "guard_events", "web_provenance", "search_no_answer_by_kind"]
 
 
 def load_tasks() -> dict:

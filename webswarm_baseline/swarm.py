@@ -105,6 +105,7 @@ class AtomState:
     findings: list = field(default_factory=list)     # Finding
     last_query: str = ""
     batch_start: int = 1                             # index of the first result of the latest search
+    search_errors: list = field(default_factory=list)   # kinds of searches that got no answer at all
 
 
 @dataclass
@@ -326,7 +327,14 @@ class Swarm:
                     st.queries.append(action.query)
                     st.last_query = action.query
                     found = self.web.search(action.query, node)
-                    if not found:
+                    if getattr(found, "error", ""):
+                        # no answer from the provider: rewording the query cannot help, and this must
+                        # not be reported upward as "nothing was found"
+                        st.search_errors.append(found.kind)
+                        if len(st.search_errors) == 1:
+                            self._note(node, f"search got no answer ({found.kind}); that is a retrieval failure, "
+                                             "not an empty result")
+                    elif not found:
                         simpler = simplify_query(action.query)
                         if simpler and norm(simpler) not in {norm(q) for q in st.queries}:
                             self._note(node, f"search returned nothing; retried as {simpler!r}")
@@ -545,6 +553,10 @@ class Swarm:
         failures = [f"{domain_of(st.results[i - 1].url)}: {why}" for i, why in st.read.items() if why != "ok"]
         if not st.findings:
             gaps = "No usable evidence was retrieved."
+            if st.search_errors:
+                kinds = ", ".join(sorted(set(st.search_errors)))
+                gaps += (f" {len(st.search_errors)} of {len(st.queries)} searches got no answer from the search "
+                         f"provider ({kinds}), so this is a retrieval failure, not evidence that nothing exists.")
             if failures:
                 gaps += " Pages that could not be read: " + "; ".join(failures[:4]) + "."
             verdict = "unverifiable" if node.role == "verifier" else ""
