@@ -28,6 +28,7 @@ from webswarm_baseline.config import REPO_ROOT, SwarmConfig
 from webswarm_baseline.run import BASELINE_CONFIG, execute
 
 from .grade import grade
+from .grade_v2 import grade_v2
 
 HERE = Path(__file__).resolve().parent
 RESULTS = HERE.parent / "results"
@@ -40,7 +41,8 @@ KEEP = ["answer_seconds", "wall_seconds", "time_to_first_evidence", "time_to_fir
         "decision_calls", "decision_seconds", "decision_prompt_tokens", "decisions",
         "searches", "fetches", "web_calls", "fetch_failures", "search_failures", "web_seconds",
         "web_from_cassette", "nodes", "nodes_by_mode", "nodes_by_status", "max_depth", "findings",
-        "findings_from_pages", "findings_rejected", "sources", "redundancy", "interventions", "budget_hits"]
+        "findings_from_pages", "findings_rejected", "sources", "redundancy", "interventions", "budget_hits",
+        "fetch_truncated", "findings_adjusted", "guard_events"]
 
 
 def load_tasks() -> dict:
@@ -51,8 +53,8 @@ def load_arms() -> dict:
     return json.loads((HERE / "arms.json").read_text())["arms"]
 
 
-def arm_config(arm: str, spec: dict, task_id: str, use_cassette: bool) -> SwarmConfig:
-    cfg = SwarmConfig.load(BASELINE_CONFIG).override(spec.get("overrides", []))
+def arm_config(arm: str, spec: dict, task_id: str, use_cassette: bool, extra: list[str] = ()) -> SwarmConfig:
+    cfg = SwarmConfig.load(BASELINE_CONFIG).override(list(spec.get("overrides", [])) + list(extra))
     cfg.name = arm
     if use_cassette:
         cfg.web_mode = "replay_or_record"
@@ -60,12 +62,15 @@ def arm_config(arm: str, spec: dict, task_id: str, use_cassette: bool) -> SwarmC
     return cfg
 
 
-def run_one(task: dict, arm: str, spec: dict, repeat: int, out_dir: Path, use_cassette: bool) -> dict:
-    cfg = arm_config(arm, spec, task["id"], use_cassette)
+def run_one(task: dict, arm: str, spec: dict, repeat: int, out_dir: Path, use_cassette: bool,
+            extra: list[str] = ()) -> dict:
+    cfg = arm_config(arm, spec, task["id"], use_cassette, extra)
     started = datetime.now().astimezone().isoformat(timespec="seconds")
     t0 = time.perf_counter()
     row = {"task": task["id"], "type": task["type"], "stability": task["stability"], "arm": arm,
            "repeat": repeat, "started": started}
+    if extra:
+        row["extra_overrides"] = list(extra)      # anything beyond the arm's own definition is on the record
     try:
         art = execute(task["question"], cfg, echo=False, out_dir=out_dir / "runs")
     except Exception as e:  # noqa: BLE001 - a crashed run is a result, not a reason to stop the benchmark
@@ -77,6 +82,9 @@ def run_one(task: dict, arm: str, spec: dict, repeat: int, out_dir: Path, use_ca
     row.update(status=art.outcome["status"], confidence=art.outcome["confidence"], answer=art.outcome["answer"],
                audit=art.outcome.get("audit") or {}, run_dir=str(art.path.relative_to(REPO_ROOT)) if art.path else "")
     row.update(grade(task, art.outcome["answer"], art.outcome.get("audit") or {}, art.swarm.evidence.snapshot()))
+    # the stricter v2 grade sits beside the v1 fields, which stay as they always were (see grade_v2.py)
+    row["v2"] = grade_v2(task, art.outcome["answer"], art.outcome.get("audit") or {})
+    row["gaps"] = art.outcome.get("gaps", "")
     row["ref_model_seconds"] = round(((s.get("prompt_tokens") or 0) + (s.get("decision_prompt_tokens") or 0))
                                      / REF_PROMPT_TPS + (s.get("output_tokens") or 0) / REF_GEN_TPS, 1)
     gen, gsec = s.get("output_tokens") or 0, s.get("llm_generation_seconds") or 0
@@ -93,6 +101,9 @@ def main() -> None:
     ap.add_argument("--repeats", type=int, default=1)
     ap.add_argument("--pause", type=float, default=15.0, help="seconds to idle between runs (lets the laptop cool)")
     ap.add_argument("--no-cassette", action="store_true", help="always hit the live web (no record/replay)")
+    ap.add_argument("--set", action="append", default=[], metavar="KEY=VALUE", dest="extra",
+                    help="extra override applied to every arm in this invocation and stored in each row, e.g. "
+                         "--set budgets.max_seconds=2700 when the model server is shared with another job")
     args = ap.parse_args()
 
     tasks, arms = load_tasks(), load_arms()
@@ -123,7 +134,7 @@ def main() -> None:
     print(f"{len(jobs)} runs to do ({len(done)} already recorded) -> {path}", flush=True)
 
     for n, (tid, arm, rep) in enumerate(jobs, 1):
-        row = run_one(tasks[tid], arm, arms[arm], rep, out_dir, not args.no_cassette)
+        row = run_one(tasks[tid], arm, arms[arm], rep, out_dir, not args.no_cassette, args.extra)
         with path.open("a") as fh:
             fh.write(json.dumps(row, ensure_ascii=False, default=str) + "\n")
         print(f"[{n}/{len(jobs)}] {datetime.now():%H:%M:%S} {tid:3} {arm:14} "

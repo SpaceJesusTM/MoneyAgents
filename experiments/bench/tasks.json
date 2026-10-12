@@ -1,5 +1,6 @@
 {
   "_note": "Benchmark tasks. 'stable' tasks have answers fixed by past filings (gold facts checked against the issuers' own releases on 2026-10-11). 'live' tasks depend on current reporting; they are graded for coverage and grounding only. `key_facts` and `coverage` are case-insensitive regular expressions matched against the final answer; a fact counts as found when any of its patterns matches. Both GAAP and non-GAAP figures are accepted where a company reports both.",
+  "_note_v2": "Fields read only by grade_v2.py; grade.py ignores them, so v1 scores are unchanged. `attribution` on a key fact: a figure stated with the wrong accounting basis is not credited (the values and bases are the ones already written in the fact's own description). `ranking`: the compared entities from highest to lowest, each tied to its key fact by index; `metric` holds word stems that must appear in a sentence for it to count as a ranking statement.",
   "tasks": [
     {
       "id": "A1", "type": "ATOM", "stability": "stable",
@@ -24,10 +25,14 @@
       "id": "W1", "type": "WIDE", "stability": "stable",
       "question": "Compare the gross margins of NVIDIA (fiscal year 2025), AMD (fiscal year 2024) and Intel (fiscal year 2024).",
       "key_facts": [
-        {"fact": "NVIDIA FY2025 gross margin 75.0% GAAP (75.5% non-GAAP)", "patterns": ["75\\.0\\s?%", "75\\.5\\s?%", "\\b75\\s?%"]},
-        {"fact": "AMD FY2024 gross margin 49% GAAP (53% non-GAAP)", "patterns": ["\\b49\\s?%", "\\b53\\s?%"]},
-        {"fact": "Intel FY2024 gross margin 32.7% GAAP (36.0% non-GAAP)", "patterns": ["32\\.7\\s?%", "36\\.0\\s?%", "\\b36\\s?%"]}
+        {"fact": "NVIDIA FY2025 gross margin 75.0% GAAP (75.5% non-GAAP)", "patterns": ["75\\.0\\s?%", "75\\.5\\s?%", "\\b75\\s?%"],
+         "attribution": [{"pattern": "75\\.0\\s?%", "basis": "gaap"}, {"pattern": "75\\.5\\s?%", "basis": "non-gaap"}]},
+        {"fact": "AMD FY2024 gross margin 49% GAAP (53% non-GAAP)", "patterns": ["\\b49\\s?%", "\\b53\\s?%"],
+         "attribution": [{"pattern": "\\b49\\s?%", "basis": "gaap"}, {"pattern": "\\b53\\s?%", "basis": "non-gaap"}]},
+        {"fact": "Intel FY2024 gross margin 32.7% GAAP (36.0% non-GAAP)", "patterns": ["32\\.7\\s?%", "36\\.0\\s?%", "\\b36\\s?%"],
+         "attribution": [{"pattern": "32\\.7\\s?%", "basis": "gaap"}, {"pattern": "36\\.0\\s?%|\\b36\\s?%", "basis": "non-gaap"}]}
       ],
+      "ranking": {"metric": ["gross", "margi"], "order": [{"names": ["NVIDIA"], "fact": 0}, {"names": ["AMD"], "fact": 1}, {"names": ["Intel"], "fact": 2}]},
       "coverage": [
         {"point": "NVIDIA", "patterns": ["nvidia"]}, {"point": "AMD", "patterns": ["\\bamd\\b"]}, {"point": "Intel", "patterns": ["intel"]}
       ],
@@ -42,6 +47,7 @@
         {"fact": "Alphabet 2024 revenue $350.0 billion", "patterns": ["350\\.0", "350,018", "\\$350 billion", "350 billion"]},
         {"fact": "Amazon 2024 net sales $638.0 billion", "patterns": ["638\\.0", "637\\.9", "637,959", "638 billion"]}
       ],
+      "ranking": {"metric": ["reven", "sales"], "order": [{"names": ["Amazon"], "fact": 2}, {"names": ["Alphabet", "Google"], "fact": 1}, {"names": ["Microsoft"], "fact": 0}]},
       "coverage": [
         {"point": "Microsoft", "patterns": ["microsoft"]}, {"point": "Alphabet", "patterns": ["alphabet|google"]}, {"point": "Amazon", "patterns": ["amazon"]}
       ],
