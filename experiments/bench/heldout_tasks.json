@@ -1,0 +1,124 @@
+{
+  "_note": "HELD-OUT set, written 2026-10-12 before any configuration was run on it. Do not tune prompts, rules or patterns on these questions; if a pattern here turns out to be wrong, fix it, say so in the results, and re-grade every configuration. None of these questions, companies' figures or source documents were used while developing the engine or the guards (the development tasks are in tasks.json). All answers are fixed by filings and events dated 2023-2025. The gold facts were written from the author's knowledge of those filings and corroborated in search results on 2026-10-12 where the `corroborated` field says so; they were not each re-read in the primary document. Fields are the same as in tasks.json: `key_facts` and `coverage` are case-insensitive regular expressions matched against the final answer; `ranking` lists compared entities from highest to lowest (v2 grader).",
+  "_scoring": "Fixed before evaluation. Automatic: grade.py (v1) and grade_v2.py, unchanged. Manual, per answer, 0-2 on each: CORRECT (2 = every requested fact right and correctly labelled; 1 = some right, none wrong; 0 = any requested fact wrong or the main fact missing), SUPPORTED (2 = every stated figure and name traceable to a cited retrieved source; 1 = minor unsupported detail; 0 = a requested fact is unsupported or invented), COMPLETE (2 = all parts of the question answered or explicitly reported as not found; 1 = a part silently skipped; 0 = most of the question unanswered). A configuration 'answers' a question only with CORRECT = 2.",
+  "tasks": [
+    {
+      "id": "H1", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "question": "What was Google Cloud's revenue for the full year 2024?",
+      "key_facts": [{"fact": "Google Cloud 2024 revenue $43.2 billion", "patterns": ["43\\.2", "43,229"]}],
+      "authoritative": ["abc.xyz", "sec.gov"],
+      "check": "Alphabet Q4 and fiscal year 2024 results release, segment table: Google Cloud revenues $43,229 million."
+    },
+    {
+      "id": "H2", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "question": "How many vehicles did Tesla deliver in calendar year 2024?",
+      "key_facts": [{"fact": "Tesla 2024 deliveries 1,789,226 (about 1.79 million)", "patterns": ["1,789,226", "1\\.79 million", "1\\.789 million", "1,789,\\d{3}"]}],
+      "authoritative": ["ir.tesla.com", "tesla.com", "sec.gov"],
+      "check": "Tesla Q4 2024 production, deliveries and deployments release, 2 January 2025: 1,789,226 deliveries in 2024."
+    },
+    {
+      "id": "H3", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "question": "What were Meta Platforms' capital expenditures for the full year 2024?",
+      "key_facts": [{"fact": "Meta 2024 capital expenditures $39.23 billion (including principal payments on finance leases)", "patterns": ["39\\.23", "39\\.2 billion", "\\$39\\.2\\b"]}],
+      "authoritative": ["investor.atmeta.com", "investor.fb.com", "sec.gov"],
+      "check": "Meta Q4 and full year 2024 results release, 29 January 2025."
+    },
+    {
+      "id": "H4", "type": "ATOM", "kind": "numerical with a growth figure", "stability": "stable",
+      "question": "What was AMD's Data Center segment revenue for the full year 2024, and how much did it grow from 2023?",
+      "key_facts": [
+        {"fact": "AMD Data Center segment revenue 2024 $12.6 billion", "patterns": ["12\\.6\\s?(billion|B\\b)", "\\$12\\.6", "12,579"]},
+        {"fact": "up 94% year over year", "patterns": ["94\\s?%", "94 percent"]}
+      ],
+      "authoritative": ["ir.amd.com", "amd.com", "sec.gov"],
+      "check": "AMD fourth quarter and full year 2024 results release, 4 February 2025."
+    },
+    {
+      "id": "H5", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "question": "What was Amazon Web Services (AWS) segment revenue for the full year 2024?",
+      "key_facts": [{"fact": "AWS 2024 net sales $107.6 billion", "patterns": ["107\\.6", "107,556"]}],
+      "authoritative": ["ir.aboutamazon.com", "aboutamazon.com", "sec.gov"],
+      "check": "Amazon Q4 2024 results release, 6 February 2025: AWS segment sales $107.6 billion for the year."
+    },
+    {
+      "id": "H6", "type": "WIDE", "kind": "comparison", "stability": "stable",
+      "question": "Compare the 2024 net income of JPMorgan Chase, Bank of America and Wells Fargo.",
+      "key_facts": [
+        {"fact": "JPMorgan Chase 2024 net income $58.5 billion", "patterns": ["58\\.5", "58,471"]},
+        {"fact": "Bank of America 2024 net income $27.1 billion", "patterns": ["27\\.1", "27,132"]},
+        {"fact": "Wells Fargo 2024 net income $19.7 billion", "patterns": ["19\\.7", "19,722"]}
+      ],
+      "coverage": [{"point": "JPMorgan", "patterns": ["jpmorgan|jp morgan"]}, {"point": "Bank of America", "patterns": ["bank of america|bofa"]}, {"point": "Wells Fargo", "patterns": ["wells fargo"]}],
+      "ranking": {"metric": ["incom", "profi", "earni"], "order": [{"names": ["JPMorgan", "JP Morgan"], "fact": 0}, {"names": ["Bank of America", "BofA"], "fact": 1}, {"names": ["Wells Fargo"], "fact": 2}]},
+      "authoritative": ["jpmorganchase.com", "bankofamerica.com", "wellsfargo.com", "sec.gov"],
+      "check": "Each bank's fourth quarter 2024 earnings release, January 2025."
+    },
+    {
+      "id": "H7", "type": "WIDE", "kind": "comparison", "stability": "stable",
+      "question": "Compare the fiscal year 2024 net revenue of Visa and Mastercard.",
+      "key_facts": [
+        {"fact": "Visa fiscal 2024 net revenue $35.9 billion", "patterns": ["35\\.9", "35,926"]},
+        {"fact": "Mastercard 2024 net revenue $28.2 billion", "patterns": ["28\\.2", "28,167"]}
+      ],
+      "coverage": [{"point": "Visa", "patterns": ["\\bvisa\\b"]}, {"point": "Mastercard", "patterns": ["mastercard"]}],
+      "ranking": {"metric": ["reven"], "order": [{"names": ["Visa"], "fact": 0}, {"names": ["Mastercard"], "fact": 1}]},
+      "authoritative": ["investor.visa.com", "visa.com", "investor.mastercard.com", "mastercard.com", "sec.gov"],
+      "check": "Visa fiscal fourth quarter and full year 2024 release (year ended 30 September 2024); Mastercard fourth quarter and full year 2024 release."
+    },
+    {
+      "id": "H8", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
+      "question": "Which company acquired Activision Blizzard, and who was that company's chief executive when the deal closed?",
+      "key_facts": [
+        {"fact": "the acquirer is Microsoft", "patterns": ["microsoft"]},
+        {"fact": "its chief executive was Satya Nadella", "patterns": ["nadella"]}
+      ],
+      "coverage": [{"point": "when the deal closed (13 October 2023)", "patterns": ["october 13, 2023", "13 october 2023", "october 2023", "oct\\.? 13"]}],
+      "authoritative": ["microsoft.com", "sec.gov", "reuters.com"],
+      "check": "Microsoft announcement of 13 October 2023; Satya Nadella has been Microsoft's CEO since 2014."
+    },
+    {
+      "id": "H9", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
+      "question": "Which company makes the extreme ultraviolet (EUV) lithography machines used to manufacture leading-edge chips, and in which country is it headquartered?",
+      "key_facts": [
+        {"fact": "the company is ASML", "patterns": ["\\basml\\b"]},
+        {"fact": "it is headquartered in the Netherlands", "patterns": ["netherlands", "\\bdutch\\b", "veldhoven"]}
+      ],
+      "authoritative": ["asml.com", "reuters.com"],
+      "check": "ASML Holding N.V., Veldhoven, the Netherlands, is the sole supplier of EUV lithography systems."
+    },
+    {
+      "id": "H10", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
+      "question": "Which company acquired VMware, and in which month and year did that acquisition close?",
+      "key_facts": [
+        {"fact": "the acquirer is Broadcom", "patterns": ["broadcom"]},
+        {"fact": "the acquisition closed in November 2023", "patterns": ["november 2023", "nov\\.? 22,? 2023", "november 22", "22 november"]}
+      ],
+      "authoritative": ["broadcom.com", "sec.gov", "reuters.com"],
+      "check": "Broadcom announcement of 22 November 2023."
+    },
+    {
+      "id": "H11", "type": "ENTITY_COLLECT", "kind": "entity collection", "stability": "stable",
+      "question": "Which companies make up the group of stocks known as the 'Magnificent Seven'?",
+      "key_facts": [
+        {"fact": "Apple", "patterns": ["\\bapple\\b"]}, {"fact": "Microsoft", "patterns": ["microsoft"]},
+        {"fact": "Alphabet", "patterns": ["alphabet|google"]}, {"fact": "Amazon", "patterns": ["amazon"]},
+        {"fact": "Nvidia", "patterns": ["nvidia"]}, {"fact": "Meta", "patterns": ["\\bmeta\\b"]},
+        {"fact": "Tesla", "patterns": ["tesla"]}
+      ],
+      "authoritative": ["reuters.com", "bloomberg.com", "investopedia.com"],
+      "check": "Apple, Microsoft, Alphabet, Amazon, Nvidia, Meta Platforms and Tesla. An answer that adds an eighth company is wrong on CORRECT."
+    },
+    {
+      "id": "H12", "type": "ENTITY_COLLECT", "kind": "entity collection", "stability": "stable",
+      "question": "Which firms are the 'Big Four' accounting firms?",
+      "key_facts": [
+        {"fact": "Deloitte", "patterns": ["deloitte"]},
+        {"fact": "PwC", "patterns": ["\\bpwc\\b|pricewaterhousecoopers"]},
+        {"fact": "EY", "patterns": ["\\bey\\b|ernst\\s*&?\\s*(and\\s+)?young"]},
+        {"fact": "KPMG", "patterns": ["kpmg"]}
+      ],
+      "authoritative": ["reuters.com", "ft.com", "investopedia.com"],
+      "check": "Deloitte, PwC, EY and KPMG. An answer that adds a fifth firm is wrong on CORRECT."
+    }
+  ]
+}

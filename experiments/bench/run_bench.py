@@ -45,8 +45,9 @@ KEEP = ["answer_seconds", "wall_seconds", "time_to_first_evidence", "time_to_fir
         "fetch_truncated", "findings_adjusted", "guard_events", "web_provenance", "search_no_answer_by_kind"]
 
 
-def load_tasks() -> dict:
-    return {t["id"]: t for t in json.loads((HERE / "tasks.json").read_text())["tasks"]}
+def load_tasks(name: str = "tasks.json") -> dict:
+    """`tasks.json` is the development set; `heldout_tasks.json` is the held-out set (see its note)."""
+    return {t["id"]: t for t in json.loads((HERE / name).read_text())["tasks"]}
 
 
 def load_arms() -> dict:
@@ -101,12 +102,14 @@ def main() -> None:
     ap.add_argument("--repeats", type=int, default=1)
     ap.add_argument("--pause", type=float, default=15.0, help="seconds to idle between runs (lets the laptop cool)")
     ap.add_argument("--no-cassette", action="store_true", help="always hit the live web (no record/replay)")
+    ap.add_argument("--suite", default="tasks.json", help="task file in experiments/bench (heldout_tasks.json "
+                                                          "for the held-out set)")
     ap.add_argument("--set", action="append", default=[], metavar="KEY=VALUE", dest="extra",
                     help="extra override applied to every arm in this invocation and stored in each row, e.g. "
                          "--set budgets.max_seconds=2700 when the model server is shared with another job")
     args = ap.parse_args()
 
-    tasks, arms = load_tasks(), load_arms()
+    tasks, arms = load_tasks(args.suite), load_arms()
     for a in args.arms:
         if a not in arms:
             raise SystemExit(f"unknown arm {a!r}; available: {sorted(arms)}")
