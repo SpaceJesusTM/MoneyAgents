@@ -3,28 +3,28 @@
   "_scoring": "Fixed before evaluation. Automatic: grade.py (v1) and grade_v2.py, unchanged. Manual, per answer, 0-2 on each: CORRECT (2 = every requested fact right and correctly labelled; 1 = some right, none wrong; 0 = any requested fact wrong or the main fact missing), SUPPORTED (2 = every stated figure and name traceable to a cited retrieved source; 1 = minor unsupported detail; 0 = a requested fact is unsupported or invented), COMPLETE (2 = all parts of the question answered or explicitly reported as not found; 1 = a part silently skipped; 0 = most of the question unanswered). A configuration 'answers' a question only with CORRECT = 2.",
   "tasks": [
     {
-      "id": "H1", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "id": "H1", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets for a neutral query", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
       "question": "What was Google Cloud's revenue for the full year 2024?",
       "key_facts": [{"fact": "Google Cloud 2024 revenue $43.2 billion", "patterns": ["43\\.2", "43,229"]}],
       "authoritative": ["abc.xyz", "sec.gov"],
       "check": "Alphabet Q4 and fiscal year 2024 results release, segment table: Google Cloud revenues $43,229 million."
     },
     {
-      "id": "H2", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "id": "H2", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets, but for a query that itself named the expected fact (weaker: it shows pages state it, not that a neutral search surfaces it)", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
       "question": "How many vehicles did Tesla deliver in calendar year 2024?",
       "key_facts": [{"fact": "Tesla 2024 deliveries 1,789,226 (about 1.79 million)", "patterns": ["1,789,226", "1\\.79 million", "1\\.789 million", "1,789,\\d{3}"]}],
       "authoritative": ["ir.tesla.com", "tesla.com", "sec.gov"],
       "check": "Tesla Q4 2024 production, deliveries and deployments release, 2 January 2025: 1,789,226 deliveries in 2024."
     },
     {
-      "id": "H3", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "id": "H3", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets, but for a query that itself named the expected fact (weaker: it shows pages state it, not that a neutral search surfaces it)", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
       "question": "What were Meta Platforms' capital expenditures for the full year 2024?",
       "key_facts": [{"fact": "Meta 2024 capital expenditures $39.23 billion (including principal payments on finance leases)", "patterns": ["39\\.23", "39\\.2 billion", "\\$39\\.2\\b"]}],
       "authoritative": ["investor.atmeta.com", "investor.fb.com", "sec.gov"],
       "check": "Meta Q4 and full year 2024 results release, 29 January 2025."
     },
     {
-      "id": "H4", "type": "ATOM", "kind": "numerical with a growth figure", "stability": "stable",
+      "id": "H4", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets, but for a query that itself named the expected fact (weaker: it shows pages state it, not that a neutral search surfaces it)", "type": "ATOM", "kind": "numerical with a growth figure", "stability": "stable",
       "question": "What was AMD's Data Center segment revenue for the full year 2024, and how much did it grow from 2023?",
       "key_facts": [
         {"fact": "AMD Data Center segment revenue 2024 $12.6 billion", "patterns": ["12\\.6\\s?(billion|B\\b)", "\\$12\\.6", "12,579"]},
@@ -34,14 +34,14 @@
       "check": "AMD fourth quarter and full year 2024 results release, 4 February 2025."
     },
     {
-      "id": "H5", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
+      "id": "H5", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets for a neutral query", "type": "ATOM", "kind": "single-hop numerical", "stability": "stable",
       "question": "What was Amazon Web Services (AWS) segment revenue for the full year 2024?",
       "key_facts": [{"fact": "AWS 2024 net sales $107.6 billion", "patterns": ["107\\.6", "107,556"]}],
       "authoritative": ["ir.aboutamazon.com", "aboutamazon.com", "sec.gov"],
       "check": "Amazon Q4 2024 results release, 6 February 2025: AWS segment sales $107.6 billion for the year."
     },
     {
-      "id": "H6", "type": "WIDE", "kind": "comparison", "stability": "stable",
+      "id": "H6", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets for a neutral query", "type": "WIDE", "kind": "comparison", "stability": "stable",
       "question": "Compare the 2024 net income of JPMorgan Chase, Bank of America and Wells Fargo.",
       "key_facts": [
         {"fact": "JPMorgan Chase 2024 net income $58.5 billion", "patterns": ["58\\.5", "58,471"]},
@@ -54,7 +54,7 @@
       "check": "Each bank's fourth quarter 2024 earnings release, January 2025."
     },
     {
-      "id": "H7", "type": "WIDE", "kind": "comparison", "stability": "stable",
+      "id": "H7", "corroborated": "2026-10-12: Visa's figure appeared for a neutral query; Mastercard's only for a query that named the figure", "type": "WIDE", "kind": "comparison", "stability": "stable",
       "question": "Compare the fiscal year 2024 net revenue of Visa and Mastercard.",
       "key_facts": [
         {"fact": "Visa fiscal 2024 net revenue $35.9 billion", "patterns": ["35\\.9", "35,926"]},
@@ -66,7 +66,7 @@
       "check": "Visa fiscal fourth quarter and full year 2024 release (year ended 30 September 2024); Mastercard fourth quarter and full year 2024 release."
     },
     {
-      "id": "H8", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
+      "id": "H8", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets, but for a query that itself named the expected fact (weaker: it shows pages state it, not that a neutral search surfaces it)", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
       "question": "Which company acquired Activision Blizzard, and who was that company's chief executive when the deal closed?",
       "key_facts": [
         {"fact": "the acquirer is Microsoft", "patterns": ["microsoft"]},
@@ -77,7 +77,7 @@
       "check": "Microsoft announcement of 13 October 2023; Satya Nadella has been Microsoft's CEO since 2014."
     },
     {
-      "id": "H9", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
+      "id": "H9", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets, but for a query that itself named the expected fact (weaker: it shows pages state it, not that a neutral search surfaces it)", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
       "question": "Which company makes the extreme ultraviolet (EUV) lithography machines used to manufacture leading-edge chips, and in which country is it headquartered?",
       "key_facts": [
         {"fact": "the company is ASML", "patterns": ["\\basml\\b"]},
@@ -87,7 +87,7 @@
       "check": "ASML Holding N.V., Veldhoven, the Netherlands, is the sole supplier of EUV lithography systems."
     },
     {
-      "id": "H10", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
+      "id": "H10", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets for a neutral query", "type": "DEEP", "kind": "multi-hop", "stability": "stable",
       "question": "Which company acquired VMware, and in which month and year did that acquisition close?",
       "key_facts": [
         {"fact": "the acquirer is Broadcom", "patterns": ["broadcom"]},
@@ -97,7 +97,7 @@
       "check": "Broadcom announcement of 22 November 2023."
     },
     {
-      "id": "H11", "type": "ENTITY_COLLECT", "kind": "entity collection", "stability": "stable",
+      "id": "H11", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets, but for a query that itself named the expected fact (weaker: it shows pages state it, not that a neutral search surfaces it)", "type": "ENTITY_COLLECT", "kind": "entity collection", "stability": "stable",
       "question": "Which companies make up the group of stocks known as the 'Magnificent Seven'?",
       "key_facts": [
         {"fact": "Apple", "patterns": ["\\bapple\\b"]}, {"fact": "Microsoft", "patterns": ["microsoft"]},
@@ -109,7 +109,7 @@
       "check": "Apple, Microsoft, Alphabet, Amazon, Nvidia, Meta Platforms and Tesla. An answer that adds an eighth company is wrong on CORRECT."
     },
     {
-      "id": "H12", "type": "ENTITY_COLLECT", "kind": "entity collection", "stability": "stable",
+      "id": "H12", "corroborated": "2026-10-12: every gold fact appeared in search-result snippets for a neutral query", "type": "ENTITY_COLLECT", "kind": "entity collection", "stability": "stable",
       "question": "Which firms are the 'Big Four' accounting firms?",
       "key_facts": [
         {"fact": "Deloitte", "patterns": ["deloitte"]},
