@@ -14,9 +14,12 @@ import io
 import ipaddress
 import json
 import re
+import select
 import socket
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeout
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -44,6 +47,126 @@ class SearchResult:
     url: str
     snippet: str
     date: str = ""
+
+
+class SearchResults(list):
+    """Search results that can also say the search itself failed. An empty list with `error` set
+    means "we could not ask", which is not the same as "we asked and nothing came back"."""
+    error: str = ""
+    kind: str = ""      # timeout | network | rate_limited | provider | internal | unavailable | replay_miss
+
+
+class SearchFailure(Exception):
+    """A search that got no valid answer. Always transient from the point of view of a recording:
+    nothing about it says what the web contains, so it must never be stored and replayed."""
+
+    def __init__(self, kind: str, detail: str = ""):
+        super().__init__(f"{kind}: {detail}"[:300])
+        self.kind, self.detail = kind, detail
+
+
+# ---- local network profile ------------------------------------------------------------------------
+
+_NET: dict = {}
+
+
+def ipv6_route() -> bool:
+    """Does this machine have a route to the IPv6 internet? Checked once, without sending anything:
+    connecting a UDP socket only consults the routing table."""
+    if "v6" not in _NET:
+        try:
+            with socket.socket(socket.AF_INET6, socket.SOCK_DGRAM) as s:
+                s.connect(("2001:4860:4860::8888", 53))
+            _NET["v6"] = True
+        except OSError:
+            _NET["v6"] = False
+    return _NET["v6"]
+
+
+def gai_family() -> int:
+    """Address family for name lookups. Without an IPv6 route an AAAA answer cannot be used, and on a
+    network whose resolver drops AAAA queries every dual-stack lookup waits out a timeout (measured
+    here: 2-5 s per connection). So: no IPv6 route, IPv4-only lookups."""
+    return socket.AF_UNSPEC if ipv6_route() else socket.AF_INET
+
+
+def prefer_usable_addresses() -> str:
+    """Apply `gai_family()` to this process's `requests` connections. Returns what was chosen."""
+    if gai_family() == socket.AF_INET:
+        import urllib3.util.connection as conn
+        conn.allowed_gai_family = lambda: socket.AF_INET
+        return "ipv4 only (no IPv6 route)"
+    return "system default"
+
+
+class Ipv4Tunnel:
+    """A CONNECT proxy on 127.0.0.1 that resolves names over IPv4 only.
+
+    The `ddgs` search client does its own name resolution and has no address-family switch, so on a
+    network with broken AAAA lookups each of its requests burns its whole timeout. It does accept a
+    proxy. This one only opens TLS tunnels (port 443) to hosts the SSRF guard accepts, and relays
+    bytes; it never sees request contents."""
+
+    def __init__(self):
+        self._sock = socket.socket()
+        self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self._sock.bind(("127.0.0.1", 0))
+        self._sock.listen(32)
+        self.url = f"http://127.0.0.1:{self._sock.getsockname()[1]}"
+        threading.Thread(target=self._serve, name="ipv4-tunnel", daemon=True).start()
+
+    def close(self) -> None:
+        try:
+            self._sock.close()
+        except OSError:
+            pass
+
+    def _serve(self) -> None:
+        while True:
+            try:
+                client, _ = self._sock.accept()
+            except OSError:
+                return
+            threading.Thread(target=self._handle, args=(client,), daemon=True).start()
+
+    def _handle(self, client: socket.socket) -> None:
+        up = None
+        try:
+            client.settimeout(10)
+            head = b""
+            while b"\r\n\r\n" not in head and len(head) < 8192:
+                chunk = client.recv(4096)
+                if not chunk:
+                    return
+                head += chunk
+            parts = head.split(b"\r\n", 1)[0].decode("latin-1").split(" ")
+            host, _, port = (parts[1] if len(parts) > 1 else "").rpartition(":")
+            if parts[0] != "CONNECT" or port != "443" or validate_url(f"https://{host}/"):
+                client.sendall(b"HTTP/1.1 403 Forbidden\r\n\r\n")
+                return
+            addr = socket.getaddrinfo(host, 443, socket.AF_INET, socket.SOCK_STREAM)[0][4]
+            up = socket.create_connection(addr, timeout=8)
+            client.sendall(b"HTTP/1.1 200 Connection established\r\n\r\n")
+            client.settimeout(None)
+            up.settimeout(None)
+            while True:
+                ready, _, _ = select.select([client, up], [], [], 30)
+                if not ready:
+                    return
+                for sock in ready:
+                    data = sock.recv(65536)
+                    if not data:
+                        return
+                    (up if sock is client else client).sendall(data)
+        except (OSError, ValueError, IndexError):
+            return
+        finally:
+            for sock in (client, up):
+                try:
+                    if sock is not None:
+                        sock.close()
+                except OSError:
+                    pass
 
 
 @dataclass
@@ -87,7 +210,7 @@ def validate_url(url: str) -> str | None:
         return f"port {port} not allowed"
     try:
         infos = socket.getaddrinfo(host, port or (443 if p.scheme == "https" else 80),
-                                   proto=socket.IPPROTO_TCP)
+                                   family=gai_family(), proto=socket.IPPROTO_TCP)
     except (socket.gaierror, UnicodeError):
         return "DNS resolution failed"
     for info in infos:
@@ -180,24 +303,65 @@ class _Got:
 # ---- search providers ---------------------------------------------------------------------------
 
 class DDGSProvider:
-    """Keyless metasearch via the `ddgs` package. Swappable: anything with `.search(q, n)` works."""
+    """Keyless metasearch via the `ddgs` package. Swappable: anything with `.search(q, n)` works.
+
+    `search` returns a list (possibly empty: the engines answered and had nothing) or raises
+    `SearchFailure` (no valid answer: timeout, network, rate limit, provider or internal error)."""
     name = "ddgs"
 
-    def search(self, query: str, n: int) -> list[dict]:
+    def __init__(self, timeout: int = 10, deadline: float = 25.0):
+        self.timeout, self.deadline = timeout, deadline
+        self._tunnel: Ipv4Tunnel | None = None
+        self._pool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="ddgs")
+
+    def _proxy(self) -> str | None:
+        if ipv6_route():
+            return None
+        if self._tunnel is None:
+            self._tunnel = Ipv4Tunnel()
+        return self._tunnel.url
+
+    def _ask(self, query: str, n: int) -> list[dict]:
         from ddgs import DDGS
-        last: Exception | None = None
-        for attempt in range(2):
-            try:
-                rows = DDGS(timeout=10).text(query, max_results=n, region="us-en")
-                return [{"title": r.get("title") or "", "url": r.get("href") or "",
-                         "snippet": r.get("body") or "", "date": r.get("date") or ""}
-                        for r in rows if r.get("href")]
-            except Exception as e:  # noqa: BLE001
-                last = e
-                if "no results" in str(e).lower():
-                    return []
-                time.sleep(1.5 * (attempt + 1))
-        raise RuntimeError(f"search failed: {type(last).__name__}: {last}")
+        return DDGS(timeout=self.timeout, proxy=self._proxy()).text(query, max_results=n, region="us-en")
+
+    def search(self, query: str, n: int) -> list[dict]:
+        t0 = time.perf_counter()
+        future = self._pool.submit(self._ask, query, n)
+        try:
+            rows = future.result(timeout=self.deadline)       # the library has no overall time limit of its own
+        except FutureTimeout:
+            raise SearchFailure("timeout", f"no answer within {self.deadline:.0f} s") from None
+        except Exception as e:  # noqa: BLE001 - classified below; the caller decides what to do with it
+            outcome = classify_ddgs_error(e, time.perf_counter() - t0, self.timeout)
+            if isinstance(outcome, _Empty):
+                return []                                     # the engines answered and had nothing
+            raise outcome from None
+        return [{"title": r.get("title") or "", "url": r.get("href") or "",
+                 "snippet": r.get("body") or "", "date": r.get("date") or ""}
+                for r in rows if r.get("href")]
+
+
+def classify_ddgs_error(e: Exception, elapsed: float, timeout: float):
+    """Turn a `ddgs` exception into an empty result (returned) or a `SearchFailure` (returned, to be
+    raised). The library reports "No results found" both when the engines had nothing and when every
+    engine timed out or served a rate-limit page; only the first is an answer."""
+    name, text = type(e).__name__, str(e)
+    if name == "RatelimitException" or re.search(r"\b(?:202|429)\b|ratelimit|rate limit|too many requests", text, re.I):
+        return SearchFailure("rate_limited", text)
+    if name == "TimeoutException" or re.search(r"timed? ?out", text, re.I):
+        return SearchFailure("timeout", text)
+    if "no results" in text.lower():
+        if elapsed >= 0.8 * timeout:
+            return SearchFailure("timeout", f"'no results' after {elapsed:.0f} s: the engines did not answer in time")
+        return _Empty()
+    if re.search(r"dns|resolve|connect|network|unreachable|ssl|certificate", text, re.I):
+        return SearchFailure("network", text)
+    return SearchFailure("provider" if name == "DDGSException" else "internal", f"{name}: {text}")
+
+
+class _Empty(Exception):
+    """Marker: the provider answered and had no results."""
 
 
 PROVIDERS = {"ddgs": DDGSProvider}
@@ -345,7 +509,10 @@ class WebClient:
                 finally:
                     if budgeted:
                         self._sem.release()
-                if self.cassette and mode in ("record", "replay_or_record"):
+                # A search that got no valid answer says nothing about the web, so it is never recorded:
+                # a recorded timeout would be replayed to every later run as if it were a result.
+                failed_search = kind == "search" and bool(resp.get("error"))
+                if self.cassette and mode in ("record", "replay_or_record") and not failed_search:
                     self.cassette.put(kind, key, resp, time.perf_counter() - t0)
             secs = time.perf_counter() - t0
             with self._lock:
