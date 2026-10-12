@@ -1,0 +1,35 @@
+5 runs to do (0 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/model_compare_v1/results.jsonl
+[1/5] 02:40:07 A1  reliability    t=42.8s q=1.0 facts=1.0 cov=None ground=1.0 llm=7 dec=0 web=3 nodes=1 tps=25.1 hits=[] 
+[2/5] 02:48:56 W1  reliability    t=520.2s q=0.889 facts=0.667 cov=1.0 ground=1.0 llm=47 dec=0 web=19 nodes=6 tps=17.7 hits=[] 
+h2 connection driver error: broken pipe
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+[3/5] 02:55:34 W2  reliability    t=390.3s q=1.0 facts=1.0 cov=1.0 ground=1.0 llm=43 dec=0 web=18 nodes=6 tps=15.9 hits=[] 
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+h2 connection driver error: connection reset
+[4/5] 03:01:30 D1  reliability    t=347.8s q=0.667 facts=0.0 cov=1.0 ground=1.0 llm=31 dec=0 web=14 nodes=5 tps=15.2 hits=[] 
+[5/5] 03:02:42 D2  reliability    t=63.3s q=0.75 facts=0.5 cov=None ground=1.0 llm=7 dec=0 web=4 nodes=1 tps=15.6 hits=[] 
+done
+[?2026h[?25l[1G[K[?25h[?2026l[?25l[2K[1G[?25h5 runs to do (5 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/model_compare_v1/results.jsonl
+[1/5] 03:05:12 A1  reliability_9b t=144.0s q=1.0 facts=1.0 cov=None ground=1.0 llm=8 dec=0 web=4 nodes=1 tps=8.5 hits=[] 
+[2/5] 03:21:32 W1  reliability_9b t=972.0s q=0.556 facts=0.667 cov=1.0 ground=0.0 llm=27 dec=0 web=8 nodes=4 tps=8.4 hits=['max_seconds', 'wrap_up'] 
+3 runs to do (7 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/model_compare_v1/results.jsonl
+[1/3] 03:28:07 D2  reliability_9b t=346.4s q=1.0 facts=1.0 cov=None ground=1.0 llm=18 dec=0 web=5 nodes=3 tps=9.3 hits=[] 
+[2/3] 03:30:20 D1  reliability_9b t=125.1s q=0.0 facts=0.0 cov=0.0 ground=0.0 llm=10 dec=0 web=4 nodes=2 tps=9.5 hits=[] 
+[3/3] 03:36:52 W2  reliability_9b t=384.4s q=0.889 facts=0.667 cov=1.0 ground=1.0 llm=30 dec=0 web=11 nodes=4 tps=9.6 hits=[] 
+done
+[?2026h[?25l[1G[K[?25h[?2026l[?25l[2K[1G[?25h

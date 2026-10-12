@@ -1,0 +1,4 @@
+2 runs to do (0 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/evidence_v1/results.jsonl
+[1/2] 03:42:47 D2  evidence       t=274.8s q=1.0 facts=1.0 cov=None ground=1.0 llm=30 dec=0 web=17 nodes=5 tps=19.1 hits=[] 
+[2/2] 03:48:54 D1  evidence       t=362.3s q=1.0 facts=1.0 cov=1.0 ground=1.0 llm=32 dec=0 web=15 nodes=5 tps=19.0 hits=[] 
+done

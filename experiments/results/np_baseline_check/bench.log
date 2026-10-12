@@ -1,0 +1,15 @@
+2 runs to do (2 already recorded) -> /Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/results/np_baseline_check/results.jsonl
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+h2 connection driver error: peer closed connection without sending TLS close_notify: https://docs.rs/rustls/latest/rustls/manual/_03_howto/index.html#unexpected-eof
+[1/2] 04:01:23 W2  baseline       t=276.4s q=1.0 facts=1.0 cov=1.0 ground=1.0 llm=40 dec=0 web=16 nodes=6 tps=20.5 hits=[] 
+[2/2] 04:06:16 D1  baseline       t=287.9s q=0.667 facts=0.0 cov=1.0 ground=1.0 llm=31 dec=0 web=14 nodes=5 tps=17.2 hits=[] 
+done

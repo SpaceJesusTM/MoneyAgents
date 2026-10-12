@@ -14,6 +14,7 @@ experiments. Start here:
 | [`OPTIMIZATION_RESULTS.md`](OPTIMIZATION_RESULTS.md) | Baseline versus optimized arms |
 | [`DESIGN_DECISIONS.md`](DESIGN_DECISIONS.md) | Decision log with sources |
 | [`OVERNIGHT_PROGRESS.md`](OVERNIGHT_PROGRESS.md) | Build log, blockers, how to resume |
+| [`NEXT_PASS_RESULTS.md`](NEXT_PASS_RESULTS.md) | Latest pass: search-failure diagnosis and fixes, 4B versus 9B, evidence-check prototype, held-out set, recommendations |
 | [`RELIABILITY_IMPROVEMENTS.md`](RELIABILITY_IMPROVEMENTS.md) | Follow-up pass: opt-in fixes for the verification, numeric and oversized-PDF failures, and a stricter grader |
 | [`examples/`](examples/) | Saved live runs: report, agent tree, full trace |
 
