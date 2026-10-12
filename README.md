@@ -14,7 +14,8 @@ experiments. Start here:
 | [`OPTIMIZATION_RESULTS.md`](OPTIMIZATION_RESULTS.md) | Baseline versus optimized arms |
 | [`DESIGN_DECISIONS.md`](DESIGN_DECISIONS.md) | Decision log with sources |
 | [`OVERNIGHT_PROGRESS.md`](OVERNIGHT_PROGRESS.md) | Build log, blockers, how to resume |
-| [`examples/`](examples/) | Six saved live runs: report, agent tree, full trace |
+| [`RELIABILITY_IMPROVEMENTS.md`](RELIABILITY_IMPROVEMENTS.md) | Follow-up pass: opt-in fixes for the verification, numeric and oversized-PDF failures, and a stricter grader |
+| [`examples/`](examples/) | Saved live runs: report, agent tree, full trace |
 
 ```bash
 .venv/bin/pip install -r requirements.txt -r webswarm_baseline/requirements.txt

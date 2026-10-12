@@ -1,0 +1,498 @@
+{
+  "question": "Compare the gross margins of NVIDIA (fiscal year 2025), AMD (fiscal year 2024) and Intel (fiscal year 2024).",
+  "config": {
+    "name": "reliability",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/W1",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "cite_retry": false,
+    "extract_mode": "quote",
+    "verify_guard": true,
+    "claim_checks": true,
+    "numeric_guard": true,
+    "oversize_policy": "fail",
+    "max_pdf_bytes": 8000000,
+    "pdf_max_pages": 40,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T13:02:41-04:00",
+    "git_commit": "a1139d6c3e8397a2fb1f649b6caaebff6e66b1e0",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "NVIDIA's GAAP gross margin for fiscal year 2025 was 73.0%, while AMD's GAAP gross margin for fiscal year 2024 was 49% [S1, S2]. Intel reported a GAAP gross margin of 32.7% for fiscal year 2024 [S3].\n\nThe primary comparison relies on GAAP figures because they represent standardized accounting measures across all three companies, whereas non-GAAP margins vary by company and exclude specific adjustments that make direct cross-company comparison difficult. NVIDIA's margin is significantly higher than both AMD and Intel, driven largely by its data center segment performance. AMD showed a slight year-over-year increase in Q4 2024 to 51%, whereas Intel reported decreases for both GAAP and Non-GAAP margins compared to the prior year [S1, S3].\n\nUncertainty: The search results did not specify the exact search terms used to retrieve Intel's data, nor did they provide a breakdown of gross margin availability by product segment or region. Additionally, while evidence was found for NVIDIA and AMD, no specific evidence was located regarding Intel's gross margin performance trends beyond the aggregate fiscal year figure; however, the available data confirms the 32.7% GAAP figure exists.",
+    "status": "partial",
+    "confidence": "high",
+    "gaps": "no evidence for: Intel gross margin performance for fiscal year 2024; finished before all sub-tasks reported",
+    "audit": {
+      "citations": 3,
+      "unknown_citations": [],
+      "cited_pages": 3,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "ir.amd.com",
+        "nasdaq.com",
+        "nvidianews.nvidia.com"
+      ],
+      "numbers": 9,
+      "numbers_in_cited_source": 8,
+      "numbers_elsewhere_in_evidence": 1,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 1,
+      "numeric_grounding": 0.889,
+      "consistency": {
+        "ordering_issues": [],
+        "basis_conflicts": [],
+        "mixed_basis_or_period": [],
+        "clean": true
+      }
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 422.3,
+    "wall_seconds": 438.9,
+    "time_to_first_search_result": 21.264,
+    "time_to_first_evidence": 83.265,
+    "time_to_first_page_evidence": 83.265,
+    "llm_calls": 37,
+    "llm_calls_by_kind": {
+      "route": 4,
+      "plan": 1,
+      "act": 17,
+      "extract": 6,
+      "snippet_extract": 1,
+      "review": 4,
+      "answer": 3,
+      "synthesize": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 273.27,
+    "llm_queue_wait_seconds": 287.08,
+    "prompt_tokens": 23620,
+    "output_tokens": 3384,
+    "llm_prompt_eval_seconds": 86.25,
+    "llm_generation_seconds": 163.77,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 4,
+      "review:generative": 4
+    },
+    "searches": 13,
+    "fetches": 7,
+    "web_calls": 20,
+    "fetch_failures": 2,
+    "fetch_truncated": 0,
+    "search_failures": 7,
+    "web_seconds": 831.48,
+    "web_run_cache_hits": 1,
+    "web_from_cassette": 13,
+    "nodes": 6,
+    "nodes_by_mode": {
+      "WIDE": 1,
+      "ATOM": 5
+    },
+    "nodes_by_role": {
+      "research": 6
+    },
+    "nodes_by_status": {
+      "partial": 1,
+      "ok": 3,
+      "failed": 1,
+      "cancelled": 1
+    },
+    "max_depth": 1,
+    "findings": 7,
+    "findings_from_pages": 7,
+    "findings_rejected": 9,
+    "findings_adjusted": 1,
+    "guard_events": {
+      "finding_adjusted": 1,
+      "comparison": 1
+    },
+    "sources": 3,
+    "source_domains": [
+      "ir.amd.com",
+      "nasdaq.com",
+      "nvidianews.nvidia.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 1,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 1,
+      "pages_read_with_no_accepted_finding": 3,
+      "nodes_with_no_evidence": 1,
+      "nodes_cancelled": 1
+    },
+    "interventions": 9,
+    "budget_hits": []
+  },
+  "tree": "[WIDE] Compare the gross margins of NVIDIA (fiscal year 2025), AMD (fiscal year 2024) and Intel (fiscal year 2024).  (#0, partial, 422s, confidence high)\n│   why: Compares three named entities on a specific metric.\n│   ! follow-up requested but none allowed (limit reached)\n│   ! finished early with 1 sub-task(s) outstanding\n├── [ATOM] NVIDIA gross margin performance for fiscal year 2025  (#1, ok, 359s, confidence high)\n│       why: Single company metric requested, fits ATOM.\n│       ! search returned nothing; retried as 'NVIDIA fiscal year 2025 annual gross margin'\n├── [ATOM] AMD gross margin performance for fiscal year 2024  (#2, ok, 399s, confidence high)\n│       why: Single entity and metric requested; ATOM.\n│       ! search returned nothing; retried as 'AMD fiscal year 2024 gross margin earnings'\n│       ! finish with no evidence overridden; read the next unread result\n│       ! search returned nothing; retried as 'AMD fiscal year 2024 gross margin Q3'\n├── [ATOM] Intel gross margin performance for fiscal year 2024  (#3, failed, 188s)\n│       why: Single entity fact lookup.\n│       ! no page evidence; used search snippets (0 findings)\n├── [ATOM] Verify Intel's fiscal year 2024 gross margin availability and correct search terms.  (#4, ok, 168s, confidence high)\n└── [ATOM] Cross-check AMD and NVIDIA FY2024/FY2025 data against Intel's reported periods.  (#5, cancelled, 234s)\n        ! search returned nothing; retried as 'Intel fiscal year FY2024 FY2025 reporting period'\n        ! research cut short: Cancelled",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "Compare the gross margins of NVIDIA (fiscal year 2025), AMD (fiscal year 2024) and Intel (fiscal year 2024).",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "WIDE",
+      "model_mode": "WIDE",
+      "status": "partial",
+      "reason": "Compares three named entities on a specific metric.",
+      "notes": [
+        "follow-up requested but none allowed (limit reached)",
+        "finished early with 1 sub-task(s) outstanding"
+      ],
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "created": 0.057,
+      "started": 0.057,
+      "finished": 422.298,
+      "result": {
+        "status": "partial",
+        "answer": "NVIDIA's GAAP gross margin for fiscal year 2025 was 73.0%, while AMD's GAAP gross margin for fiscal year 2024 was 49% [S1, S2]. Intel reported a GAAP gross margin of 32.7% for fiscal year 2024 [S3].\n\nThe primary comparison relies on GAAP figures because they represent standardized accounting measures across all three companies, whereas non-GAAP margins vary by company and exclude specific adjustments that make direct cross-company comparison difficult. NVIDIA's margin is significantly higher than both AMD and Intel, driven largely by its data center segment performance. AMD showed a slight year-over-year increase in Q4 2024 to 51%, whereas Intel reported decreases for both GAAP and Non-GAAP margins compared to the prior year [S1, S3].\n\nUncertainty: The search results did not specify the exact search terms used to retrieve Intel's data, nor did they provide a breakdown of gross margin availability by product segment or region. Additionally, while evidence was found for NVIDIA and AMD, no specific evidence was located regarding Intel's gross margin performance trends beyond the aggregate fiscal year figure; however, the available data confirms the 32.7% GAAP figure exists.",
+        "confidence": "high",
+        "gaps": "no evidence for: Intel gross margin performance for fiscal year 2024; finished before all sub-tasks reported",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1",
+          "S2",
+          "S3"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "depth": 1,
+      "objective": "NVIDIA gross margin performance for fiscal year 2025",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Single company metric requested, fits ATOM.",
+      "notes": [
+        "search returned nothing; retried as 'NVIDIA fiscal year 2025 annual gross margin'"
+      ],
+      "children": [],
+      "created": 7.786,
+      "started": 7.786,
+      "finished": 367.095,
+      "result": {
+        "status": "ok",
+        "answer": "NVIDIA's GAAP gross margin for fiscal year 2025 was 73.0% [S2], while its non-GAAP gross margin was 75.5% [S2].",
+        "confidence": "high",
+        "gaps": "",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S2"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 2,
+      "parent": 0,
+      "depth": 1,
+      "objective": "AMD gross margin performance for fiscal year 2024",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Single entity and metric requested; ATOM.",
+      "notes": [
+        "search returned nothing; retried as 'AMD fiscal year 2024 gross margin earnings'",
+        "finish with no evidence overridden; read the next unread result",
+        "search returned nothing; retried as 'AMD fiscal year 2024 gross margin Q3'"
+      ],
+      "children": [],
+      "created": 7.786,
+      "started": 7.788,
+      "finished": 406.329,
+      "result": {
+        "status": "ok",
+        "answer": "AMD's GAAP gross margin for fiscal year 2024 was 49% [S1]. The fourth quarter of 2024 saw a higher margin of 51%, representing a 4 percentage point increase compared to the prior year [S1].",
+        "confidence": "high",
+        "gaps": "None.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": []
+    },
+    {
+      "id": 3,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Intel gross margin performance for fiscal year 2024",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "failed",
+      "reason": "Single entity fact lookup.",
+      "notes": [
+        "no page evidence; used search snippets (0 findings)"
+      ],
+      "children": [],
+      "created": 7.786,
+      "started": 7.789,
+      "finished": 195.728,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "No usable evidence was retrieved.",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": []
+    },
+    {
+      "id": 4,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Verify Intel's fiscal year 2024 gross margin availability and correct search terms.",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "assigned by parent",
+      "notes": [],
+      "children": [],
+      "created": 204.793,
+      "started": 204.794,
+      "finished": 372.434,
+      "result": {
+        "status": "ok",
+        "answer": "Intel's fiscal year 2024 GAAP gross margin was 32.7% [S3], while its Non-GAAP gross margin was 36.0% [S3]. Both figures represent decreases compared to the prior year. The findings do not specify the exact search terms used to retrieve this data, nor do they provide a breakdown of gross margin availability by product segment or region.",
+        "confidence": "high",
+        "gaps": "Search terms used; gross margin availability by segment/region.",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S3"
+        ]
+      },
+      "context_keys": [
+        "follow_up"
+      ]
+    },
+    {
+      "id": 5,
+      "parent": 0,
+      "depth": 1,
+      "objective": "Cross-check AMD and NVIDIA FY2024/FY2025 data against Intel's reported periods.",
+      "role": "research",
+      "forced_mode": "ATOM",
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "cancelled",
+      "reason": "assigned by parent",
+      "notes": [
+        "search returned nothing; retried as 'Intel fiscal year FY2024 FY2025 reporting period'",
+        "research cut short: Cancelled"
+      ],
+      "children": [],
+      "created": 204.793,
+      "started": 204.8,
+      "finished": 438.978,
+      "result": {
+        "status": "failed",
+        "answer": "",
+        "confidence": "low",
+        "gaps": "stopped before an answer was written",
+        "verdict": "",
+        "entities": [],
+        "sources": []
+      },
+      "context_keys": [
+        "follow_up"
+      ]
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://ir.amd.com/news-events/press-releases/detail/1236/amd-reports-fourth-quarter-and-full-year-2024-financial-results",
+        "title": "AMD Reports Fourth Quarter and Full Year 2024 Financial Results :: Advanced Micro Devices, Inc. (AMD)",
+        "domain": "ir.amd.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T16:56:45+00:00",
+        "first_node": 2
+      },
+      {
+        "id": "S2",
+        "url": "https://nvidianews.nvidia.com/_gallery/download_pdf/67bf85d73d633281c6875f57/",
+        "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2025",
+        "domain": "nvidianews.nvidia.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T16:57:15+00:00",
+        "first_node": 1
+      },
+      {
+        "id": "S3",
+        "url": "https://www.nasdaq.com/press-release/intel-reports-fourth-quarter-and-full-year-2024-financial-results-2025-01-30",
+        "title": "Intel Reports Fourth-Quarter and Full-Year 2024 Financial Results | Nasdaq",
+        "domain": "nasdaq.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T17:01:22+00:00",
+        "first_node": 4
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "AMD's GAAP gross margin for the full year 2024 was 49%.",
+        "quote": "For the full year 2024, AMD reported record revenue of $25.8 billion, gross margin of 49%...",
+        "source_id": "S1",
+        "node_id": 2,
+        "t": 83.265,
+        "verified": true,
+        "basis": "gaap"
+      },
+      {
+        "id": "F2",
+        "claim": "AMD's GAAP gross margin for the fourth quarter of 2024 was 51%, reflecting a year-over-year increase of 4 percentage points.",
+        "quote": "Fourth quarter revenue was a record $7.7 billion, gross margin was 51%... Q4 2024 | Q4 2023 | Y/Y | Q3 2024 | Q/Q Gross margin | 51% | 47% | Up 4 ppts | 50% | Up 1%",
+        "source_id": "S1",
+        "node_id": 2,
+        "t": 83.371,
+        "verified": true,
+        "basis": "gaap"
+      },
+      {
+        "id": "F3",
+        "claim": "In the fourth quarter of fiscal year 2025 (ended January 26, 2025), NVIDIA's GAAP gross margin was 73.0%, which was 1.6 percentage points lower than the previous quarter.",
+        "quote": "Q4 FY25 Q3 FY25 Q4 FY24 Q/Q Y/Y Revenue $39,331 $35,082 $22,103 Up 12% Up 78% Gross margin 73.0% 74.6% 76.0% Down 1.6 pts Down 3.0 pts",
+        "source_id": "S2",
+        "node_id": 1,
+        "t": 113.274,
+        "verified": true,
+        "basis": "gaap"
+      },
+      {
+        "id": "F4",
+        "claim": "NVIDIA's non-GAAP gross margin for fiscal year 2025 was 75.5%, up 1.7 percentage points from the prior year.",
+        "quote": "FY25 FY24 Y/Y Revenue $130,497 $60,922 Up 114% Gross margin 75.5% 73.8% Up 1.7 pts",
+        "source_id": "S2",
+        "node_id": 1,
+        "t": 113.315,
+        "verified": true,
+        "basis": "non-gaap"
+      },
+      {
+        "id": "F5",
+        "claim": "Intel's full-year 2024 GAAP gross margin was 32.7%, which represents a decrease of 7.3 percentage points compared to the prior year.",
+        "quote": "Gross margin | 32.7% | 40.0% | down 7.3 ppts | 36.0% | 43.6% | down 7.6 ppts",
+        "source_id": "S3",
+        "node_id": 4,
+        "t": 360.355,
+        "verified": true,
+        "basis": "both"
+      },
+      {
+        "id": "F6",
+        "claim": "Intel's full-year 2024 Non-GAAP gross margin was 36.0%, representing a decrease of 7.6 percentage points from the prior year.",
+        "quote": "Gross margin | 32.7% | 40.0% | down 7.3 ppts | 36.0% | 43.6% | down 7.6 ppts",
+        "source_id": "S3",
+        "node_id": 4,
+        "t": 360.414,
+        "verified": true,
+        "basis": "both"
+      },
+      {
+        "id": "F7",
+        "claim": "Intel's guidance for Q1 2025 includes a Non-GAAP gross margin estimate of 36.0% based on the mid-point of the revenue range.",
+        "quote": "Q1 2025 | GAAP | Non-GAAP\nRevenue | $11.7-12.7 billion\nGross Margin | 33.8% | 36.0%",
+        "source_id": "S3",
+        "node_id": 4,
+        "t": 360.449,
+        "verified": true,
+        "basis": "both"
+      }
+    ]
+  }
+}

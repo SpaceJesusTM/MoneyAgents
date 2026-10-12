@@ -96,6 +96,27 @@ Other mechanisms, all switchable in the config:
 - If no page yields evidence, an agent may fall back to search-result snippets. Those sources are
   marked "search snippet only; page not read" in the report.
 
+### Reliability guards (opt-in)
+
+Added after the baseline was frozen, in response to failures it showed. All are off in
+`configs/baseline.json`, so the baseline behaves as it was measured; `configs/reliability_v1.json`
+is the baseline with all of them on. They are deterministic code in `guards.py`, with no model call
+except one retry of a synthesis that contradicts its figures.
+
+| Switch | What it does | Failure it answers |
+|---|---|---|
+| `verify_guard` | A DEEP manager sends a verifier only a positive, checkable claim (clauses that report missing information or talk about "the findings" are removed; if nothing is left, no verifier is sent). A verdict needs cited evidence. An answer with unresolved steps is `partial` and never `high` confidence. | D1: "the findings do not contain capacity figures" came back `survived` |
+| `claim_checks` | Each extracted claim is tied to its quote: a figure that is nowhere in the source rejects the finding, a trailing clause with a figure that is not next to the quote is cut, a GAAP / non-GAAP label must not contradict the passage (a label the passage does not show is removed). A written answer must keep each figure's period (quarter or full year) and basis; one retry, then the agent returns its extracted findings instead. | W1: non-GAAP 75.5% stored as GAAP, and then a quarterly figure written up as the fiscal-year one; A2: an invented figure attached to a real quote |
+| `numeric_guard` | For "compare A, B and C" objectives the compared figures are picked out and sorted by code and given to the synthesis. An ordering statement that contradicts the figures triggers one retry; if it persists, a labelled computed correction is appended. Mixed bases or periods are flagged. | W2: $350 billion ranked above $638 billion |
+| `oversize_policy=fail`, `max_pdf_bytes`, `pdf_max_pages` | A response cut off by the size or time limit is an explicit error (of the form "too large: N bytes declared, limit M; nothing parsed") and nothing from it is parsed. PDFs get their own, larger, still bounded limit. A PDF read only in part says so. | A2: a 4.9 MB filing truncated at 3 MB and reported as "no extractable text" |
+
+```bash
+.venv/bin/python -m webswarm_baseline.run "your question" --config webswarm_baseline/configs/reliability_v1.json
+.venv/bin/python -m webswarm_baseline.run "your question" --set numeric_guard=true     # one guard at a time
+```
+
+What was verified, and what these guards do not catch: `../RELIABILITY_IMPROVEMENTS.md`.
+
 ### Limits
 
 Hard limits live in `config.Budgets`: tree depth, node count, children per batch, follow-ups,
@@ -130,6 +151,8 @@ treat it as data. The model has no tools beyond search, read and finish.
 | `run.py` | CLI and the `execute()` function used by tests and benchmarks |
 | `mock.py` | Scripted model and canned pages for offline tests |
 | `configs/baseline.json` | The frozen baseline configuration |
+| `guards.py` | Deterministic reliability checks (opt-in): unverifiable claims, figures and accounting basis, rankings |
+| `configs/reliability_v1.json` | The baseline plus the reliability guards |
 
 ## What differs from the paper
 
@@ -153,7 +176,8 @@ treat it as data. The model has no tools beyond search, read and finish.
 - All model calls share one slot, so a run's wall-clock time is essentially its total model time.
 - Quote verification proves that a quote is on the page, not that the claim follows from it.
 - The number audit matches digits, so it cannot tell that a correct number is attached to the
-  wrong metric.
+  wrong metric. (`claim_checks` narrows this for GAAP / non-GAAP labels and for figures that are
+  not in the source at all; it still cannot tell revenue from operating income.)
 - Entity merging is by normalised name; an acronym and its long form are listed separately.
 - The SSRF guard validates before connecting but does not pin the resolved address, so a
   DNS-rebinding attacker could in principle still redirect a request.

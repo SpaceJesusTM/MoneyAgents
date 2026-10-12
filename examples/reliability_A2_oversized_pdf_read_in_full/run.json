@@ -1,0 +1,288 @@
+{
+  "question": "What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?",
+  "config": {
+    "name": "reliability",
+    "model": "qwen3.5:4b-q4_K_M",
+    "ollama_url": "http://127.0.0.1:11434",
+    "temperature": 0.0,
+    "seed": 7,
+    "num_ctx": 8192,
+    "think": false,
+    "llm_timeout": 180.0,
+    "llm_concurrency": 1,
+    "keep_alive": "30m",
+    "search_provider": "ddgs",
+    "search_results": 5,
+    "web_concurrency": 4,
+    "web_mode": "replay_or_record",
+    "cassette": "/Users/samuelruo/Desktop/Agent Projects/moneyAgents/MoneyAgents/experiments/bench/cassettes/A2",
+    "replay_latency": true,
+    "fetch_timeout": 12.0,
+    "max_page_bytes": 3000000,
+    "page_chars": 3200,
+    "respect_robots": true,
+    "min_search_interval": 0.7,
+    "decider": "generative",
+    "decider_options": {},
+    "review_policy": "incremental",
+    "scheduler": "fifo",
+    "web_probing": false,
+    "experience_sharing": false,
+    "scout_count": 2,
+    "verify_policy": "always",
+    "allow_entity_collect": true,
+    "final_audit": true,
+    "cite_retry": false,
+    "extract_mode": "quote",
+    "verify_guard": true,
+    "claim_checks": true,
+    "numeric_guard": true,
+    "oversize_policy": "fail",
+    "max_pdf_bytes": 8000000,
+    "pdf_max_pages": 40,
+    "budgets": {
+      "max_depth": 2,
+      "max_nodes": 12,
+      "max_children": 4,
+      "max_followups": 2,
+      "max_llm_calls": 110,
+      "max_web_calls": 60,
+      "max_seconds": 900.0,
+      "wrap_up_fraction": 0.7,
+      "atom_max_steps": 4,
+      "deep_max_rounds": 3,
+      "entity_paths": 3,
+      "entity_verify_max": 2,
+      "llm_retries": 1,
+      "reserve_llm_calls": 2
+    }
+  },
+  "manifest": {
+    "created": "2026-10-11T12:33:27-04:00",
+    "git_commit": "a1139d6c3e8397a2fb1f649b6caaebff6e66b1e0",
+    "git_dirty": true,
+    "python": "3.11.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "ollama_version": "0.40.0",
+    "model_digest": "d8b0f5e9760cd168",
+    "model_details": {
+      "parent_model": "model.gguf",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "llamacpp"
+    }
+  },
+  "outcome": {
+    "answer": "Apple's Services revenue for the twelve months ended September 28, 2024 was $96,169 million [S1].",
+    "status": "ok",
+    "confidence": "high",
+    "gaps": "",
+    "audit": {
+      "citations": 1,
+      "unknown_citations": [],
+      "cited_pages": 1,
+      "cited_snippets": 0,
+      "cited_domains": [
+        "apple.com"
+      ],
+      "numbers": 3,
+      "numbers_in_cited_source": 3,
+      "numbers_elsewhere_in_evidence": 0,
+      "numbers_ungrounded": 0,
+      "ungrounded_examples": [],
+      "sentences_with_figures_but_no_citation": 0,
+      "numeric_grounding": 1.0,
+      "consistency": {
+        "ordering_issues": [],
+        "basis_conflicts": [],
+        "mixed_basis_or_period": [],
+        "clean": true
+      }
+    },
+    "removed_citations": [],
+    "stragglers": 0
+  },
+  "stats": {
+    "answer_seconds": 254.3,
+    "wall_seconds": 254.2,
+    "time_to_first_search_result": 8.704,
+    "time_to_first_evidence": 39.079,
+    "time_to_first_page_evidence": 39.079,
+    "llm_calls": 9,
+    "llm_calls_by_kind": {
+      "route": 1,
+      "act": 4,
+      "extract": 3,
+      "answer": 1
+    },
+    "llm_failed_calls": 0,
+    "llm_seconds": 239.93,
+    "llm_queue_wait_seconds": 0,
+    "prompt_tokens": 6724,
+    "output_tokens": 632,
+    "llm_prompt_eval_seconds": 38.44,
+    "llm_generation_seconds": 37.94,
+    "decision_calls": 0,
+    "decision_seconds": 0,
+    "decision_prompt_tokens": null,
+    "decisions": {
+      "route:generative": 1
+    },
+    "searches": 1,
+    "fetches": 3,
+    "web_calls": 4,
+    "fetch_failures": 0,
+    "fetch_truncated": 0,
+    "search_failures": 0,
+    "web_seconds": 14.26,
+    "web_run_cache_hits": 0,
+    "web_from_cassette": 4,
+    "nodes": 1,
+    "nodes_by_mode": {
+      "ATOM": 1
+    },
+    "nodes_by_role": {
+      "research": 1
+    },
+    "nodes_by_status": {
+      "ok": 1
+    },
+    "max_depth": 0,
+    "findings": 5,
+    "findings_from_pages": 5,
+    "findings_rejected": 1,
+    "findings_adjusted": 0,
+    "guard_events": {},
+    "sources": 2,
+    "source_domains": [
+      "apple.com"
+    ],
+    "redundancy": {
+      "objectives_dropped_as_duplicate": 0,
+      "near_duplicate_objective_pairs": 0,
+      "repeated_queries": 0,
+      "urls_read_by_more_than_one_agent": 0,
+      "pages_read_with_no_accepted_finding": 1,
+      "nodes_with_no_evidence": 0,
+      "nodes_cancelled": 0
+    },
+    "interventions": 1,
+    "budget_hits": []
+  },
+  "tree": "[ATOM] What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?  (#0, ok, 254s, confidence high)\n    why: Single named entity and specific fact requested.\n    ! asked to read result 2, which is not an unread result; read 1 instead",
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "depth": 0,
+      "objective": "What was Apple's Services revenue in fiscal year 2024 (the year ended September 28, 2024)?",
+      "role": "research",
+      "forced_mode": null,
+      "mode": "ATOM",
+      "model_mode": "ATOM",
+      "status": "ok",
+      "reason": "Single named entity and specific fact requested.",
+      "notes": [
+        "asked to read result 2, which is not an unread result; read 1 instead"
+      ],
+      "children": [],
+      "created": 0.024,
+      "started": 0.024,
+      "finished": 254.258,
+      "result": {
+        "status": "ok",
+        "answer": "Apple's Services revenue for the twelve months ended September 28, 2024 was $96,169 million [S1].",
+        "confidence": "high",
+        "gaps": "",
+        "verdict": "",
+        "entities": [],
+        "sources": [
+          "S1"
+        ]
+      },
+      "context_keys": []
+    }
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.apple.com/newsroom/pdfs/fy2024-q4/FY24_Q4_Consolidated_Financial_Statements.pdf",
+        "title": "24-10-31 Apple reports fourth quarter results",
+        "domain": "apple.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T16:29:52+00:00",
+        "first_node": 0
+      },
+      {
+        "id": "S2",
+        "url": "https://www.apple.com/newsroom/2024/10/apple-reports-fourth-quarter-results/",
+        "title": "Apple reports fourth quarter results - Apple",
+        "domain": "apple.com",
+        "kind": "page",
+        "retrieved_at": "2026-10-11T16:30:55+00:00",
+        "first_node": 0
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "claim": "Apple's Services revenue for the twelve months ended September 28, 2024 was $96,169 million.",
+        "quote": "Services 24,972 22,314 96,169 85,200",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 39.079,
+        "verified": true,
+        "basis": ""
+      },
+      {
+        "id": "F2",
+        "claim": "Apple's Services revenue for the three months ended September 28, 2024 was $24,972 million.",
+        "quote": "Services 24,972 22,314 96,169 85,200",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 39.098,
+        "verified": true,
+        "basis": ""
+      },
+      {
+        "id": "F3",
+        "claim": "Apple's Services revenue for the twelve months ended September 30, 2023 was $85,200 million.",
+        "quote": "Services 24,972 22,314 96,169 85,200",
+        "source_id": "S1",
+        "node_id": 0,
+        "t": 39.117,
+        "verified": true,
+        "basis": ""
+      },
+      {
+        "id": "F4",
+        "claim": "The report covers the fourth quarter of fiscal year 2024, which ended on September 28, 2024.",
+        "quote": "Apple today announced financial results for its fiscal 2024 fourth quarter ended September 28, 2024.",
+        "source_id": "S2",
+        "node_id": 0,
+        "t": 102.645,
+        "verified": true,
+        "basis": ""
+      },
+      {
+        "id": "F5",
+        "claim": "Total quarterly revenue for the period was $94.9 billion, representing a 6 percent year-over-year increase.",
+        "quote": "The Company posted quarterly revenue of $94.9 billion, up 6 percent year over year",
+        "source_id": "S2",
+        "node_id": 0,
+        "t": 102.658,
+        "verified": true,
+        "basis": ""
+      }
+    ]
+  }
+}
