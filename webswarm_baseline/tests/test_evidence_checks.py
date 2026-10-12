@@ -65,6 +65,18 @@ def test_identification_questions_are_recognised(objective, two_part, identify):
     assert g.asks_to_identify(objective) is identify
 
 
+def test_the_first_part_of_a_two_part_question_is_kept_word_for_word():
+    """REAL: D1's first step was reworded from "most constrains shipments" to "primary supplier"."""
+    d1 = ("Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's latest AI accelerators, "
+          "and how fast can that capacity grow?")
+    assert g.first_part(d1) == ("Which supplier's advanced-packaging capacity most constrains shipments of NVIDIA's "
+                                "latest AI accelerators?")
+    assert g.first_part(D2_Q) == "Which company manufactures the processors Apple designs for the iPhone?"
+    assert g.first_part("Which company acquired VMware, and in which month and year did that acquisition close?") == \
+        "Which company acquired VMware?"
+    assert g.first_part("Which company acquired VMware?") == "Which company acquired VMware?"
+
+
 # ---- support --------------------------------------------------------------------------------------
 
 def test_d2_intel_foundry_rests_on_one_site_reporting_a_plan():
@@ -143,6 +155,10 @@ def test_a_two_part_identification_question_is_worked_as_deep_even_when_the_rout
     root = art.swarm.nodes[0]
     assert root.model_mode == "ATOM" and root.mode == "DEEP" and len(root.children) >= 2
     assert any("two-part identification question" in n for n in root.notes)
+    # its first step is the first half of the question as asked, chosen without a model call
+    assert art.swarm.nodes[root.children[0]].objective == "Which partner constrains Acme Corp advanced packaging supply?"
+    first = [e for e in art.tracer.events if e["type"] == "decision" and e["point"] == "deep_step"][0]
+    assert first["provider"] == "rule"
     off = run(ACME_Q, deep_handlers("ATOM"))
     assert off.swarm.nodes[0].mode == "ATOM" and not off.swarm.nodes[0].children
 

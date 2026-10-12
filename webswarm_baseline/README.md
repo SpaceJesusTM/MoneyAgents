@@ -117,6 +117,40 @@ except one retry of a synthesis that contradicts its figures.
 
 What was verified, and what these guards do not catch: `../RELIABILITY_IMPROVEMENTS.md`.
 
+### When search fails
+
+A search that gets no valid answer (timeout, network error, rate limit, provider or internal error)
+is a different thing from a search that is answered with nothing, and the code keeps them apart:
+
+- It is **never written to a recording**. Empty result lists, HTTP refusals and oversized pages are
+  answers and are recorded; timeouts and dropped connections are not.
+- The provider's "no results" is trusted only if a control query that always has results is being
+  answered too (`ddgs` says "no results" when its engines serve rate-limit pages).
+- Each search has a deadline and a bounded number of tries; after several failures in a row search
+  is treated as unavailable for a while, so a dead provider costs seconds, not minutes per call.
+- An agent whose searches failed reports a retrieval failure, not "nothing found", and does not
+  reword its query. Each run's statistics say how much of its evidence was replayed, fetched live,
+  or not answered (`web_provenance`).
+- Without an IPv6 route, names are resolved over IPv4 only, and `ddgs` is sent through an in-process
+  IPv4-only tunnel. (On the development machine the resolver dropped IPv6 lookups, which cost
+  2-5 s per connection and timed out every search.)
+
+```bash
+.venv/bin/python -m webswarm_baseline.netcheck     # which of: local network, provider outage, rate limiting, our code
+```
+
+### Evidence checks for identification questions (opt-in, prototype)
+
+`configs/evidence_v1.json` is `reliability_v1` plus two switches, added after looking at why two
+"which company ...?" questions were answered from a single page reporting a deal or a plan:
+
+| Switch | What it does |
+|---|---|
+| `identify_guard` | "Which X ..., and <something that depends on it>?" is worked as DEEP whatever the router said, so the first answer is checked before the second part builds on it |
+| `support_check` | The entity named in answer to "which / who" must be named by quoted passages from two sites, and not only by reports of a deal or plan. Otherwise: low confidence, a stated gap, and a DEEP manager verifies that step first. No extra model call for a single lookup |
+
+Results and limits: `../NEXT_PASS_RESULTS.md`.
+
 ### Limits
 
 Hard limits live in `config.Budgets`: tree depth, node count, children per batch, follow-ups,
@@ -153,6 +187,9 @@ treat it as data. The model has no tools beyond search, read and finish.
 | `configs/baseline.json` | The frozen baseline configuration |
 | `guards.py` | Deterministic reliability checks (opt-in): unverifiable claims, figures and accounting basis, rankings |
 | `configs/reliability_v1.json` | The baseline plus the reliability guards |
+| `configs/reliability_v1_9b.json` | The same with the research model changed to `qwen3.5:9b-q4_K_M` (model comparison) |
+| `configs/evidence_v1.json` | `reliability_v1` plus the evidence checks for identification questions |
+| `netcheck.py` | Read-only diagnosis of why web search is failing |
 
 ## What differs from the paper
 

@@ -788,6 +788,18 @@ def two_part_identification(objective: str) -> bool:
     return bool(re.match(r"(?:which|who|what)\b", o, re.I)) and not _NOT_IDENTIFY.match(o) and bool(_WH_SECOND.search(o))
 
 
+def first_part(objective: str) -> str:
+    """The identification half of a two-part question, word for word.
+
+    In D1 the model reworded "Which supplier's advanced-packaging capacity most constrains shipments
+    ..." as "Who is the primary supplier of advanced packaging technology ...". The relationship that
+    was asked about ("constrains shipments") was gone before the first search, and the search then
+    returned a different relationship's news. Asking the first part verbatim keeps it."""
+    o = (objective or "").strip()
+    m = _WH_SECOND.search(o)
+    return (o[:m.start()].rstrip(" ,;") + "?") if m else o
+
+
 def identified_entity(objective: str, answer: str) -> str:
     """The first name in the answer's opening sentence that the objective did not already contain."""
     first = (sentences(strip_cites(answer)) or [""])[0]

@@ -1003,6 +1003,15 @@ class Swarm:
             (f"verdict {s['verdict']}: " if s["kind"] == "verify" else "") +
             (" ".join(s["answer"].split()[:90]) or f"(no evidence; {s['gaps'][:120]})")
             for i, s in enumerate(rt.steps, 1)) or "(none yet)"
+        if self.cfg.identify_guard and not rt.steps and guards.two_part_identification(node.objective):
+            # first step of a two-part identification: the first part of the question, word for word,
+            # so the relationship that was asked about survives into the search (no model call)
+            text = guards.first_part(node.objective)
+            self.tracer.event("decision", node.id, point="deep_step", value="investigate", provider="rule",
+                              reason="first part of a two-part identification question, verbatim", text=text[:240])
+            rt.rounds += 1
+            rt.to_dispatch = [{"objective": text, "forced_mode": "ATOM", "step_kind": "investigate", "context": {}}]
+            return "dispatch"
         try:
             out = self.llm.json("deep_step", node, prompts.DEEP_SYSTEM,
                                 prompts.DEEP_USER.format(today=self.today, objective=node.objective,

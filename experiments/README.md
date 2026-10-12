@@ -85,6 +85,9 @@ how good its decisions are.
 | `bench/grade_v2.py` | stricter grading (v2): no credit for "not found", for a figure under the wrong accounting basis, or for a ranking the figures contradict |
 | `bench/regrade.py` | re-grades every recorded run with v2 into `results/regrade_v2/` without touching the recorded results |
 | `bench/guard_replay.py` | replays the reliability guards over recorded runs: what each would have refused, rejected or flagged |
+| `bench/heldout_tasks.json` | held-out set: 12 questions with gold facts and scoring rules fixed before any run (`run_bench --suite heldout_tasks.json`). Do not tune on it |
+| `bench/model_table.py` | table for runs that differ only in the model, with evidence provenance and memory |
+| `bench/memwatch.py` | samples swap, free memory, pageouts and the model runner's size during a run |
 | `bench/compare.py` | per-arm, paired, and per-task tables |
 | `bench/decision_ceiling.py` | splits baseline model time into generative vs bounded-decision work |
 | `bench/eval_routing.py`, `bench/routing_cases.json` | router agreement on 32 labelled objectives |
