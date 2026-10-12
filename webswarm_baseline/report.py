@@ -95,7 +95,7 @@ def compute_stats(tracer, swarm, budget, wall: float) -> dict:
         "findings_rejected": sum(1 for e in ev if e["type"] == "finding_rejected"),
         "findings_adjusted": sum(1 for e in ev if e["type"] == "finding_adjusted"),
         "guard_events": dict(Counter(e["type"] for e in ev if e["type"] in (
-            "verify_refused", "numeric_issue", "label_issue", "comparison", "finding_adjusted"))),
+            "verify_refused", "numeric_issue", "label_issue", "comparison", "finding_adjusted", "support_flag"))),
         "sources": len(swarm.evidence.sources),
         "source_domains": sorted({s.domain for s in swarm.evidence.sources.values()}),
         "redundancy": {

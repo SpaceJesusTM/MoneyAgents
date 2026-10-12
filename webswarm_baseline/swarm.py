@@ -59,6 +59,7 @@ class NodeResult:
     verdict: str = ""             # verifiers only
     entities: list = field(default_factory=list)   # collectors / ENTITY_COLLECT only
     sources: list = field(default_factory=list)    # source ids cited in the answer
+    support: list = field(default_factory=list)    # support_check: why an identification is weakly supported
 
 
 @dataclass
@@ -290,7 +291,13 @@ class Swarm:
             except (LLMError, BudgetExceeded) as e:
                 mode = "ATOM"
                 self._note(node, f"routing failed ({e}); defaulted to ATOM")
-            node.model_mode = node.mode = mode
+            node.model_mode = mode
+            if (self.cfg.identify_guard and mode != "DEEP" and node.role == "research"
+                    and guards.two_part_identification(node.objective)):
+                self._note(node, f"two-part identification question: router said {mode}, worked as DEEP so the "
+                                 "first answer is checked before the second part builds on it")
+                mode = "DEEP"
+            node.mode = mode
             if mode != "ATOM" and node.depth >= b.max_depth:
                 self._note(node, f"max depth {b.max_depth} reached; {mode} forced to ATOM")
                 node.mode = "ATOM"
@@ -607,8 +614,19 @@ class Swarm:
             status = "ok" if cited_ids(answer) else "partial"
             if failures and status == "ok" and not out.get("gaps"):
                 out["gaps"] = ""
+            weak: list = []
+            if self.cfg.support_check:
+                sup = guards.identification_support(
+                    node.objective, answer, [asdict(f) for f in st.findings],
+                    {sid: src.domain for sid, src in self.evidence.sources.items()})
+                if sup is not None and sup.flags:
+                    weak = [f"{sup.entity}: {flag}" for flag in sup.flags]
+                    self.tracer.event("support_flag", node.id, entity=sup.entity, domains=sup.domains, flags=sup.flags)
+                    self._note(node, "identification weakly supported (" + "; ".join(weak) + ")")
+                    out = dict(out, confidence="low",
+                               gaps=(str(out.get("gaps") or "") + " Weak support for " + "; ".join(weak) + ".").strip()[:400])
             return NodeResult(status=status, answer=answer, confidence=out.get("confidence", "low"),
-                              gaps=out.get("gaps", ""), sources=cited_ids(answer))
+                              gaps=out.get("gaps", ""), sources=cited_ids(answer), support=weak)
         except (LLMError, BudgetExceeded) as e:
             self._note(node, f"answer step failed ({e}); returning raw findings")
             return self._raw_result(node, st, "answer not written (model call failed)")
@@ -963,7 +981,7 @@ class Swarm:
         r = child.result or NodeResult()
         rt.steps.append({"kind": child.context.get("step_kind", "investigate"), "node": child.id,
                          "text": child.objective, "status": child.status, "answer": r.answer,
-                         "verdict": r.verdict, "gaps": r.gaps})
+                         "verdict": r.verdict, "gaps": r.gaps, "support": list(r.support)})
 
     def _deep_known(self, rt: ManagerRT, chars: int = 700) -> str:
         parts = [re.sub(r"\s*\[S\d+(?:,\s*S\d+)*\]", "", s["answer"]) for s in rt.steps
@@ -1021,7 +1039,7 @@ class Swarm:
         candidate = next((s for s in reversed(rt.steps) if s["kind"] == "investigate" and s["answer"]), None)
         if rt.verified or self.cfg.verify_policy == "never" or candidate is None:
             return "synthesize"
-        if self.cfg.verify_guard:
+        if self.cfg.verify_guard or self.cfg.support_check:
             claim = self._checkable_claim(node, rt, text)
             if not claim:
                 rt.verify_refused = True
@@ -1050,6 +1068,16 @@ class Swarm:
         The model's own verify / finish text is tried first, then the investigate answers from the
         latest back to the first. Clauses that report missing information, or that talk about the
         evidence rather than the subject, are never part of what a verifier is asked to check."""
+        if self.cfg.support_check:
+            # an identification that rests on one source or on a reported plan is what everything after
+            # it depends on: check that first, whatever the model proposed to verify
+            for step in rt.steps:
+                if step["kind"] == "investigate" and step.get("support") and step["answer"]:
+                    claim = guards.verifiable_part(step["answer"])
+                    if claim:
+                        self._note(node, "verifying the weakly supported identification first ("
+                                         + "; ".join(step["support"]) + ")")
+                        return claim
         options = ([text] if len(text) > 25 else []) + \
                   [s["answer"] for s in reversed(rt.steps) if s["kind"] == "investigate" and s["answer"]]
         for i, option in enumerate(options):

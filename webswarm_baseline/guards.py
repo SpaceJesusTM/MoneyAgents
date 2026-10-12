@@ -753,3 +753,78 @@ def consistency_audit(answer: str, findings: list[dict], known_sources: set[str]
     return {"ordering_issues": ordering, "basis_conflicts": basis, "period_conflicts": period,
             "mixed_basis_or_period": list(cmp.warnings) if cmp else [],
             "clean": not ordering and not basis and not period}
+
+
+# =================================================================================================
+# 7. Identification questions ("which company ...?"): is the named entity actually supported?
+# =================================================================================================
+# Added after looking at why D1 answered Amkor and D2 answered Intel Foundry. In both, the model named
+# an entity on the strength of one source reporting a deal or a plan, and no quoted passage stated the
+# relationship that was asked about. Opt-in: SwarmConfig.identify_guard and SwarmConfig.support_check.
+
+_WH_SECOND = re.compile(r",?\s+and\s+(?:(?:in|by|at|for|to|on)\s+)?(?:which|who|whom|what|how|when|where|why)\b", re.I)
+_NOT_IDENTIFY = re.compile(r"what\s+(?:was|were|is|are|did|does|do)\b|which\s+of\b", re.I)
+_PLAN = re.compile(r"\bwill\b|\bwould\b|\bplans?\s+to\b|\bplanned\b|\bexpected\s+to\b|\bintends?\s+to\b|\bset\s+to\b|"
+                   r"\bagree(?:d|ment)\b|\bdeals?\b|\bpartnerships?\b|\bsigned\b|\bannounced\b|"
+                   r"\bto\s+(?:manufacture|produce|build|make|supply|develop|expand)\b", re.I)
+
+
+_OPENERS = frozenset("the this that these those it they there no none according based however in on for as a an its "
+                     "their while although our we he she by at to from with and but or if when what which who".split())
+
+
+def asks_to_identify(objective: str) -> bool:
+    """Does the objective ask for an entity it does not name ("Which company ...", "Who ...")?"""
+    o = (objective or "").strip()
+    return bool(re.match(r"(?:which|who)\b|what\s+(?:company|supplier|firm|manufacturer|foundry|bank|vendor|maker)\b",
+                         o, re.I)) and not _NOT_IDENTIFY.match(o)
+
+
+def two_part_identification(objective: str) -> bool:
+    """"Which X ..., and <a second question that depends on the answer>?" The second part cannot be
+    right unless the first is, so such a question deserves step-by-step work and an independent
+    check of the first answer rather than a single lookup."""
+    o = (objective or "").strip()
+    return bool(re.match(r"(?:which|who|what)\b", o, re.I)) and not _NOT_IDENTIFY.match(o) and bool(_WH_SECOND.search(o))
+
+
+def identified_entity(objective: str, answer: str) -> str:
+    """The first name in the answer's opening sentence that the objective did not already contain."""
+    first = (sentences(strip_cites(answer)) or [""])[0]
+    if is_absence_statement(first):
+        return ""                                   # "The findings do not say ..." identifies nobody
+    asked = (objective or "").lower()
+    for name in compared_entities("x " + first):
+        if name.lower() not in asked and name.lower() not in _OPENERS:
+            return name
+    return ""
+
+
+@dataclass
+class Support:
+    entity: str
+    domains: list
+    flags: list          # empty when the identification is adequately supported
+
+
+def identification_support(objective: str, answer: str, findings: list[dict], domain_of_source: dict) -> Support | None:
+    """For an identification question: which quoted passages name the entity the answer gives, how
+    many independent sites they come from, and whether they only describe a deal or a plan.
+    Returns None when the objective is not an identification or the answer names no new entity."""
+    if not asks_to_identify(objective):
+        return None
+    entity = identified_entity(objective, answer)
+    if not entity:
+        return None
+    named = re.compile(rf"(?<![A-Za-z]){re.escape(entity)}(?![A-Za-z])", re.I)
+    backing = [f for f in findings if named.search(f.get("quote", ""))]
+    domains = sorted({domain_of_source.get(f.get("source_id"), "") for f in backing} - {""})
+    flags = []
+    if not backing:
+        flags.append("no quoted passage names it")
+    elif len(domains) < 2:
+        flags.append(f"it rests on one source ({domains[0] if domains else 'unknown'})")
+    if backing and all(_PLAN.search(f.get("quote", "")) for f in backing):
+        flags.append("the passages describe a deal or a plan, not the current situation")
+    return Support(entity, domains, flags)
+

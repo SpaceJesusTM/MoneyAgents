@@ -95,6 +95,13 @@ class SwarmConfig:
                                         # 0 = same as max_page_bytes
     pdf_max_pages: int = 15             # pages of a PDF that are parsed
 
+    # --- evidence checks for identification questions (off by default; configs/evidence_v1.json) ---
+    identify_guard: bool = False        # "Which X ..., and <something that depends on it>?" is always worked
+                                        # step by step with an independent check (DEEP), whatever the router said
+    support_check: bool = False         # an entity named in answer to "which / who" must be named by quoted
+                                        # passages from two sites and not only by reports of a deal or plan;
+                                        # otherwise low confidence, and a DEEP manager verifies that step first
+
     budgets: Budgets = field(default_factory=Budgets)
 
     def to_dict(self) -> dict:
